@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="此方法利用 Instagram 的「下載您的資料」功能來取得 你的粉絲 和 你追蹤的人 的檔案。透過比較兩個檔案，您可以發現那些沒有回追你的人。">
+    <meta name="keywords" content="instagram,instagram-follower">
+    <meta name="author" content="Xiang">
+    <meta property="og:title" content="Instagram-Follow-Back-Tracker">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>查看誰沒有在IG上回追你</title>
+    <link rel="icon" type="image/x-icon" href="img/grid-svgrepo-com.svg" />
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="bootstrap-5.1.1-dist/css/bootstrap.min.css">
+</head>
+
+<body>
+
+    <a href="https://SiteStates.com" title="站長工具" style="display: none;">
+        <img src="https://SiteStates.com/show/image/33614.jpg" border="0" />
+    </a>
+
+
+    <section class="wrap">
+
+        <section class="introduction">
+            <h2 class="underline">Instagram-Follow-Back-Tracker</h2>
+
+            <div class="github-badge">
+                <img src="https://img.shields.io/github/last-commit/Xiang511/Instagram-Follow-Back-Tracker?display_timestamp=committer&style=flat-square"
+                    alt=""></img>
+                <img src="https://img.shields.io/github/created-at/Xiang511/Instagram-Follow-Back-Tracker?style=flat-square"
+                    alt="">
+                <img src="https://img.shields.io/github/license/Xiang511/Instagram-Follow-Back-Tracker?style=flat-square"
+                    alt="">
+                <img src="https://hits.dwyl.com/Xiang511/Instagram-Follow-Back-Tracker.svg?style=flat-square" alt="">
+
+                <a href="https://github.com/Xiang511/Instagram-Follow-Back-Tracker" target="_blank"><img
+                        src="https://img.shields.io/badge/Github-demo?style=flat-square&logo=github&color=%23000"
+                        alt=""></a>
+
+
+            </div>
+
+            <h1>此方法利用 Instagram 的「下載您的資料」功能來取得追蹤者及追蹤者清單檔案。透過比較兩個檔案，您可以發現那些沒有回追你的人</h1>
+            <h1>只需要 <code>JSON</code> 文件，不需要任何授權或認證 <a target="_blank" href="https://youtu.be/0XyRyZL3BO4?si=CVc7xN1tdGbtrgeK">觀看示範</a></h1>
+
+        </section>
+
+        <section class="feature">
+            <h2 class="underline">功能</h2>
+
+            <div class="todo">
+
+
+                <input type="checkbox" name="" id="" checked disabled> 查看在 Instagram 上誰沒有回追你
+                </br>
+                <input type="checkbox" name="" id="" checked disabled > 優化網站介面 </br>
+
+                <input type="checkbox" name="" id="" disabled> 新增時間軸以顯示個別用戶追蹤多長時間
+            
+            </div>
+        </section>
+
+        <section class="usage">
+            <h2 class="underline">如何使用</h2>
+
+            <h3>取得資料</h3>
+            <p>前往帳戶管理中心並找到<a target="_blank"
+                    href="https://accountscenter.instagram.com/info_and_permissions/"> 您的資訊和隱私
+                </a>
+                頁面</p>
+
+            <p>點選「下載資訊」> 選擇部分資訊 > "只"選取<code>追蹤者及追蹤者清單</code> > 選擇資料範圍: <code>所有時間</code> > 選擇格式: <code>JSON</code></p>
+
+            <h3>處理下載的資料</h3>
+            <p>收到下載完成電子郵件後，按一下連結下載 ZIP 檔案</p>
+
+            <p>解壓縮檔案並找到<code>followers.json</code> 和 <code>following.json</code> 兩個檔案，並且上傳至網站
+            </p>
+
+        </section>
+
+
+        <section class="usage">
+            <h2 class="underline">資料隱私政策</h2>
+
+            <p>我們不會保留任何使用者相關資訊，僅提供搜尋功能</p>
+
+        </section>
+
+        <section class="usage">
+            <h2 class="underline">錯誤回報 & 使用回饋</h2>
+            <p>歡迎前往 GitHub 提交 <a target="_blank" href="https://github.com/Xiang511/Instagram-Follow-Back-Tracker/issues"> issue </a></p>
+        </section>
+
+    </section>
+
+
+    <div class="wrap">
+        <section class="main">
+            <h2 class="underline">上傳你的 JSON 檔案</h2>
+            <div class="follower">
+                <h3>Follower file</h3>
+
+                <div class="input-group">
+                    <input class="form-control" type="file" id="fileInput" name="fileInput" accept=".json">
+                    <button class="btn btn-outline-secondary" id="uploadButton">上傳</button>
+                </div>
+
+            </div>
+            <div class="following">
+                <h3>Following file</h3>
+                <div class="input-group">
+                    <input class="form-control" type="file" id="fileInput2" name="fileInput2" accept=".json">
+                    <button class="btn btn-outline-secondary" id="uploadButton2">上傳</button>
+                </div>
+            </div>
+            <button class="btn btn-outline-primary my-2" onclick="main()">開始搜尋</button>
+        </section>
+    </div>
+
+    <div class="wrap">
+        <section class="main">
+            <h2 class="underline">結果</h2>
+            <ol class="list-group list-group-flush" id="result">
+
+            </ol>
+        </section>
+    </div>
+
+    <div class="toast1">
+
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-body">
+                    ✅ 資料上傳成功
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://giscus.app/client.js" data-repo="Xiang511/Instagram-Follow-Back-Tracker"
+        data-repo-id="R_kgDOMXluYA" data-category="Announcements" data-category-id="DIC_kwDOMXluYM4Cg5y9"
+        data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0"
+        data-input-position="bottom" data-theme="light" data-lang="zh-TW" crossorigin="anonymous" async>
+        </script>
+</body>
+<script src="main.js"></script>
+<script src="bootstrap-5.1.1-dist/js/bootstrap.bundle.min.js"></script>
+
+</html>
