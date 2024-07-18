@@ -3,6 +3,14 @@ var followingData = [];
 var followerValues = [];
 var followingValues = [];
 
+var result = document.getElementById('result');
+
+var toastTrigger = document.getElementById('liveToastBtn')
+var toastLiveExample = document.getElementById('liveToast')
+
+
+
+
 function Follower() {
                 
     followerValues = followersData.map(follower =>
@@ -11,8 +19,12 @@ function Follower() {
             href: data.href
         }))
     ).flat();
+    
+    let toast = new bootstrap.Toast(toastLiveExample)
+    toast.show()
 
-    console.log(followerValues);
+
+    
 
 }
 
@@ -25,8 +37,10 @@ function Following(arg) {
                 href: data.href
             }))
         ).flat();
-    
-        console.log(followingValues);
+
+        let toast = new bootstrap.Toast(toastLiveExample)
+        toast.show()
+      
     
     }
 
@@ -105,8 +119,9 @@ function main() {
             var link = document.createElement('a');
             link.href = item.href; 
             link.textContent = item.value; 
+            listItem.classList.add('list-group-item');
             listItem.appendChild(link); 
-            listElement.appendChild(listItem);
+            result.appendChild(listItem);
         });
     }else{
         alert('Please upload information first (follower and following)');

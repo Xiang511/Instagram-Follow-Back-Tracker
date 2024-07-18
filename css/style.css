@@ -1,0 +1,86 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+}
+h1,h2,h3{
+    font-size: initial !important;
+}
+body{
+    padding: 1em;
+}
+.wrap,
+.giscus{
+    max-width: 1200px;
+    margin: auto;
+}
+h2,
+h3{ 
+    font-weight: 600;
+}
+h2{
+    margin-top: 0.4em;
+}
+.wrap{
+    border: #e5e7eb 1px solid;
+    border-radius: .375rem;
+    padding: 1.2rem;
+    margin-top: 1em;
+}
+.introduction h2{
+    font-weight: 600;
+    font-size: 2em !important;
+    
+}
+.underline{
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: .6rem;
+    margin-bottom: 1rem;
+}
+.introduction h1{
+    margin-bottom: 1rem;
+    font-size: 1em !important;
+    font-weight: normal;
+    line-height: 1.8em;
+}
+.github-badge{
+    margin-bottom: 1rem;
+}
+.todo{
+    margin-left: 1em;
+    line-height: 1.8em;
+}
+.usage{
+    margin-top: 1em;
+}
+.usage p{
+    margin-top: 0.8em;
+    line-height: 1.6em;
+}
+h2{
+    font-size: 1.6em !important;
+}
+h3{
+    margin-bottom: .5em;
+    font-size: 1.2em !important;
+}
+.usage p + h3{
+    margin-top: 0.5em;
+}
+code{
+    background: #afb8c133;
+    font-weight: normal;
+    padding: .2em .4em;
+    font-size: 85%;
+    border-radius: 6px;
+}
+
+.main .follower,
+.main .following{
+    margin-bottom: 1em;
+}
+.main .follower h2,
+.main .following h2{
+    margin-bottom: .4em;
+}

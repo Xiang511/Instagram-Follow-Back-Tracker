@@ -1,28 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <meta name="description" content="This method utilizes Instagram's 'Download Your Data' feature to retrieve a list of your followers and following. By comparing the two lists, you can identify those who no longer follow you back.">
+    <meta name="keywords" content="instagram,instagram-follower">
+    <meta name="author" content="Xiang">
+    <meta property="og:title" content="Instagram-Follow-Back-Tracker">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>See who unfollowed me on Instagram</title>
+    <link rel="icon" type="image/x-icon" href="img/grid-svgrepo-com.svg" />
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="bootstrap-5.1.1-dist/css/bootstrap.min.css">
 </head>
-<body>
-    <button onclick="main()">Search</button>
-    <section>
-        <h2>Follower file</h2>
-        <input type="file" id="fileInput" name="fileInput" accept=".json">
-        <button id="uploadButton">Upload</button>
-    </section>
 
-    <section>
-        <h2>Following file</h2>
-        <input type="file" id="fileInput2" name="fileInput2" accept=".json">
-        <button id="uploadButton2">Upload</button>
-    </section>
+<body>
+
     <a href="https://SiteStates.com" title="站長工具" style="display: none;">
         <img src="https://SiteStates.com/show/image/33614.jpg" border="0" />
     </a>
 
 
+    <section class="wrap">
+
+        <section class="introduction">
+            <h2 class="underline">Instagram-Follow-Back-Tracker</h2>
+
+            <div class="github-badge">
+                <img src="https://img.shields.io/github/last-commit/Xiang511/Instagram-Follow-Back-Tracker?display_timestamp=committer&style=flat-square"
+                    alt=""></img>
+                <img src="https://img.shields.io/github/created-at/Xiang511/Instagram-Follow-Back-Tracker?style=flat-square"
+                    alt="">
+                <img src="https://img.shields.io/github/license/Xiang511/Instagram-Follow-Back-Tracker?style=flat-square"
+                    alt="">
+                <img src="https://hits.dwyl.com/Xiang511/Instagram-Follow-Back-Tracker.svg?style=flat-square" alt="">
+
+                <a href="https://github.com/Xiang511/Instagram-Follow-Back-Tracker" target="_blank"><img
+                        src="https://img.shields.io/badge/Github-demo?style=flat-square&logo=github&color=%23000"
+                        alt=""></a>
+
+
+            </div>
+
+            <h1>This method utilizes Instagram's "Download Your Data" feature to retrieve a list of your followers and
+                following. By comparing the two lists, you can identify those who no longer follow you back.This tool only requires a JSON file and does not require any authorization or authentication. <a href="https://youtu.be/0XyRyZL3BO4?si=CVc7xN1tdGbtrgeK">demo</a></h1>
+
+        </section>
+
+        <section class="feature">
+            <h2 class="underline">Feature</h2>
+
+            <div class="todo">
+                <input type="checkbox" name="" id="" checked disabled> See who's not following me back on Instagram
+                </br>
+                <input type="checkbox" name="" id="" disabled> Add a timeline to show how long a user has been following
+                someone</br>
+                <input type="checkbox" name="" id="" disabled> Optimize website interface
+
+            </div>
+        </section>
+
+        <section class="usage">
+            <h2 class="underline">Usage</h2>
+
+            <h3>Preparation</h3>
+            <p>Navigate to the Account Management Center and Locate <a
+                    href="https://accountscenter.instagram.com/info_and_permissions/"> Your Information and Privacy.
+                </a>
+                Page</p>
+
+            <p>Click "Download information" > partail Information > Followers and followers list (only) > data range : all the
+                time > Format select json</p>
+
+            <h3>Process Downloaded Data</h3>
+            <p>Once you receive the download completion email, click the link to download the ZIP file.</p>
+
+            <p>Extract the ZIP file and locate the <code>followers.json</code> and <code>following.json</code> files.
+            </p>
+
+        </section>
+
+
+        <section class="usage">
+            <h2 class="underline">Data Privacy Policy</h2>
+
+            <p>This website does not retain any relevant information, it only offers search capabilities.</p>
+
+        </section>
+
+        <section class="usage">
+            <h2 class="underline">Bug report & Feedback</h2>
+            <p>Feel free to submit an <a href="https://github.com/Xiang511/Instagram-Follow-Back-Tracker/issues"> issue </a></p>
+        </section>
+
+    </section>
+
+
+    <div class="wrap">
+        <section class="main">
+            <h2 class="underline">Upload your JSON files</h2>
+            <div class="follower">
+                <h3>Follower file</h3>
+
+                <div class="input-group">
+                    <input class="form-control" type="file" id="fileInput" name="fileInput" accept=".json">
+                    <button class="btn btn-outline-secondary" id="uploadButton">Upload</button>
+                </div>
+
+            </div>
+            <div class="following">
+                <h3>Following file</h3>
+                <div class="input-group">
+                    <input class="form-control" type="file" id="fileInput2" name="fileInput2" accept=".json">
+                    <button class="btn btn-outline-secondary" id="uploadButton2">Upload</button>
+                </div>
+            </div>
+            <button class="btn btn-outline-primary my-2" onclick="main()">Click to run</button>
+        </section>
+    </div>
+
+    <div class="wrap">
+        <section class="main">
+            <h2 class="underline">Result</h2>
+            <ol class="list-group list-group-flush" id="result">
+
+            </ol>
+        </section>
+    </div>
+
+    <div class="toast1">
+
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-body">
+                    ✅ Data uploaded successfully 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://giscus.app/client.js" data-repo="Xiang511/Instagram-Follow-Back-Tracker"
+        data-repo-id="R_kgDOMXluYA" data-category="Announcements" data-category-id="DIC_kwDOMXluYM4Cg5y9"
+        data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0"
+        data-input-position="bottom" data-theme="light" data-lang="zh-TW" crossorigin="anonymous" async>
+        </script>
 </body>
 <script src="main.js"></script>
+<script src="bootstrap-5.1.1-dist/js/bootstrap.bundle.min.js"></script>
+
 </html>
