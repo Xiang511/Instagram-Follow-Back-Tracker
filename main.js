@@ -117,7 +117,8 @@ function main() {
         filteredFollowingValues.forEach(item => {
             var listItem = document.createElement('li');
             var link = document.createElement('a');
-            link.href = item.href; 
+            link.href = item.href;
+            link.target = "_blank";
             link.textContent = item.value; 
             listItem.classList.add('list-group-item');
             listItem.appendChild(link); 
