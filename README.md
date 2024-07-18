@@ -1,14 +1,15 @@
 # Instagram-Follow-Back-Tracker
 ![GitHub last commit](https://img.shields.io/github/last-commit/Xiang511/Instagram-Follow-Back-Tracker?display_timestamp=committer&style=flat-square) ![GitHub commit activity](https://img.shields.io/github/commit-activity/y/Xiang511/Instagram-Follow-Back-Tracker?style=flat-square) ![GitHub Created At](https://img.shields.io/github/created-at/Xiang511/Instagram-Follow-Back-Tracker?style=flat-square) ![GitHub License](https://img.shields.io/github/license/Xiang511/Instagram-Follow-Back-Tracker?style=flat-square)
 
-This method utilizes Instagram's "Download Your Data" feature to retrieve a list of your followers and following. By comparing the two lists, you can identify those who no longer follow you back.
+This method utilizes Instagram's "Download Your Data" feature to retrieve a list of your followers and following. By comparing the two lists, you can identify those who no longer follow you back.This tool only requires a JSON file and does not require any authorization or authentication. 
 
 
 ## Features
 
+- [x] Optimize website interface
 - [x] See who's not following me back on Instagram
 - [ ] Add a timeline to show how long a user has been following someone
-- [ ] Optimize website interface
+
 
 ## Usage
 
@@ -16,10 +17,14 @@ This method utilizes Instagram's "Download Your Data" feature to retrieve a list
 
 Navigate to the Account Management Center and Locate Your Information and Privacy Page
 
-Click "Download information", select the "JSON" format.
+Click "Download information" > partail Information > Followers and followers list (only) > data range : all the time > Format select json
 
 ```
 https://accountscenter.instagram.com/info_and_permissions/
+```
+
+```
+demo: https://www.youtube.com/watch?v=0XyRyZL3BO4&ab_channel=XiangFang
 ```
 
 ### Process Downloaded Data
