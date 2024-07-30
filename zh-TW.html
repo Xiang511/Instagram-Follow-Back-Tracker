@@ -12,6 +12,7 @@
     <link rel="icon" type="image/x-icon" href="img/grid-svgrepo-com.svg" />
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="bootstrap-5.1.1-dist/css/bootstrap.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
 <body>
@@ -43,7 +44,8 @@
             </div>
 
             <h1>此方法利用 Instagram 的「下載您的資料」功能來取得追蹤者及追蹤者清單檔案。透過比較兩個檔案，您可以發現那些沒有回追你的人</h1>
-            <h1>只需要 <code>JSON</code> 文件，不需要任何授權或認證 <a target="_blank" href="https://youtu.be/0XyRyZL3BO4?si=CVc7xN1tdGbtrgeK">觀看示範</a></h1>
+            <h1>只需要 <code>JSON</code> 文件，不需要任何授權或認證 <a target="_blank"
+                    href="https://youtu.be/0XyRyZL3BO4?si=CVc7xN1tdGbtrgeK">觀看示範</a></h1>
             <h1>新功能 : <a target="_blank" href="threads.html">查看在 Threads 上誰沒有回追你</a></h1>
         </section>
 
@@ -55,25 +57,24 @@
 
                 <input type="checkbox" name="" id="" checked disabled> 查看在 Instagram 上誰沒有回追你
                 </br>
-                <input type="checkbox" name="" id="" checked disabled > 優化網站介面 </br>
+                <input type="checkbox" name="" id="" checked disabled> 優化網站介面 </br>
 
                 <input type="checkbox" name="" id="" disabled> 新增時間軸以顯示個別用戶追蹤多長時間
-            
+
             </div>
         </section>
 
         <section class="usage">
             <h2 class="underline">如何使用</h2>
 
-            <h3>取得資料</h3>
-            <p>前往帳戶管理中心並找到<a target="_blank"
-                    href="https://accountscenter.instagram.com/info_and_permissions/"> 您的資訊和隱私
+            <!-- <h3>取得資料</h3> -->
+            <p>前往帳戶管理中心並找到<a target="_blank" href="https://accountscenter.instagram.com/info_and_permissions/"> 您的資訊和隱私
                 </a>
                 頁面</p>
 
             <p>點選「下載資訊」> 選擇部分資訊 > "只"選取<code>追蹤者及追蹤者清單</code> > 選擇資料範圍: <code>所有時間</code> > 選擇格式: <code>JSON</code></p>
 
-            <h3>處理下載的資料</h3>
+            <!-- <h3>處理下載的資料</h3> -->
             <p>收到下載完成電子郵件後，按一下連結下載 ZIP 檔案</p>
 
             <p>解壓縮檔案並找到<code>followers.json</code> 和 <code>following.json</code> 兩個檔案，並且上傳至網站
@@ -91,7 +92,8 @@
 
         <section class="usage">
             <h2 class="underline">錯誤回報 & 使用回饋</h2>
-            <p>歡迎前往 GitHub 提交 <a target="_blank" href="https://github.com/Xiang511/Instagram-Follow-Back-Tracker/issues"> Issues </a></p>
+            <p>歡迎前往 GitHub 提交 <a target="_blank"
+                    href="https://github.com/Xiang511/Instagram-Follow-Back-Tracker/issues"> Issues </a></p>
         </section>
 
     </section>
@@ -128,6 +130,31 @@
             </ol>
         </section>
     </div>
+
+    <div class="wrap">
+        <section class="feature">
+            <h2 class="underline">網站資訊</h2>
+
+            <div class="todo" style="margin: 0;">
+
+
+                <script src="https://SiteStates.com/show/js_text/b8cc25660e113e850df745866725c57d"
+                    type="text/javascript"></script>
+                <style>
+                    .sitestatesJs {
+                        display: none;
+                    }
+                </style>
+
+                <i class='bx bx-pointer'></i><span id="Total" class="icon"></span></br>
+
+                <i class='bx bx-walk'></i><span id="Today" class="icon"></span></br>
+
+                <i class='bx bx-pulse'></i><span id="online" class="icon"></span></br>
+            </div>
+        </section>
+    </div>
+
 
     <div class="toast1">
 
