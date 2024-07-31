@@ -12,6 +12,8 @@
     <link rel="icon" type="image/x-icon" href="img/grid-svgrepo-com.svg" />
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="bootstrap-5.1.1-dist/css/bootstrap.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
 </head>
 
 <body>
@@ -45,7 +47,7 @@
             <h1>此方法利用 Instagram 的「下載您的資料」功能來取得追蹤者及追蹤者清單檔案。透過比較兩個檔案，您可以發現那些沒有回追你的人</h1>
             <h1>只需要 <code>JSON</code> 文件，不需要任何授權或認證 <a target="_blank"
                     href="https://youtu.be/0XyRyZL3BO4?si=CVc7xN1tdGbtrgeK">觀看示範</a></h1>
-            <h1><a target="_blank" href="index.html">查看在 Instagram 上誰沒有回追你</a></h1>
+            <h1><a target="_blank" href="zh-TW.html">查看在 Instagram 上誰沒有回追你</a></h1>
 
         </section>
 
@@ -66,9 +68,7 @@
             <h2 class="underline">如何使用</h2>
 
             <!-- <h3>取得資料</h3> -->
-            <p>前往帳戶管理中心並找到<a target="_blank" href="https://accountscenter.instagram.com/info_and_permissions/"> 您的資訊和隱私
-                </a>
-                頁面</p>
+            <p>前往帳戶管理中心並找到 <a target="_blank" href="https://accountscenter.instagram.com/info_and_permissions/">您的資訊和隱私</a> 頁面</p>
 
             <p>點選「下載資訊」> 選擇部分資訊 > "只"選取<code>Threads</code> > 選擇資料範圍: <code>所有時間</code> > 選擇格式: <code>JSON</code></p>
 
@@ -105,7 +105,7 @@
 
                 <div class="input-group">
                     <input class="form-control" type="file" id="fileInput" name="fileInput" accept=".json">
-                    <button class="btn btn-outline-secondary" id="uploadButton">上傳</button>
+                    <!-- <button class="btn btn-outline-secondary" id="uploadButton">上傳</button> -->
                 </div>
 
             </div>
@@ -113,7 +113,7 @@
                 <h3>Following file</h3>
                 <div class="input-group">
                     <input class="form-control" type="file" id="fileInput2" name="fileInput2" accept=".json">
-                    <button class="btn btn-outline-secondary" id="uploadButton2">上傳</button>
+                    <!-- <button class="btn btn-outline-secondary" id="uploadButton2">上傳</button> -->
                 </div>
             </div>
             <button class="btn btn-outline-primary my-2" onclick="main()">開始搜尋</button>

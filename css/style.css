@@ -55,8 +55,8 @@ h2{
     margin-top: 1.5em;
 }
 .usage p{
-    margin-top: 0.8em;
-    line-height: 1.2em;
+    /* margin-top: 0.8em; */
+    line-height: 1.6em;
 }
 h2{
     font-size: 1.6em !important;

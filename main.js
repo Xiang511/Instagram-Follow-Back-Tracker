@@ -9,7 +9,7 @@ var toastTrigger = document.getElementById('liveToastBtn')
 var toastLiveExample = document.getElementById('liveToast')
 
 
-
+let toast_body = document.querySelector('.toast-body');
 
 function Follower() {
                 
@@ -21,6 +21,8 @@ function Follower() {
     ).flat();
     
     let toast = new bootstrap.Toast(toastLiveExample)
+
+ 
     toast.show()
 
 
@@ -44,7 +46,7 @@ function Following(arg) {
     
     }
 
-document.getElementById('uploadButton').addEventListener('click', function() {
+document.getElementById('fileInput').addEventListener('change', function() {
     var fileInput = document.getElementById('fileInput');
     if (fileInput.files.length > 0) {
         var file = fileInput.files[0];
@@ -54,13 +56,15 @@ document.getElementById('uploadButton').addEventListener('click', function() {
             var content = e.target.result;
             try {
                 var json = JSON.parse(content);
-
                 followersData = json;
-                Follower();
 
+                toast_body.textContent = " ✅ 資料上傳成功 "+ `${file.name}`
+
+                Follower();
             } catch (error) {
                 console.error('解析 JSON 失敗:', error);
-                alert('檔案內容不是有效的 JSON 格式');
+                alert('檔案內容不是有效的 JSON 格式，請選擇正確的檔案');
+                fileInput.value = ''; // 清空檔案輸入欄位
             }
         };
        
@@ -70,8 +74,7 @@ document.getElementById('uploadButton').addEventListener('click', function() {
     }
 });
 
-
-document.getElementById('uploadButton2').addEventListener('click', function() {
+document.getElementById('fileInput2').addEventListener('change', function() {
     var fileInput2 = document.getElementById('fileInput2');
     if (fileInput2.files.length > 0) {
         var file = fileInput2.files[0];
@@ -81,11 +84,14 @@ document.getElementById('uploadButton2').addEventListener('click', function() {
             var content = e.target.result;
             try {
                 var json = JSON.parse(content);
-                Following(json)
 
+                toast_body.textContent = " ✅ 資料上傳成功 "+ `${file.name}`
+
+                Following(json);
             } catch (error) {
                 console.error('解析 JSON 失敗:', error);
-                alert('檔案內容不是有效的 JSON 格式');
+                alert('檔案內容不是有效的 JSON 格式，請選擇正確的檔案');
+                fileInput2.value = ''; // 清空檔案輸入欄位
             }
         };
        
@@ -155,3 +161,5 @@ document.getElementById("Total").innerHTML = "累計訪客:"+"&ensp;" +Real_Time
 // document.getElementById("month").innerHTML = "本月訪客:"+ month;
 document.getElementById("Today").innerHTML = "今日訪客:" +"&ensp;" +secondSpan_result;
 document.getElementById("online").innerHTML = "線上人數:" +"&ensp;" +onlineSpan_result;
+
+
