@@ -8,6 +8,7 @@ This method utilizes Instagram's "Download Your Data" feature to retrieve a list
 
 - [x] Optimize website interface
 - [x] See who's not following me back on Instagram
+- [x] See who's not following me back on Threads
 - [ ] Add a timeline to show how long a user has been following someone
 
 
