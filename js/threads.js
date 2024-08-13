@@ -10,6 +10,8 @@ var toastLiveExample = document.getElementById('liveToast')
 
 let toast_body = document.querySelector('.toast-body');
 
+let YMDCheck = document.getElementById('YMDCheck');
+
 
 function Follower(arg) {
     followersData = arg.text_post_app_text_post_app_followers;
@@ -17,7 +19,8 @@ function Follower(arg) {
     followerValues = followersData.map(follower =>
         follower.string_list_data.map(data => ({
             value: data.value,
-            href: data.href
+            href: data.href,
+            timestamp: data.timestamp
         }))
     ).flat();
     // console.log(followerValues);
@@ -35,7 +38,8 @@ function Following(arg) {
     followingValues = followingData.map(follower =>
         follower.string_list_data.map(data => ({
             value: data.value,
-            href: data.href
+            href: data.href,
+            timestamp: data.timestamp
         }))
     ).flat();
 
@@ -99,7 +103,7 @@ document.getElementById('fileInput2').addEventListener('change', function () {
 });
 
 function main() {
-
+    result.innerHTML = '';
     if (fileInput.files.length > 0 && fileInput2.files.length > 0) {
 
         var filteredFollowingValues = followingValues.filter(following =>
@@ -120,11 +124,34 @@ function main() {
         filteredFollowingValues.forEach(item => {
             var listItem = document.createElement('li');
             var link = document.createElement('a');
+
+            var span = document.createElement('span');
+
+            moment.locale('zh-tw');
+            if(YMDCheck.checked){
+                span.textContent = `您於 ${moment.unix(item.timestamp).format("YYYY年MM月")} 開始追蹤此用戶`;
+            }else{
+                span.textContent = `您於 ${moment.unix(item.timestamp).fromNow()} 開始追蹤此用戶`;
+            }
+            
+
+            span.style.fontSize = '.5em';
+            if (window.innerWidth > 992) {
+                span.style.fontSize = '1em';
+            }
+            listItem.style.display = 'flex';
+            listItem.style.justifyContent = 'space-between';
+            listItem.style.alignItems = 'center';
+            listItem.classList.add('list-group-item');
+
+
+
+            link.textContent = item.value;
             link.href = item.href;
             link.target = "_blank";
-            link.textContent = item.value;
-            listItem.classList.add('list-group-item');
+           
             listItem.appendChild(link);
+            listItem.appendChild(span);
             result.appendChild(listItem);
         });
     } else {
