@@ -11,54 +11,60 @@ var toastLiveExample = document.getElementById('liveToast')
 
 let toast_body = document.querySelector('.toast-body');
 
+
+let YMDCheck = document.getElementById('YMDCheck');
+
+
 function Follower() {
-                
+
     followerValues = followersData.map(follower =>
         follower.string_list_data.map(data => ({
             value: data.value,
-            href: data.href
+            href: data.href,
+            timestamp: data.timestamp
         }))
     ).flat();
-    
+
     let toast = new bootstrap.Toast(toastLiveExample)
 
- 
+
     toast.show()
 
 
-    
+
 
 }
 
 function Following(arg) {
-        followingData = arg.relationships_following;
-    
-        followingValues = followingData.map(follower =>
-            follower.string_list_data.map(data => ({
-                value: data.value,
-                href: data.href
-            }))
-        ).flat();
+    followingData = arg.relationships_following;
 
-        let toast = new bootstrap.Toast(toastLiveExample)
-        toast.show()
-      
-    
-    }
+    followingValues = followingData.map(follower =>
+        follower.string_list_data.map(data => ({
+            value: data.value,
+            href: data.href,
+            timestamp: data.timestamp
+        }))
+    ).flat();
 
-document.getElementById('fileInput').addEventListener('change', function() {
+    let toast = new bootstrap.Toast(toastLiveExample)
+    toast.show()
+
+
+}
+
+document.getElementById('fileInput').addEventListener('change', function () {
     var fileInput = document.getElementById('fileInput');
     if (fileInput.files.length > 0) {
         var file = fileInput.files[0];
         var reader = new FileReader();
 
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             var content = e.target.result;
             try {
                 var json = JSON.parse(content);
                 followersData = json;
 
-                toast_body.textContent = " ✅ 資料上傳成功 "+ `${file.name}`
+                toast_body.textContent = " ✅ 資料上傳成功 " + `${file.name}`
 
                 Follower();
             } catch (error) {
@@ -67,25 +73,25 @@ document.getElementById('fileInput').addEventListener('change', function() {
                 fileInput.value = ''; // 清空檔案輸入欄位
             }
         };
-       
+
         reader.readAsText(file); // 讀取檔案內容作為文字
     } else {
         alert('請選擇一個檔案');
     }
 });
 
-document.getElementById('fileInput2').addEventListener('change', function() {
+document.getElementById('fileInput2').addEventListener('change', function () {
     var fileInput2 = document.getElementById('fileInput2');
     if (fileInput2.files.length > 0) {
         var file = fileInput2.files[0];
         var reader = new FileReader();
 
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             var content = e.target.result;
             try {
                 var json = JSON.parse(content);
 
-                toast_body.textContent = " ✅ 資料上傳成功 "+ `${file.name}`
+                toast_body.textContent = " ✅ 資料上傳成功 " + `${file.name}`
 
                 Following(json);
             } catch (error) {
@@ -94,7 +100,7 @@ document.getElementById('fileInput2').addEventListener('change', function() {
                 fileInput2.value = ''; // 清空檔案輸入欄位
             }
         };
-       
+
         reader.readAsText(file); // 讀取檔案內容作為文字
     } else {
         alert('請選擇一個檔案');
@@ -102,39 +108,59 @@ document.getElementById('fileInput2').addEventListener('change', function() {
 });
 
 function main() {
-
-    if (fileInput.files.length > 0 && fileInput2.files.length > 0) {
+    result.innerHTML = '';
+    if (fileInput.files.length > 0 && fileInput2.files.length > 0) { 
 
         var filteredFollowingValues = followingValues.filter(following =>
             !followerValues.some(follower => follower.value === following.value));
-    
+
         console.log(filteredFollowingValues);
-    
+
         var listElement = document.getElementById('followingList');
         if (!listElement) {
             listElement = document.createElement('ul');
             listElement.id = 'followingList';
             document.body.appendChild(listElement);
         }
-    
+
         listElement.innerHTML = '';
-    
-    
+
+
         filteredFollowingValues.forEach(item => {
             var listItem = document.createElement('li');
             var link = document.createElement('a');
+            var span = document.createElement('span');
+
+            moment.locale('zh-tw');
+            if(YMDCheck.checked){
+                span.textContent = `您於 ${moment.unix(item.timestamp).format("YYYY年MM月")} 開始追蹤此用戶`;
+            }else{
+                span.textContent = `您於 ${moment.unix(item.timestamp).fromNow()} 開始追蹤此用戶`;
+            }
+            
+
+            span.style.fontSize = '.5em';
+            if (window.innerWidth > 992) {
+                span.style.fontSize = '1em';
+            }
+            listItem.style.display = 'flex';
+            listItem.style.justifyContent = 'space-between';
+            listItem.style.alignItems = 'center';
+            listItem.classList.add('list-group-item');
+         
+            link.textContent = item.value;
             link.href = item.href;
             link.target = "_blank";
-            link.textContent = item.value; 
-            listItem.classList.add('list-group-item');
-            listItem.appendChild(link); 
+            
+
+            listItem.appendChild(link);
+            listItem.appendChild(span);
             result.appendChild(listItem);
         });
-    }else{
+    } else {
         alert('Please upload information first (follower and following)');
     }
 }
-
 
 
 //即時查詢總人數
@@ -157,9 +183,9 @@ const onlineSpan = online[2];
 const onlineSpan_txt = onlineSpan.textContent;
 const onlineSpan_result = onlineSpan_txt.substring(text.length - 4);
 
-document.getElementById("Total").innerHTML = "累計訪客:"+"&ensp;" +Real_Time_Number;
+document.getElementById("Total").innerHTML = "累計訪客:" + "&ensp;" + Real_Time_Number;
 // document.getElementById("month").innerHTML = "本月訪客:"+ month;
-document.getElementById("Today").innerHTML = "今日訪客:" +"&ensp;" +secondSpan_result;
-document.getElementById("online").innerHTML = "線上人數:" +"&ensp;" +onlineSpan_result;
+document.getElementById("Today").innerHTML = "今日訪客:" + "&ensp;" + secondSpan_result;
+document.getElementById("online").innerHTML = "線上人數:" + "&ensp;" + onlineSpan_result;
 
 
