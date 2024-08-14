@@ -9,23 +9,25 @@ This method utilizes Instagram's "Download Your Data" feature to retrieve a list
 - [x] Optimize website interface
 - [x] See who's not following me back on Instagram
 - [x] See who's not following me back on Threads
-- [ ] Add a timeline to show how long a user has been following someone
+- [x] Add a timeline to show how long a user has been following someone
 
 
 ## Usage
 
 ### Preparation
 
-Navigate to the Account Management Center and Locate Your Information and Privacy Page
+Navigate to the Account Management Center and Locate Your [Information and Privacy Page](https://accountscenter.instagram.com/info_and_permissions/)
+
+```Instagram```
 
 Click "Download information" > partail Information > Followers and followers list (only) > data range : all the time > Format select json
 
-```
-https://accountscenter.instagram.com/info_and_permissions/
-```
+```Threads```
+
+Click "Download information" > partail Information > Threads (only) > data range : all the time > Format select json
 
 ```
-demo: https://www.youtube.com/watch?v=0XyRyZL3BO4&ab_channel=XiangFang
+Demo: https://www.youtube.com/watch?v=0XyRyZL3BO4&ab_channel=XiangFang
 ```
 
 ### Process Downloaded Data
