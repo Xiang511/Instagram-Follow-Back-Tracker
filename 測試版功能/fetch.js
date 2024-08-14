@@ -44,7 +44,7 @@ const values = unfollowValues.map(item => item.value);
 values.forEach(async username => {
     await getProfilePicture(username);
    //將剛下載的圖片放入unfollowed.json物件中
-    unfollowValues.find(item => item.value === username).profilePicture = `測試版功能/profile_pictures/${username}_profile_picture.png`;
+    unfollowValues.find(item => item.value === username).profilePicture = `profile_pictures/${username}_profile_picture.png`;
     fs.writeFileSync('unfollowed.json', JSON.stringify(unfollowValues, null, 2));
     
 });
