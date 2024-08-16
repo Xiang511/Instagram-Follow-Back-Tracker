@@ -40,6 +40,7 @@ function main(){
         followersData.forEach(item => {
             var listItem = document.createElement('li');
             var link = document.createElement('a');
+            var div = document.createElement('div');
             var span = document.createElement('span');
             //建立img元素
             var img = document.createElement('img');
@@ -64,12 +65,21 @@ function main(){
             link.textContent = item.value;
             link.href = item.href;
             link.target = "_blank";
-            img.style.width = '5%';
+            img.style.width = '15%'
+            img.style.marginRight = '0.5em'
             img.style.borderRadius = '50%';
             img.src = item.profilePicture;
-            listItem.appendChild(img);
-            listItem.appendChild(link);
+            img.onerror = function() {
+                this.src = 'profile_pictures/default_profile_picture.png';
+
+            };
+        
+           
+            div.appendChild(img);
+            div.appendChild(link);
+            listItem.appendChild(div);      
             listItem.appendChild(span);
             result.appendChild(listItem);
         });
 }
+//將找不到的圖片預設為defale.png
