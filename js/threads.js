@@ -111,6 +111,20 @@ function main() {
 
         console.log(filteredFollowingValues);
 
+        let downloadbtn = document.getElementById('downloadjson');
+       
+            if (downloadbtn.checked) {
+                var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(filteredFollowingValues));
+                var downloadAnchorNode = document.createElement('a');
+                downloadAnchorNode.setAttribute("href", dataStr);
+                downloadAnchorNode.setAttribute("download", "filteredFollowingValues.json");
+                document.body.appendChild(downloadAnchorNode); // required for firefox
+                downloadAnchorNode.click();
+                downloadAnchorNode.remove();
+            }
+            
+
+
         var listElement = document.getElementById('followingList');
         if (!listElement) {
             listElement = document.createElement('ul');
@@ -149,7 +163,12 @@ function main() {
             link.textContent = item.value;
             link.href = item.href;
             link.target = "_blank";
-           
+
+        
+
+
+
+
             listItem.appendChild(link);
             listItem.appendChild(span);
             result.appendChild(listItem);
