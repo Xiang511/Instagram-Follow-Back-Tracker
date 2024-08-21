@@ -243,3 +243,8 @@ code {
     transition: none;
     opacity: 1;
 }
+
+.bxl-github::before{
+    font-size: 1.5em;
+    vertical-align: sub;
+}
