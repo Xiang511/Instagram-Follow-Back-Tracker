@@ -4,15 +4,22 @@ var followerValues = [];
 var followingValues = [];
 
 var result = document.getElementById('result');
-
-var toastTrigger = document.getElementById('liveToastBtn')
-var toastLiveExample = document.getElementById('liveToast')
-
-
-let toast_body = document.querySelector('.toast-body');
-
-
 let YMDCheck = document.getElementById('YMDCheck');
+
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'center',
+  iconColor: 'white',
+  customClass: {
+    popup: 'colored-toast',
+  },
+  showConfirmButton: false,
+  timer: 1500,
+  timerProgressBar: true,
+})
+
+
 
 
 function Follower() {
@@ -24,14 +31,6 @@ function Follower() {
             timestamp: data.timestamp
         }))
     ).flat();
-
-    let toast = new bootstrap.Toast(toastLiveExample)
-
-
-    toast.show()
-
-
-
 
 }
 
@@ -46,10 +45,6 @@ function Following(arg) {
         }))
     ).flat();
 
-    let toast = new bootstrap.Toast(toastLiveExample)
-    toast.show()
-
-
 }
 
 document.getElementById('fileInput').addEventListener('change', function () {
@@ -63,20 +58,32 @@ document.getElementById('fileInput').addEventListener('change', function () {
             try {
                 var json = JSON.parse(content);
                 followersData = json;
-
-                toast_body.textContent = " ✅ 資料上傳成功 " + `${file.name}`
+                Toast.fire({
+                    icon: 'success',
+                    title: '上傳成功',
+                  })
+                
 
                 Follower();
             } catch (error) {
                 console.error('解析 JSON 失敗:', error);
-                alert('檔案內容不是有效的 JSON 格式，請選擇正確的檔案');
+                Swal.fire({
+                    title: "請選擇正確的檔案",
+                    text: "該檔案內容不是有效的 JSON 格式",
+                    icon: "question"
+                  });
                 fileInput.value = ''; // 清空檔案輸入欄位
             }
         };
 
         reader.readAsText(file); // 讀取檔案內容作為文字
     } else {
-        alert('請選擇一個檔案');
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "看來你在選擇檔案過程中出現問題",
+            footer: '請重新嘗試</br>若仍然無法解決歡迎前往留言區提問</a>'
+          });
     }
 });
 
@@ -90,20 +97,34 @@ document.getElementById('fileInput2').addEventListener('change', function () {
             var content = e.target.result;
             try {
                 var json = JSON.parse(content);
-
-                toast_body.textContent = " ✅ 資料上傳成功 " + `${file.name}`
+                followersData = json;
+                Toast.fire({
+                    icon: 'success',
+                    title: '上傳成功',
+                  })
+               
 
                 Following(json);
             } catch (error) {
                 console.error('解析 JSON 失敗:', error);
-                alert('檔案內容不是有效的 JSON 格式，請選擇正確的檔案');
+                Swal.fire({
+                    title: "請選擇正確的檔案",
+                    text: "該檔案內容不是有效的 JSON 格式",
+                    icon: "question"
+                  });
                 fileInput2.value = ''; // 清空檔案輸入欄位
             }
         };
 
         reader.readAsText(file); // 讀取檔案內容作為文字
     } else {
-        alert('請選擇一個檔案');
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "看來你在選擇檔案過程中出現問題",
+            footer: '請重新嘗試</br>若仍然無法解決歡迎前往留言區提問</a>'
+          });
+        
     }
 });
 
@@ -158,7 +179,12 @@ function main() {
             result.appendChild(listItem);
         });
     } else {
-        alert('Please upload information first (follower and following)');
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "請先上傳您的檔案",
+            footer: '請重新嘗試</br>若仍然無法解決歡迎前往留言區提問</a>'
+          });
     }
 }
 
