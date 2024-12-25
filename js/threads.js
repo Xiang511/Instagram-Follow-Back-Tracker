@@ -217,14 +217,14 @@ const firstSpan = document.querySelector('.sitestatesJs');
 //取得字串
 const text = firstSpan.textContent;
 //取得數字
-const Real_Time_Number = text.substring(text.length - 4);
+const Real_Time_Number = text.substring(text.length - 5);
 
 
 //今日訪客
 const spans = document.querySelectorAll(".sitestatesJs");
 const secondSpan = spans[1];
 const secondSpan_txt = secondSpan.textContent;
-const secondSpan_result = secondSpan_txt.substring(text.length - 4);
+const secondSpan_result = secondSpan_txt.substring(text.length - 6);
 
 //線上人數
 const online = document.querySelectorAll(".sitestatesJs");
