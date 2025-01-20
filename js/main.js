@@ -1,10 +1,14 @@
 var followersData = [];
 var followingData = [];
 var followerValues = [];
+var OldfollowerValues = [];
 var followingValues = [];
 
+let fileInput = document.getElementById('fileInput');
+let fileInput2 = document.getElementById('fileInput2');
 var result = document.getElementById('result');
 let YMDCheck = document.getElementById('YMDCheck');
+let CheckLastFile = document.getElementById('CheckLastFile');
 
 
 const Toast = Swal.mixin({
@@ -19,6 +23,30 @@ const Toast = Swal.mixin({
     timerProgressBar: true,
 })
 
+CheckLastFile.addEventListener('change', function () {
+    if (CheckLastFile.checked) {
+        // 清空input
+        fileInput.value = '';
+        fileInput2.value = '';
+
+        // toast 您以切換為第二選項
+        Toast.fire({
+            icon: 'success',
+            title: '已切換為第二選項',
+        })
+    }else{
+        // 清空input
+        fileInput.value = '';
+        fileInput2.value = '';
+
+        // toast 您以切換為第一選項
+        Toast.fire({
+            icon: 'success',
+            title: '已切換為預設選項',
+        })
+    }
+
+});
 
 
 
@@ -31,6 +59,19 @@ function Follower() {
             timestamp: data.timestamp
         }))
     ).flat();
+    console.log(followerValues);
+
+}
+function OldFollower() {
+
+    OldfollowerValues = followersData.map(follower =>
+        follower.string_list_data.map(data => ({
+            value: data.value,
+            href: data.href,
+            timestamp: data.timestamp
+        }))
+    ).flat();
+    console.log(OldfollowerValues);
 
 }
 
@@ -48,7 +89,6 @@ function Following(arg) {
 }
 
 document.getElementById('fileInput').addEventListener('change', function () {
-    let fileInput = document.getElementById('fileInput');
     if (fileInput.files.length > 0) {
         let file = fileInput.files[0];
         let reader = new FileReader();
@@ -62,8 +102,8 @@ document.getElementById('fileInput').addEventListener('change', function () {
                     icon: 'success',
                     title: '上傳成功',
                 })
-
-
+                
+                
                 Follower();
             } catch (error) {
                 console.error('解析 JSON 失敗:', error);
@@ -75,7 +115,7 @@ document.getElementById('fileInput').addEventListener('change', function () {
                 fileInput.value = ''; // 清空檔案輸入欄位
             }
         };
-
+        
         reader.readAsText(file); // 讀取檔案內容作為文字
     } else {
         Swal.fire({
@@ -88,11 +128,10 @@ document.getElementById('fileInput').addEventListener('change', function () {
 });
 
 document.getElementById('fileInput2').addEventListener('change', function () {
-    let fileInput2 = document.getElementById('fileInput2');
     if (fileInput2.files.length > 0) {
         let file = fileInput2.files[0];
         let reader = new FileReader();
-
+        
         reader.onload = function (e) {
             let content = e.target.result;
             try {
@@ -103,8 +142,12 @@ document.getElementById('fileInput2').addEventListener('change', function () {
                     title: '上傳成功',
                 })
 
+                if (CheckLastFile.checked) {
+                    OldFollower();
+                } else {
+                    Following(json);
+                }
 
-                Following(json);
             } catch (error) {
                 console.error('解析 JSON 失敗:', error);
                 Swal.fire({
@@ -176,27 +219,34 @@ function creatList(filteredFollowingValues) {
     })
 }
 
+
+
 function main() {
     result.innerHTML = '';
     if (fileInput.files.length > 0 && fileInput2.files.length > 0) {
 
+
         let filteredFollowingValues = followingValues.filter(following =>
             !followerValues.some(follower => follower.value === following.value));
 
-        // console.log(filteredFollowingValues);
+        let filteredFollowingValuesLast = followerValues
+            .filter(following =>
+                !OldfollowerValues.some(follower => follower.value === following.value)
+            );
 
-        if (filteredFollowingValues.length === 0) {
-            Swal.fire({
-                icon: "success",
-                title: "恭喜",
-                text: "您的追蹤名單中沒有任何未追蹤你的用戶",
-                footer: '請重新嘗試</br>若仍然無法解決歡迎前往留言區提問</a>'
-            });
+
+        // console.log(filteredFollowingValues);
+        // console.log(filteredFollowingValuesLast);
+        if (CheckLastFile.checked) {
+            return creatList(filteredFollowingValuesLast);
+        }
+        else {
+            return creatList(filteredFollowingValues);
         }
 
-        return creatList(filteredFollowingValues);
 
-    } else {
+    } 
+    else {
         Swal.fire({
             icon: "error",
             title: "Oops...",

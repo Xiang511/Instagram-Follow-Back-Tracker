@@ -19,7 +19,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js" integrity="sha512-42PE0rd+wZ2hNXftlM78BSehIGzezNeQuzihiBCvUEB3CVxHvsShF86wBWwQORNxNINlBPuq7rG4WWhNiTVHFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.13.3/sweetalert2.all.min.js' integrity='sha512-gsNfesanRM2JhCctFRZl9ptz7RKkQip/EMj9Ji3V4kuiPv6b+qP04icNTeZR93HBgxRJcJRU6w5mA9UGR18SFQ==' crossorigin='anonymous'></script>
 </head>
-
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+  </style>
+  
 <body>
 
   <a href="https://SiteStates.com" title="站長工具" style="display: none;">
@@ -49,6 +52,7 @@
       <h1>此方法利用 Instagram 的「下載您的資料」功能來取得追蹤者及追蹤者清單檔案。透過比較兩個檔案，您可以發現那些沒有回追你的人</h1>
       <h1>只需要 <code>JSON</code> 文件，不需要任何授權或認證 <a target="_blank" href="https://youtu.be/0XyRyZL3BO4?si=CVc7xN1tdGbtrgeK">觀看示範</a></h1>
       <h1>新功能 : <a target="_blank" href="threads.html">查看在 Threads 上誰沒有回追你</a></h1>
+      <h1>新功能 : <a href="#mainform">查看更名用戶以及新增加的粉絲，上傳新舊檔案進行比較</a></h1>
     </section>
 
     <section class="feature">
@@ -62,7 +66,8 @@
         <input type="checkbox" name="" id="" checked disabled> 優化網站介面 </br>
 
         <input type="checkbox" name="" id="" checked disabled> 顯示個別用戶在甚麼時候開始追蹤你
-
+        </br>
+        <input type="checkbox" name="" id="" checked disabled> 查看更名用戶以及新增加的粉絲
       </div>
     </section>
 
@@ -103,7 +108,7 @@
   </section>
 
 
-  <div class="wrap">
+  <div class="wrap" id="mainform">
     <section class="main">
       <h2 class="underline">上傳你的 JSON 檔案</h2>
       <div class="follower">
@@ -116,13 +121,14 @@
 
       </div>
       <div class="following">
-        <h3>Following file</h3>
+        <h3>Following or Old Follower file</h3>
         <div class="input-group">
           <input class="form-control" type="file" id="fileInput2" name="fileInput2" accept=".json">
           <!-- <button class="btn btn-outline-secondary" id="uploadButton2">上傳</button> -->
         </div>
       </div>
       <input type="checkbox" class="ui-checkbox" id="YMDCheck" name=""> 顯示詳細日期
+      <input type="checkbox" class="ui-checkbox" id="CheckLastFile" name=""> 查看新粉絲以及更名用戶
       <button class="btn btn-outline-primary my-3" onclick="main()">開始搜尋</button>
 
 
