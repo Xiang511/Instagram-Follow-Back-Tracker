@@ -128,6 +128,54 @@ document.getElementById('fileInput2').addEventListener('change', function () {
     }
 });
 
+
+
+// 創建列表
+function creatList(filteredFollowingValues) {
+
+    let listElement = document.getElementById('followingList');
+    if (!listElement) {
+        listElement = document.createElement('ul');
+        listElement.id = 'followingList';
+        document.body.appendChild(listElement);
+    }
+
+    listElement.innerHTML = '';
+
+
+    filteredFollowingValues.forEach(item => {
+        let listItem = document.createElement('li');
+        let link = document.createElement('a');
+        let span = document.createElement('span');
+
+        moment.locale('zh-tw');
+        if (YMDCheck.checked) {
+            span.textContent = `您於 ${moment.unix(item.timestamp).format("YYYY年MM月")} 開始追蹤此用戶`;
+        } else {
+            span.textContent = `您於 ${moment.unix(item.timestamp).fromNow()} 開始追蹤此用戶`;
+        }
+
+
+        span.style.fontSize = '.5em';
+        if (window.innerWidth > 992) {
+            span.style.fontSize = '1em';
+        }
+        listItem.style.display = 'flex';
+        listItem.style.justifyContent = 'space-between';
+        listItem.style.alignItems = 'center';
+        listItem.classList.add('list-group-item');
+
+        link.textContent = item.value;
+        link.href = item.href;
+        link.target = "_blank";
+
+
+        listItem.appendChild(link);
+        listItem.appendChild(span);
+        result.appendChild(listItem);
+    })
+}
+
 function main() {
     result.innerHTML = '';
     if (fileInput.files.length > 0 && fileInput2.files.length > 0) {
@@ -141,52 +189,13 @@ function main() {
             Swal.fire({
                 icon: "success",
                 title: "恭喜",
-                text: "您的追蹤名單中沒有任何未追蹤的用戶",
+                text: "您的追蹤名單中沒有任何未追蹤你的用戶",
                 footer: '請重新嘗試</br>若仍然無法解決歡迎前往留言區提問</a>'
             });
         }
 
-        let listElement = document.getElementById('followingList');
-        if (!listElement) {
-            listElement = document.createElement('ul');
-            listElement.id = 'followingList';
-            document.body.appendChild(listElement);
-        }
+        return creatList(filteredFollowingValues);
 
-        listElement.innerHTML = '';
-
-
-        filteredFollowingValues.forEach(item => {
-            let listItem = document.createElement('li');
-            let link = document.createElement('a');
-            let span = document.createElement('span');
-
-            moment.locale('zh-tw');
-            if (YMDCheck.checked) {
-                span.textContent = `您於 ${moment.unix(item.timestamp).format("YYYY年MM月")} 開始追蹤此用戶`;
-            } else {
-                span.textContent = `您於 ${moment.unix(item.timestamp).fromNow()} 開始追蹤此用戶`;
-            }
-
-
-            span.style.fontSize = '.5em';
-            if (window.innerWidth > 992) {
-                span.style.fontSize = '1em';
-            }
-            listItem.style.display = 'flex';
-            listItem.style.justifyContent = 'space-between';
-            listItem.style.alignItems = 'center';
-            listItem.classList.add('list-group-item');
-
-            link.textContent = item.value;
-            link.href = item.href;
-            link.target = "_blank";
-
-
-            listItem.appendChild(link);
-            listItem.appendChild(span);
-            result.appendChild(listItem);
-        });
     } else {
         Swal.fire({
             icon: "error",
