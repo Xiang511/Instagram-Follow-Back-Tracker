@@ -28,7 +28,8 @@ CheckLastFile.addEventListener('change', function () {
         // 清空input
         fileInput.value = '';
         fileInput2.value = '';
-
+        result.innerHTML = '';
+        
         // toast 您以切換為第二選項
         Toast.fire({
             icon: 'success',
