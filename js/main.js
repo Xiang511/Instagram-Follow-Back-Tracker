@@ -9,6 +9,7 @@ let fileInput2 = document.getElementById('fileInput2');
 var result = document.getElementById('result');
 let YMDCheck = document.getElementById('YMDCheck');
 let CheckLastFile = document.getElementById('CheckLastFile');
+let CheckOldName = document.getElementById('CheckOldName');
 
 
 const Toast = Swal.mixin({
@@ -23,28 +24,47 @@ const Toast = Swal.mixin({
     timerProgressBar: true,
 })
 
+
+
 CheckLastFile.addEventListener('change', function () {
     if (CheckLastFile.checked) {
         // 清空input
         fileInput.value = '';
         fileInput2.value = '';
         result.innerHTML = '';
-        
+
         // toast 您以切換為第二選項
         Toast.fire({
             icon: 'success',
             title: '已切換為第二選項',
         })
-    }else{
+    } else {
         // 清空input
         fileInput.value = '';
         fileInput2.value = '';
-
+        result.innerHTML = '';
+        CheckOldName.checked = false
         // toast 您以切換為第一選項
         Toast.fire({
             icon: 'success',
             title: '已切換為預設選項',
         })
+    }
+
+});
+
+
+
+CheckOldName.addEventListener('change', function () {
+    if (CheckOldName.checked && CheckLastFile.checked) {
+       
+    } else if (CheckOldName.checked) {
+        Swal.fire({
+            title: "請先選擇第二選項",
+            text: "此功能與第二項綁定",
+            icon: "question"
+        });
+        CheckOldName.checked = false; // Uncheck CheckOldName if CheckLastFile is not checked
     }
 
 });
@@ -103,8 +123,8 @@ document.getElementById('fileInput').addEventListener('change', function () {
                     icon: 'success',
                     title: '上傳成功',
                 })
-                
-                
+
+
                 Follower();
             } catch (error) {
                 console.error('解析 JSON 失敗:', error);
@@ -116,7 +136,7 @@ document.getElementById('fileInput').addEventListener('change', function () {
                 fileInput.value = ''; // 清空檔案輸入欄位
             }
         };
-        
+
         reader.readAsText(file); // 讀取檔案內容作為文字
     } else {
         Swal.fire({
@@ -132,7 +152,7 @@ document.getElementById('fileInput2').addEventListener('change', function () {
     if (fileInput2.files.length > 0) {
         let file = fileInput2.files[0];
         let reader = new FileReader();
-        
+
         reader.onload = function (e) {
             let content = e.target.result;
             try {
@@ -235,10 +255,18 @@ function main() {
                 !OldfollowerValues.some(follower => follower.value === following.value)
             );
 
+        let oldname = OldfollowerValues
+            .filter(following =>
+                !followerValues.some(follower => follower.value === following.value)
+            );
+
 
         // console.log(filteredFollowingValues);
         // console.log(filteredFollowingValuesLast);
-        if (CheckLastFile.checked) {
+        if (CheckOldName.checked && CheckLastFile.checked) {
+            return creatList(oldname);
+        }
+        else if (CheckLastFile.checked) {
             return creatList(filteredFollowingValuesLast);
         }
         else {
@@ -246,7 +274,7 @@ function main() {
         }
 
 
-    } 
+    }
     else {
         Swal.fire({
             icon: "error",
