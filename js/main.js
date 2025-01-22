@@ -10,7 +10,7 @@ var result = document.getElementById('result');
 let YMDCheck = document.getElementById('YMDCheck');
 let CheckLastFile = document.getElementById('CheckLastFile');
 let CheckOldName = document.getElementById('CheckOldName');
-
+let switchbtn = document.getElementById('switch');
 
 const Toast = Swal.mixin({
     toast: true,
@@ -32,7 +32,7 @@ CheckLastFile.addEventListener('change', function () {
         fileInput.value = '';
         fileInput2.value = '';
         result.innerHTML = '';
-
+        switchbtn.innerHTML = 'Old Follower file';
         // toast 您以切換為第二選項
         Toast.fire({
             icon: 'success',
@@ -43,6 +43,7 @@ CheckLastFile.addEventListener('change', function () {
         fileInput.value = '';
         fileInput2.value = '';
         result.innerHTML = '';
+        switchbtn.innerHTML = 'Following file';
         CheckOldName.checked = false
         // toast 您以切換為第一選項
         Toast.fire({
