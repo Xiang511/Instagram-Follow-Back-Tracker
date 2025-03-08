@@ -20,7 +20,7 @@ const Toast = Swal.mixin({
         popup: 'colored-toast',
     },
     showConfirmButton: false,
-    timer: 1500,
+    timer: 3000,
     timerProgressBar: true,
 })
 
@@ -37,6 +37,8 @@ CheckLastFile.addEventListener('change', function () {
         Toast.fire({
             icon: 'success',
             title: '已切換為第二選項',
+            text: '請將您之前的 Follower file 上傳',
+            width: '30rem'
         })
     } else {
         // 清空input
