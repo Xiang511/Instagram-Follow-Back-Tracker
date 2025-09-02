@@ -3,6 +3,9 @@ var followingData = [];
 var followerValues = [];
 var OldfollowerValues = [];
 var followingValues = [];
+// 新增忽略名單與標籤儲存結構
+let ignoreList = []; // array of username strings
+let tagMap = {};     // { username: "tag" }
 
 let fileInput = document.getElementById('fileInput');
 let fileInput2 = document.getElementById('fileInput2');
@@ -60,7 +63,7 @@ CheckLastFile.addEventListener('change', function () {
 
 CheckOldName.addEventListener('change', function () {
     if (CheckOldName.checked && CheckLastFile.checked) {
-       
+
     } else if (CheckOldName.checked) {
         Swal.fire({
             title: "請先選擇第二選項",
@@ -211,14 +214,32 @@ function creatList(filteredFollowingValues) {
 
     // 新增匯出按鈕（JSON / CSV）
     let exportContainer = document.getElementById('exportContainer');
+
     document.getElementById('exportJsonBtn').onclick = () => exportToJSON(filteredFollowingValues, 'filtered_following.json');
     document.getElementById('exportCsvBtn').onclick = () => exportToCSV(filteredFollowingValues, 'filtered_following.csv');
+    document.getElementById('manageIgnoreBtn').onclick = () => {
+        const list = ignoreList.join(',');
+        const input = prompt('請以逗號分隔編輯忽略名單（username1,username2）:', list);
+        if (input === null) return;
+        ignoreList = input.split(',').map(s => s.trim()).filter(Boolean);
+        saveIgnoreData();
+        Toast.fire({ icon: 'success', title: '忽略名單已更新' });
+    };
 
-
+    // 列表項目建立：新增忽略按鈕與標籤按鈕
     filteredFollowingValues.forEach(item => {
         let listItem = document.createElement('li');
+        let leftWrap = document.createElement('div');
+        let rightWrap = document.createElement('div');
+        leftWrap.style.display = 'flex';
+        leftWrap.style.alignItems = 'center';
+        leftWrap.style.gap = '0.5rem';
+
         let link = document.createElement('a');
         let span = document.createElement('span');
+        let btnIgnore = document.createElement('button');
+        let btnTag = document.createElement('button');
+        let tagLabel = document.createElement('small');
 
         moment.locale('zh-tw');
         if (YMDCheck.checked) {
@@ -242,9 +263,44 @@ function creatList(filteredFollowingValues) {
         link.target = "_blank";
 
 
-        listItem.appendChild(link);
-        listItem.appendChild(span);
+        leftWrap.appendChild(link);
+
+        // Conditionally add tag label and tool buttons
+        if (document.getElementById('showTools').checked) {
+            // 標籤顯示
+            tagLabel.style.marginLeft = '6px';
+            tagLabel.textContent = tagMap[item.value] ? ` ${tagMap[item.value]}` : '';
+            leftWrap.appendChild(tagLabel);
+
+            // 標籤按鈕
+            btnTag.className = 'btn btn-sm btn-outline-primary';
+            btnTag.textContent = '✏';
+            btnTag.onclick = () => {
+                setTag(item.value);
+                tagLabel.textContent = tagMap[item.value] ? ` ${tagMap[item.value]}` : '';
+            };
+
+            // 忽略按鈕
+            btnIgnore.className = 'btn btn-sm btn-outline-danger';
+            btnIgnore.textContent = isIgnored(item.value) ? '取消忽略' : '忽略';
+            btnIgnore.onclick = () => {
+                toggleIgnore(item.value);
+                btnIgnore.textContent = isIgnored(item.value) ? '取消忽略' : '忽略';
+                // 重新渲染列表（簡易方式）
+                main();
+            };
+
+            rightWrap.appendChild(span);
+            rightWrap.appendChild(btnTag);
+            rightWrap.appendChild(btnIgnore);
+        } else {
+            rightWrap.appendChild(span);
+        }
+
+        listItem.appendChild(leftWrap);
+        listItem.appendChild(rightWrap);
         result.appendChild(listItem);
+        
     })
 }
 
@@ -254,36 +310,36 @@ function main() {
     result.innerHTML = '';
     if (fileInput.files.length > 0 && fileInput2.files.length > 0) {
 
-
-        let filteredFollowingValues = followingValues.filter(following =>
-            !followerValues.some(follower => follower.value === following.value));
+        // 先計算差異，再把被忽略的 username 排除
+        let filteredFollowingValues = followingValues
+            .filter(following =>
+                !followerValues.some(follower => follower.value === following.value)
+            )
+        if (showIgnore.checked) {
+            filteredFollowingValues = filteredFollowingValues.filter(item => !isIgnored(item.value));
+        }
 
         let filteredFollowingValuesLast = followerValues
             .filter(following =>
                 !OldfollowerValues.some(follower => follower.value === following.value)
-            );
+            )
+            .filter(item => !isIgnored(item.value));
 
         let oldname = OldfollowerValues
             .filter(following =>
                 !followerValues.some(follower => follower.value === following.value)
-            );
+            )
+            .filter(item => !isIgnored(item.value));
 
-
-        // console.log(filteredFollowingValues);
-        // console.log(filteredFollowingValuesLast);
         if (CheckOldName.checked && CheckLastFile.checked) {
             return creatList(oldname);
-        }
-        else if (CheckLastFile.checked) {
+        } else if (CheckLastFile.checked) {
             return creatList(filteredFollowingValuesLast);
-        }
-        else {
+        } else {
             return creatList(filteredFollowingValues);
         }
 
-
-    }
-    else {
+    } else {
         Swal.fire({
             icon: "error",
             title: "Oops...",
@@ -321,24 +377,27 @@ document.getElementById("online").innerHTML = "線上人數:" + "&ensp;" + onlin
 
 // 新增匯出輔助函式
 function exportToJSON(data, filename) {
-    const blob = new Blob([JSON.stringify(data || [], null, 2)], { type: 'application/json' });
+    const enriched = (data || []).filter(d => !isIgnored(d.value)).map(d => ({ ...d, tag: tagMap[d.value] || '' }));
+    const blob = new Blob([JSON.stringify(enriched, null, 2)], { type: 'application/json' });
     downloadBlob(blob, filename);
 }
 
 function exportToCSV(data, filename) {
-    if (!data || data.length === 0) {
+    const filtered = (data || []).filter(d => !isIgnored(d.value));
+    if (filtered.length === 0) {
         Swal.fire({ icon: 'info', title: '沒有資料可匯出' });
         return;
     }
-    const headers = ['value', 'href', 'timestamp', 'date', 'profilePicture'];
-    const rows = data.map(item => {
+    const headers = ['value', 'href', 'timestamp', 'date', 'profilePicture', 'tag'];
+    const rows = filtered.map(item => {
         const date = item.timestamp ? moment.unix(item.timestamp).format('YYYY-MM-DD HH:mm:ss') : '';
         const vals = [
             item.value || '',
             item.href || '',
             item.timestamp || '',
             date,
-            item.profilePicture || ''
+            item.profilePicture || '',
+            tagMap[item.value] || ''
         ];
         return vals.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',');
     });
@@ -357,5 +416,61 @@ function downloadBlob(blob, filename) {
     a.remove();
     URL.revokeObjectURL(url);
 }
+
+// 載入忽略資料
+function loadIgnoreData() {
+    try {
+        const raw = localStorage.getItem('ig_ignore_data');
+        if (raw) {
+            const obj = JSON.parse(raw);
+            ignoreList = obj.ignore || [];
+            tagMap = obj.tags || {};
+        }
+    } catch (e) {
+        console.error('loadIgnoreData error', e);
+        ignoreList = [];
+        tagMap = {};
+    }
+}
+
+// 儲存忽略資料
+function saveIgnoreData() {
+    try {
+        localStorage.setItem('ig_ignore_data', JSON.stringify({ ignore: ignoreList, tags: tagMap }));
+    } catch (e) {
+        console.error('saveIgnoreData error', e);
+    }
+}
+
+// 判斷是否被忽略
+function isIgnored(username) {
+    return ignoreList.includes(username);
+}
+
+// 新增 / 移除忽略
+function toggleIgnore(username) {
+    if (isIgnored(username)) {
+        ignoreList = ignoreList.filter(u => u !== username);
+    } else {
+        ignoreList.push(username);
+    }
+    saveIgnoreData();
+}
+
+// 設定標籤
+function setTag(username) {
+    const current = tagMap[username] || '';
+    const tag = prompt(`為 ${username} 輸入標籤（留空表示移除）:`, current);
+    if (tag === null) return; // 取消
+    if (tag.trim() === '') {
+        delete tagMap[username];
+    } else {
+        tagMap[username] = tag.trim();
+    }
+    saveIgnoreData();
+}
+
+// 載入儲存的忽略資料
+loadIgnoreData();
 
 

@@ -16,16 +16,20 @@ li:hover {
         padding-left: 0 !important;
         padding-right: 0 !important;
     }
-    .mob{
+    /* .mob{
         display: block;
         margin: .5em 0;
-    }
+    } */
 }
 @media screen and (min-width:769px) {
-    .mob{
+    /* .mob{
         display: inline;
-    }
+    } */
 }
+.mob{
+    display: none;
+}
+
 
 h1,
 h2,
@@ -142,7 +146,9 @@ code {
     margin-left: 0.4em;
 }
 
-
+.newfeature{
+    background: yellow;
+}
 
 
 /* checkbox settings 👇 */

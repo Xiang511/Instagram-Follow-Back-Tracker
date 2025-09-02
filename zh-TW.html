@@ -51,8 +51,9 @@
 
       <h1>此方法利用 Instagram 的「下載您的資料」功能來取得追蹤者及追蹤者清單檔案。透過比較兩個檔案，您可以發現那些沒有回追你的人</h1>
       <h1>只需要 <code>JSON</code> 文件，不需要任何授權或認證 <a target="_blank" href="https://youtu.be/0XyRyZL3BO4?si=CVc7xN1tdGbtrgeK">觀看示範</a></h1>
-      <h1>新功能 : <a target="_blank" href="threads.html">查看在 Threads 上誰沒有回追你</a></h1>
-      <h1>新功能 : <a href="#mainform">查看更名用戶以及新增加的粉絲，上傳新舊檔案進行比較</a></h1>
+      <h1><a target="_blank" href="threads.html">查看在 Threads 上誰沒有回追你</a></h1>
+      <h1>新功能🎉 : 新增<code>Tag</code>，你可以自訂義標籤以便於管理追蹤者</h1>
+      <h1>新功能🎉 : 新增<code>忽略名單</code>，你可以自訂義忽略名單以便於管理追蹤者</h1>
     </section>
 
     <section class="feature">
@@ -65,9 +66,9 @@
         </br>
         <input type="checkbox" name="" id="" checked disabled> 優化網站介面 </br>
 
-        <input type="checkbox" name="" id="" checked disabled> 顯示個別用戶在甚麼時候開始追蹤你
+        <input type="checkbox" name="" id="" checked disabled> 自訂義<code>標籤</code>以便於管理追蹤者
         </br>
-        <input type="checkbox" name="" id="" checked disabled> 查看更名用戶以及新增加的粉絲
+        <input type="checkbox" name="" id="" checked disabled> 自訂義<code>忽略名單</code>以便於管理追蹤者
       </div>
     </section>
 
@@ -128,13 +129,16 @@
         </div>
       </div>
       <input type="checkbox" class="ui-checkbox" id="YMDCheck" name=""> 顯示詳細日期
+      <input type="checkbox" class="ui-checkbox" id="showTools" name=""> 顯示標籤工具列
+      <input type="checkbox" class="ui-checkbox" id="showIgnore" name=""> 隱藏忽略名單
       <div class="mob"><input type="checkbox" class="ui-checkbox" id="CheckLastFile" name=""> <span>查看新粉絲以及更名用戶</span></div>
       <div class="mob"><input type="checkbox" class="ui-checkbox" id="CheckOldName" name=""> <span>查看對方舊ID</span></div>
 
       <div class="btn-groups">
-        <button class="btn btn-outline-primary my-3" onclick="main()">開始搜尋</button>
+        <button class="btn btn-outline-primary my-3 me-1 " onclick="main()">開始搜尋</button>
         <button id="exportJsonBtn" class="btn btn-outline-secondary mx-1">下載 JSON</button>
         <button id="exportCsvBtn" class="btn btn-outline-secondary mx-1">下載 CSV</button>
+        <button id="manageIgnoreBtn" class="btn btn-outline-secondary">管理忽略名單</button>
       </div>
 
 
