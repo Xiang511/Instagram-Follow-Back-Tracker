@@ -209,6 +209,11 @@ function creatList(filteredFollowingValues) {
 
     listElement.innerHTML = '';
 
+    // 新增匯出按鈕（JSON / CSV）
+    let exportContainer = document.getElementById('exportContainer');
+    document.getElementById('exportJsonBtn').onclick = () => exportToJSON(filteredFollowingValues, 'filtered_following.json');
+    document.getElementById('exportCsvBtn').onclick = () => exportToCSV(filteredFollowingValues, 'filtered_following.csv');
+
 
     filteredFollowingValues.forEach(item => {
         let listItem = document.createElement('li');
@@ -313,5 +318,44 @@ document.getElementById("Total").innerHTML = "累計訪客:" + "&ensp;" + Real_T
 // document.getElementById("month").innerHTML = "本月訪客:"+ month;
 document.getElementById("Today").innerHTML = "今日訪客:" + "&ensp;" + secondSpan_result;
 document.getElementById("online").innerHTML = "線上人數:" + "&ensp;" + onlineSpan_result;
+
+// 新增匯出輔助函式
+function exportToJSON(data, filename) {
+    const blob = new Blob([JSON.stringify(data || [], null, 2)], { type: 'application/json' });
+    downloadBlob(blob, filename);
+}
+
+function exportToCSV(data, filename) {
+    if (!data || data.length === 0) {
+        Swal.fire({ icon: 'info', title: '沒有資料可匯出' });
+        return;
+    }
+    const headers = ['value', 'href', 'timestamp', 'date', 'profilePicture'];
+    const rows = data.map(item => {
+        const date = item.timestamp ? moment.unix(item.timestamp).format('YYYY-MM-DD HH:mm:ss') : '';
+        const vals = [
+            item.value || '',
+            item.href || '',
+            item.timestamp || '',
+            date,
+            item.profilePicture || ''
+        ];
+        return vals.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',');
+    });
+    const csv = headers.join(',') + '\n' + rows.join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    downloadBlob(blob, filename);
+}
+
+function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+}
 
 

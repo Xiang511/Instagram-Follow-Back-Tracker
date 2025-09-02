@@ -21,8 +21,8 @@
 </head>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
-  </style>
-  
+</style>
+
 <body>
 
   <a href="https://SiteStates.com" title="站長工具" style="display: none;">
@@ -130,7 +130,12 @@
       <input type="checkbox" class="ui-checkbox" id="YMDCheck" name=""> 顯示詳細日期
       <div class="mob"><input type="checkbox" class="ui-checkbox" id="CheckLastFile" name=""> <span>查看新粉絲以及更名用戶</span></div>
       <div class="mob"><input type="checkbox" class="ui-checkbox" id="CheckOldName" name=""> <span>查看對方舊ID</span></div>
-      <button class="btn btn-outline-primary my-3" onclick="main()">開始搜尋</button>
+
+      <div class="btn-groups">
+        <button class="btn btn-outline-primary my-3" onclick="main()">開始搜尋</button>
+        <button id="exportJsonBtn" class="btn btn-outline-secondary mx-1">下載 JSON</button>
+        <button id="exportCsvBtn" class="btn btn-outline-secondary mx-1">下載 CSV</button>
+      </div>
 
 
     </section>
