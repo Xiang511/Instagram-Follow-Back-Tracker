@@ -216,7 +216,9 @@ function creatList(filteredFollowingValues) {
     let exportContainer = document.getElementById('exportContainer');
 
     document.getElementById('exportJsonBtn').onclick = () => exportToJSON(filteredFollowingValues, 'filtered_following.json');
-    document.getElementById('exportCsvBtn').onclick = () => exportToCSV(filteredFollowingValues, 'filtered_following.csv');
+    // document.getElementById('exportCsvBtn').onclick = () => exportToCSV(filteredFollowingValues, 'filtered_following.csv');
+    document.getElementById('exportIgnoreListBtn').onclick = () => exportIgnoreListJSON('ignore_list.json');
+
     document.getElementById('manageIgnoreBtn').onclick = () => {
         const list = ignoreList.join(',');
         const input = prompt('請以逗號分隔編輯忽略名單（username1,username2）:', list);
@@ -300,7 +302,7 @@ function creatList(filteredFollowingValues) {
         listItem.appendChild(leftWrap);
         listItem.appendChild(rightWrap);
         result.appendChild(listItem);
-        
+
     })
 }
 
@@ -381,30 +383,35 @@ function exportToJSON(data, filename) {
     const blob = new Blob([JSON.stringify(enriched, null, 2)], { type: 'application/json' });
     downloadBlob(blob, filename);
 }
-
-function exportToCSV(data, filename) {
-    const filtered = (data || []).filter(d => !isIgnored(d.value));
-    if (filtered.length === 0) {
-        Swal.fire({ icon: 'info', title: '沒有資料可匯出' });
-        return;
-    }
-    const headers = ['value', 'href', 'timestamp', 'date', 'profilePicture', 'tag'];
-    const rows = filtered.map(item => {
-        const date = item.timestamp ? moment.unix(item.timestamp).format('YYYY-MM-DD HH:mm:ss') : '';
-        const vals = [
-            item.value || '',
-            item.href || '',
-            item.timestamp || '',
-            date,
-            item.profilePicture || '',
-            tagMap[item.value] || ''
-        ];
-        return vals.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',');
-    });
-    const csv = headers.join(',') + '\n' + rows.join('\n');
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+function exportIgnoreListJSON(filename) {
+    const payload = ignoreList.length ? ignoreList.join(',') : 'No ignored users.';
+    const blob = new Blob([payload], { type: 'text/plain;charset=utf-8' });
     downloadBlob(blob, filename);
 }
+
+// function exportToCSV(data, filename) {
+//     const filtered = (data || []).filter(d => !isIgnored(d.value));
+//     if (filtered.length === 0) {
+//         Swal.fire({ icon: 'info', title: '沒有資料可匯出' });
+//         return;
+//     }
+//     const headers = ['value', 'href', 'timestamp', 'date', 'profilePicture', 'tag'];
+//     const rows = filtered.map(item => {
+//         const date = item.timestamp ? moment.unix(item.timestamp).format('YYYY-MM-DD HH:mm:ss') : '';
+//         const vals = [
+//             item.value || '',
+//             item.href || '',
+//             item.timestamp || '',
+//             date,
+//             item.profilePicture || '',
+//             tagMap[item.value] || ''
+//         ];
+//         return vals.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',');
+//     });
+//     const csv = headers.join(',') + '\n' + rows.join('\n');
+//     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+//     downloadBlob(blob, filename);
+// }
 
 function downloadBlob(blob, filename) {
     const url = URL.createObjectURL(blob);
