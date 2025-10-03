@@ -103,11 +103,25 @@ function OldFollower() {
 }
 
 function Following(arg) {
-    followingData = arg.relationships_following;
+   followingData = arg.relationships_following;
+
+    // 將 title 回填到每筆 string_list_data 的 value（若缺少）
+    followingData.forEach(item => {
+        if (!item || !Array.isArray(item.string_list_data)) return;
+        item.string_list_data.forEach(d => {
+            if (d && (d.value === undefined || d.value === null || d.value === '')) {
+                d.value = item.title || '';
+            }
+            // 若 href 缺少，也一併補上
+            if (d && !d.href && item.title) {
+                d.href = `https://www.instagram.com/_u/${item.title}`;
+            }
+        });
+    });
 
     followingValues = followingData.map(follower =>
         follower.string_list_data.map(data => ({
-            value: data.value,
+            value: follower.title,
             href: data.href,
             timestamp: data.timestamp
         }))
@@ -236,6 +250,7 @@ function creatList(filteredFollowingValues) {
         leftWrap.style.display = 'flex';
         leftWrap.style.alignItems = 'center';
         leftWrap.style.gap = '0.5rem';
+
 
         let link = document.createElement('a');
         let span = document.createElement('span');
