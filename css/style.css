@@ -122,6 +122,7 @@ code {
     padding: .2em .4em;
     font-size: 85%;
     border-radius: 6px;
+    color: #781d4a !important;
 }
 
 .main .follower,
