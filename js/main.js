@@ -3,6 +3,7 @@ var followingData = [];
 var followerValues = [];
 var OldfollowerValues = [];
 var followingValues = [];
+
 // 新增忽略名單與標籤儲存結構
 let ignoreList = []; // array of username strings
 let tagMap = {};     // { username: "tag" }
@@ -11,9 +12,7 @@ let fileInput = document.getElementById('fileInput');
 let fileInput2 = document.getElementById('fileInput2');
 var result = document.getElementById('result');
 let YMDCheck = document.getElementById('YMDCheck');
-let CheckLastFile = document.getElementById('CheckLastFile');
-let CheckOldName = document.getElementById('CheckOldName');
-let switchbtn = document.getElementById('switch');
+
 
 const Toast = Swal.mixin({
     toast: true,
@@ -28,55 +27,6 @@ const Toast = Swal.mixin({
 })
 
 
-
-CheckLastFile.addEventListener('change', function () {
-    if (CheckLastFile.checked) {
-        // 清空input
-        fileInput.value = '';
-        fileInput2.value = '';
-        result.innerHTML = '';
-        switchbtn.innerHTML = 'Old Follower file';
-        // toast 您以切換為第二選項
-        Toast.fire({
-            icon: 'success',
-            title: '已切換為第二選項',
-            text: '請將您之前的 Follower file 上傳',
-            width: '30rem'
-        })
-    } else {
-        // 清空input
-        fileInput.value = '';
-        fileInput2.value = '';
-        result.innerHTML = '';
-        switchbtn.innerHTML = 'Following file';
-        CheckOldName.checked = false
-        // toast 您以切換為第一選項
-        Toast.fire({
-            icon: 'success',
-            title: '已切換為預設選項',
-        })
-    }
-
-});
-
-
-
-CheckOldName.addEventListener('change', function () {
-    if (CheckOldName.checked && CheckLastFile.checked) {
-
-    } else if (CheckOldName.checked) {
-        Swal.fire({
-            title: "請先選擇第二選項",
-            text: "此功能與第二項綁定",
-            icon: "question"
-        });
-        CheckOldName.checked = false; // Uncheck CheckOldName if CheckLastFile is not checked
-    }
-
-});
-
-
-
 function Follower() {
 
     followerValues = followersData.map(follower =>
@@ -86,24 +36,13 @@ function Follower() {
             timestamp: data.timestamp
         }))
     ).flat();
-    console.log(followerValues);
+    // console.log(followerValues);
 
 }
-function OldFollower() {
 
-    OldfollowerValues = followersData.map(follower =>
-        follower.string_list_data.map(data => ({
-            value: data.value,
-            href: data.href,
-            timestamp: data.timestamp
-        }))
-    ).flat();
-    console.log(OldfollowerValues);
-
-}
 
 function Following(arg) {
-   followingData = arg.relationships_following;
+    followingData = arg.relationships_following;
 
     // 將 title 回填到每筆 string_list_data 的 value（若缺少）
     followingData.forEach(item => {
@@ -183,11 +122,7 @@ document.getElementById('fileInput2').addEventListener('change', function () {
                     title: '上傳成功',
                 })
 
-                if (CheckLastFile.checked) {
-                    OldFollower();
-                } else {
-                    Following(json);
-                }
+                Following(json);
 
             } catch (error) {
                 console.error('解析 JSON 失敗:', error);
@@ -217,20 +152,8 @@ document.getElementById('fileInput2').addEventListener('change', function () {
 // 創建列表
 function creatList(filteredFollowingValues) {
 
-    let listElement = document.getElementById('followingList');
-    if (!listElement) {
-        listElement = document.createElement('ul');
-        listElement.id = 'followingList';
-        document.body.appendChild(listElement);
-    }
-
-    listElement.innerHTML = '';
-
-    // 新增匯出按鈕（JSON / CSV）
-    let exportContainer = document.getElementById('exportContainer');
 
     document.getElementById('exportJsonBtn').onclick = () => exportToJSON(filteredFollowingValues, 'filtered_following.json');
-    // document.getElementById('exportCsvBtn').onclick = () => exportToCSV(filteredFollowingValues, 'filtered_following.csv');
     document.getElementById('exportIgnoreListBtn').onclick = () => exportIgnoreListJSON('ignore_list.json');
 
     document.getElementById('manageIgnoreBtn').onclick = () => {
@@ -245,11 +168,11 @@ function creatList(filteredFollowingValues) {
     // 列表項目建立：新增忽略按鈕與標籤按鈕
     filteredFollowingValues.forEach(item => {
         let listItem = document.createElement('li');
-        let leftWrap = document.createElement('div');
-        let rightWrap = document.createElement('div');
-        leftWrap.style.display = 'flex';
-        leftWrap.style.alignItems = 'center';
-        leftWrap.style.gap = '0.5rem';
+        let listItem_name = document.createElement('div');
+        let listItem_func_controller = document.createElement('div');
+        listItem_name.style.display = 'flex';
+        listItem_name.style.alignItems = 'center';
+        listItem_name.style.gap = '0.5rem';
 
 
         let link = document.createElement('a');
@@ -278,16 +201,17 @@ function creatList(filteredFollowingValues) {
         link.textContent = item.value;
         link.href = item.href;
         link.target = "_blank";
+        listItem_name.appendChild(link);
 
+        listItem.appendChild(listItem_name);
+        listItem.appendChild(listItem_func_controller);
+        result.appendChild(listItem);
 
-        leftWrap.appendChild(link);
-
-        // Conditionally add tag label and tool buttons
         if (document.getElementById('showTools').checked) {
             // 標籤顯示
             tagLabel.style.marginLeft = '6px';
             tagLabel.textContent = tagMap[item.value] ? ` ${tagMap[item.value]}` : '';
-            leftWrap.appendChild(tagLabel);
+            listItem_name.appendChild(tagLabel);
 
             // 標籤按鈕
             btnTag.className = 'btn btn-sm btn-outline-primary';
@@ -307,20 +231,15 @@ function creatList(filteredFollowingValues) {
                 main();
             };
 
-            rightWrap.appendChild(span);
-            rightWrap.appendChild(btnTag);
-            rightWrap.appendChild(btnIgnore);
+            listItem_func_controller.appendChild(span);
+            listItem_func_controller.appendChild(btnTag);
+            listItem_func_controller.appendChild(btnIgnore);
         } else {
-            rightWrap.appendChild(span);
+            listItem_func_controller.appendChild(span);
         }
-
-        listItem.appendChild(leftWrap);
-        listItem.appendChild(rightWrap);
-        result.appendChild(listItem);
 
     })
 }
-
 
 
 function main() {
@@ -335,26 +254,10 @@ function main() {
         if (showIgnore.checked) {
             filteredFollowingValues = filteredFollowingValues.filter(item => !isIgnored(item.value));
         }
+        console.table(filteredFollowingValues);
+        return creatList(filteredFollowingValues);
 
-        let filteredFollowingValuesLast = followerValues
-            .filter(following =>
-                !OldfollowerValues.some(follower => follower.value === following.value)
-            )
-            .filter(item => !isIgnored(item.value));
 
-        let oldname = OldfollowerValues
-            .filter(following =>
-                !followerValues.some(follower => follower.value === following.value)
-            )
-            .filter(item => !isIgnored(item.value));
-
-        if (CheckOldName.checked && CheckLastFile.checked) {
-            return creatList(oldname);
-        } else if (CheckLastFile.checked) {
-            return creatList(filteredFollowingValuesLast);
-        } else {
-            return creatList(filteredFollowingValues);
-        }
 
     } else {
         Swal.fire({
@@ -404,29 +307,6 @@ function exportIgnoreListJSON(filename) {
     downloadBlob(blob, filename);
 }
 
-// function exportToCSV(data, filename) {
-//     const filtered = (data || []).filter(d => !isIgnored(d.value));
-//     if (filtered.length === 0) {
-//         Swal.fire({ icon: 'info', title: '沒有資料可匯出' });
-//         return;
-//     }
-//     const headers = ['value', 'href', 'timestamp', 'date', 'profilePicture', 'tag'];
-//     const rows = filtered.map(item => {
-//         const date = item.timestamp ? moment.unix(item.timestamp).format('YYYY-MM-DD HH:mm:ss') : '';
-//         const vals = [
-//             item.value || '',
-//             item.href || '',
-//             item.timestamp || '',
-//             date,
-//             item.profilePicture || '',
-//             tagMap[item.value] || ''
-//         ];
-//         return vals.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',');
-//     });
-//     const csv = headers.join(',') + '\n' + rows.join('\n');
-//     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-//     downloadBlob(blob, filename);
-// }
 
 function downloadBlob(blob, filename) {
     const url = URL.createObjectURL(blob);
