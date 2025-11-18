@@ -1,8 +1,11 @@
 var followersData = [];
 var followingData = [];
+
 var followerValues = [];
-var OldfollowerValues = [];
 var followingValues = [];
+
+var followerValueslength = 0;
+var followingValueslength = 0;
 
 // 新增忽略名單與標籤儲存結構
 let ignoreList = []; // array of username strings
@@ -255,6 +258,11 @@ function main() {
             filteredFollowingValues = filteredFollowingValues.filter(item => !isIgnored(item.value));
         }
         console.table(filteredFollowingValues);
+
+        followerValueslength = filteredFollowingValues.length;
+        followingValueslength = followingValues.length;
+        console.log(followerValueslength + " / " + followingValueslength);
+
         return creatList(filteredFollowingValues);
 
 
