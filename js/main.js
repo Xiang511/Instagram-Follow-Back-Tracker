@@ -283,7 +283,7 @@ const firstSpan = document.querySelector('.sitestatesJs');
 //取得字串
 const text = firstSpan.textContent;
 //取得數字
-const Real_Time_Number = text.substring(text.length - 5);
+const Real_Time_Number = text.substring(text.length - 6);
 
 
 //今日訪客
@@ -296,7 +296,7 @@ const secondSpan_result = secondSpan_txt.substring(text.length - 6);
 const online = document.querySelectorAll(".sitestatesJs");
 const onlineSpan = online[2];
 const onlineSpan_txt = onlineSpan.textContent;
-const onlineSpan_result = onlineSpan_txt.substring(text.length - 4);
+const onlineSpan_result = onlineSpan_txt.substring(text.length - 5);
 
 document.getElementById("Total").innerHTML = "累計訪客:" + "&ensp;" + Real_Time_Number;
 // document.getElementById("month").innerHTML = "本月訪客:"+ month;
