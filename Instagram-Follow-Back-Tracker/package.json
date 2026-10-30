@@ -29,6 +29,7 @@
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "@vue/test-utils": "^2.5.1",
+    "daisyui": "5.7.50",
     "eslint-config-prettier": "^10.1.8",
     "happy-dom": "^21.0.4",
     "prettier": "^3.9.10",
