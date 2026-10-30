@@ -1,0 +1,13 @@
+# 忽略目錄
+node_modules/
+dist/
+.output/
+.nuxt/
+
+# 忽略特定的自動生成文件
+auto-import.ts
+components.d.ts
+
+# 忽略靜態資源
+*.svg
+*.png

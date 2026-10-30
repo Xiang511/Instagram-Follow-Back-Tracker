@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest'
+
 import { add } from '../../app/utils/add'
 
 describe('add', () => {
