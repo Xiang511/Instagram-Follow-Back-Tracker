@@ -10,6 +10,9 @@ export function useFileManagement() {
   const followerValues = ref<FollowUser[]>([])
   const followingValues = ref<FollowUser[]>([])
 
+  // 最近一次比對的結果,供下載 JSON 使用
+  const filteredFollowingValues = ref<FollowUser[]>([])
+
   const error = ref('')
 
   function setFollower(json: unknown) {
@@ -53,6 +56,11 @@ export function useFileManagement() {
     }
   }
 
+  /** 下載最近一次的比對結果 */
+  function exportJSON() {
+    exportToJSON(filteredFollowingValues.value)
+  }
+
   return {
     followersData,
     followingData,
@@ -62,5 +70,6 @@ export function useFileManagement() {
     setFollower,
     setFollowing,
     main,
+    exportJSON,
   }
 }

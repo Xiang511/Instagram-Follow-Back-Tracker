@@ -160,9 +160,11 @@ function onSearch(payload: SearchPayload) {
     <BaseCard>
       <BaseSection title="結果">
         <template v-if="searched">
-          <p class="mb-3">
-            共 {{ followerValueslength }} 位沒有回追你(追蹤 {{ followingValueslength }} 人)
-          </p>
+          <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
+            <p>
+              共 {{ followerValueslength }} 位沒有回追你( 你追蹤了 {{ followingValueslength }} 人 )
+            </p>
+          </div>
           <DataTable :result="result" />
         </template>
         <p v-else class="opacity-60">上傳兩個檔案並按下「開始搜尋」後顯示結果</p>

@@ -21,6 +21,13 @@ function onSearch() {
 
     <div>
       <button class="btn btn-outline btn-primary font-normal" @click="onSearch">開始搜尋</button>
+      <!-- 搜尋過才有結果可以下載 -->
+      <button
+        class="btn btn-outline font-normal"
+        :disabled="filteredFollowingValues.length === 0"
+        @click="exportJSON">
+        下載 JSON
+      </button>
     </div>
   </div>
 </template>
