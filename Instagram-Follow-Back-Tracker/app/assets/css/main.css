@@ -1,2 +1,21 @@
 @import 'tailwindcss';
 @plugin 'daisyui';
+
+/* Tailwind preflight 會重置 code 與連結樣式,這裡補回原本頁面的外觀 */
+@layer base {
+  code {
+    background: #afb8c133;
+    padding: 0.2em 0.4em;
+    font-size: 85%;
+    border-radius: 6px;
+    color: #781d4a;
+  }
+
+  a {
+    color: #0d6efd;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+}
