@@ -4,7 +4,10 @@ defineProps<{ label: string }>()
 // 解析成功後把 JSON 交給父層處理
 const emit = defineEmits<{ upload: [json: unknown] }>()
 
-const { fileInput, error, onChange } = useFileUpload((json) => emit('upload', json))
+const { fileInput, error, onChange, reset } = useFileUpload((json) => emit('upload', json))
+
+// 讓父層在檔案格式不正確時清空 file input
+defineExpose({ reset })
 </script>
 
 <template>

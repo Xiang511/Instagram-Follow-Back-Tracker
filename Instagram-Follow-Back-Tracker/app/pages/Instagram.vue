@@ -57,6 +57,14 @@ function onSearch(payload: SearchPayload) {
   followingValueslength.value = payload.followingValueslength
   searched.value = true
 }
+
+// 清空後隱藏結果表格
+function onClear() {
+  result.value = []
+  followerValueslength.value = 0
+  followingValueslength.value = 0
+  searched.value = false
+}
 </script>
 
 <template>
@@ -153,7 +161,7 @@ function onSearch(payload: SearchPayload) {
 
     <BaseCard id="mainform">
       <BaseSection title="上傳你的 JSON 檔案">
-        <FileManagement @search="onSearch" />
+        <FileManagement @search="onSearch" @clear="onClear" />
       </BaseSection>
     </BaseCard>
 

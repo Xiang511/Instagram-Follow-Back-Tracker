@@ -15,15 +15,18 @@ export function useFileManagement() {
 
   const error = ref('')
 
+  // 回傳 false 代表檔案格式不正確,呼叫端可據此清空 file input
   function setFollower(json: unknown) {
     try {
       followerValues.value = Follower(json)
       followersData.value = json
       error.value = ''
+      return true
     } catch (e) {
       followersData.value = null
       followerValues.value = []
       error.value = e instanceof Error ? e.message : '檔案格式不正確'
+      return false
     }
   }
 
@@ -32,10 +35,12 @@ export function useFileManagement() {
       followingValues.value = Following(json)
       followingData.value = json
       error.value = ''
+      return true
     } catch (e) {
       followingData.value = null
       followingValues.value = []
       error.value = e instanceof Error ? e.message : '檔案格式不正確'
+      return false
     }
   }
 
@@ -47,11 +52,11 @@ export function useFileManagement() {
     }
     error.value = ''
 
-    const filteredFollowingValues = getNotFollowingBack(followerValues.value, followingValues.value)
+    filteredFollowingValues.value = getNotFollowingBack(followerValues.value, followingValues.value)
 
     return {
-      result: filteredFollowingValues,
-      followerValueslength: filteredFollowingValues.length,
+      result: filteredFollowingValues.value,
+      followerValueslength: filteredFollowingValues.value.length,
       followingValueslength: followingValues.value.length,
     }
   }
@@ -61,15 +66,36 @@ export function useFileManagement() {
     exportToJSON(filteredFollowingValues.value)
   }
 
+  // 有上傳過任何檔案或有比對結果時,才需要清空
+  const hasData = computed(
+    () =>
+      followersData.value !== null ||
+      followingData.value !== null ||
+      filteredFollowingValues.value.length > 0,
+  )
+
+  /** 清空所有已上傳的資料、比對結果與錯誤訊息 */
+  function clear() {
+    followersData.value = null
+    followingData.value = null
+    followerValues.value = []
+    followingValues.value = []
+    filteredFollowingValues.value = []
+    error.value = ''
+  }
+
   return {
     followersData,
     followingData,
     followerValues,
     followingValues,
+    filteredFollowingValues,
     error,
+    hasData,
     setFollower,
     setFollowing,
     main,
     exportJSON,
+    clear,
   }
 }
