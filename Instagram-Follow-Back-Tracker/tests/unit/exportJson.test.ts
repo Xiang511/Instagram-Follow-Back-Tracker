@@ -20,6 +20,16 @@ describe('toExportJSON', () => {
     )
   })
 
+  it('有標籤的使用者輸出對應的 tag', () => {
+    const data = [
+      { value: 'alice', href: 'a', timestamp: 1 },
+      { value: 'bob', href: 'b', timestamp: 2 },
+    ]
+    const result = JSON.parse(toExportJSON(data, { alice: '朋友' }))
+
+    expect(result.map((d: { tag: string }) => d.tag)).toEqual(['朋友', ''])
+  })
+
   it('空資料輸出空陣列', () => {
     expect(toExportJSON([])).toBe('[]')
   })

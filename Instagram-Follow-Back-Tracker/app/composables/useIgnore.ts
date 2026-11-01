@@ -7,7 +7,7 @@ const STORAGE_KEY = 'ig_ignore_data'
  */
 export function useIgnore() {
   const ignoreList = useState<string[]>('ignoreList', () => [])
-  // 標籤功能尚未搬移,但原樣保留,避免存檔時把舊資料蓋掉
+  // 標籤:{ username: tag }
   const tagMap = useState<Record<string, string>>('tagMap', () => ({}))
   const loaded = useState('ignoreLoaded', () => false)
 
@@ -58,6 +58,24 @@ export function useIgnore() {
     saveIgnoreData()
   }
 
+  const getTag = (username: string) => tagMap.value[username] ?? ''
+
+  /** 新增 / 編輯標籤;留空代表移除(與原本 setTag 一致) */
+  function setTag(username: string, tag: string) {
+    const text = tag.trim()
+    // 先排除該使用者,有內容再加回去,避免直接 delete 動態 key
+    const rest = Object.fromEntries(
+      Object.entries(tagMap.value).filter(([key]) => key !== username),
+    )
+    tagMap.value = text === '' ? rest : { ...rest, [username]: text }
+    saveIgnoreData()
+  }
+
+  /** 刪除標籤 */
+  function removeTag(username: string) {
+    setTag(username, '')
+  }
+
   /** 下載忽略名單,檔名沿用 ignore_list.json */
   function exportIgnoreListJSON(filename = 'ignore_list.json') {
     const blob = new Blob([toIgnoreListText(ignoreList.value)], {
@@ -66,5 +84,15 @@ export function useIgnore() {
     downloadBlob(blob, filename)
   }
 
-  return { ignoreList, isIgnored, toggleIgnore, setIgnoreList, exportIgnoreListJSON }
+  return {
+    ignoreList,
+    tagMap,
+    isIgnored,
+    toggleIgnore,
+    setIgnoreList,
+    getTag,
+    setTag,
+    removeTag,
+    exportIgnoreListJSON,
+  }
 }

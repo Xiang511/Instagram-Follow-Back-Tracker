@@ -19,19 +19,35 @@ const {
   goTo,
 } = useDataTable(toRef(props, 'result'))
 
-const { isIgnored, toggleIgnore } = useIgnore()
+const { isIgnored, toggleIgnore, getTag, setTag, removeTag } = useIgnore()
 
 // Action Modal:點選某一列的「操作」後,顯示該使用者可執行的動作
 const actionOpen = ref(false)
 const actionRow = ref<FollowUser | null>(null)
+const tagText = ref('')
+
+// 目前這位使用者是否已有標籤(決定顯示「新增」或「更新」、能否刪除)
+const hasTag = computed(() => !!actionRow.value && getTag(actionRow.value.value) !== '')
 
 function openAction(row: FollowUser) {
   actionRow.value = row
+  tagText.value = getTag(row.value)
   actionOpen.value = true
 }
 
 function onToggleIgnore() {
   if (actionRow.value) toggleIgnore(actionRow.value.value)
+  actionOpen.value = false
+}
+
+function onSaveTag() {
+  if (!actionRow.value || !tagText.value.trim()) return
+  setTag(actionRow.value.value, tagText.value)
+  actionOpen.value = false
+}
+
+function onRemoveTag() {
+  if (actionRow.value) removeTag(actionRow.value.value)
   actionOpen.value = false
 }
 </script>
@@ -65,6 +81,7 @@ function onToggleIgnore() {
         <thead class="[&_th]:font-normal">
           <tr>
             <th>InstagramID</th>
+            <th>標籤</th>
             <th>追蹤時間</th>
             <th>管理</th>
             <th>狀態</th>
@@ -74,6 +91,11 @@ function onToggleIgnore() {
           <tr v-for="row in pagedRows" :key="row.value">
             <td>
               <a :href="row.href" target="_blank" class="link link-primary">{{ row.value }}</a>
+            </td>
+            <td>
+              <span v-if="getTag(row.value)" class="badge badge-primary badge-outline font-normal">
+                {{ getTag(row.value) }}
+              </span>
             </td>
             <td>{{ formatTime(row.timestamp, YMDCheck) }}</td>
             <td>
@@ -92,7 +114,7 @@ function onToggleIgnore() {
             </td>
           </tr>
           <tr v-if="pagedRows.length === 0">
-            <td colspan="4" class="text-center opacity-60">沒有資料</td>
+            <td colspan="5" class="text-center opacity-60">沒有資料</td>
           </tr>
         </tbody>
       </table>
@@ -129,6 +151,30 @@ function onToggleIgnore() {
           {{ actionRow.value }}
         </a>
       </p>
+      <!-- 標籤管理:新增 / 編輯 / 刪除 -->
+      <fieldset v-if="actionRow" class="fieldset">
+        <legend class="fieldset-legend text-sm font-normal">標籤</legend>
+        <div class="join w-full">
+          <input
+            v-model="tagText"
+            type="text"
+            class="input join-item w-full"
+            placeholder="輸入標籤"
+            @keyup.enter="onSaveTag" />
+          <button
+            class="btn btn-primary join-item font-normal"
+            :disabled="!tagText.trim()"
+            @click="onSaveTag">
+            {{ hasTag ? '更新' : '新增' }}
+          </button>
+          <button
+            class="btn btn-outline btn-error join-item font-normal"
+            :disabled="!hasTag"
+            @click="onRemoveTag">
+            刪除
+          </button>
+        </div>
+      </fieldset>
       <template #actions>
         <button
           v-if="actionRow"

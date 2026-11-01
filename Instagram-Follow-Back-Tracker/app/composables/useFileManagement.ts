@@ -3,7 +3,7 @@
  * 變數名稱沿用原本 main.js
  */
 export function useFileManagement() {
-  const { isIgnored } = useIgnore()
+  const { isIgnored, tagMap } = useIgnore()
 
   // null 代表尚未上傳
   const followersData = ref<unknown>(null)
@@ -65,7 +65,10 @@ export function useFileManagement() {
 
   /** 下載最近一次的比對結果(與原本一致,不含忽略名單中的人) */
   function exportJSON() {
-    exportToJSON(filteredFollowingValues.value.filter((d) => !isIgnored(d.value)))
+    exportToJSON(
+      filteredFollowingValues.value.filter((d) => !isIgnored(d.value)),
+      tagMap.value,
+    )
   }
 
   // 有上傳過任何檔案或有比對結果時,才需要清空
