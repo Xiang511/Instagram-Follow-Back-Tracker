@@ -21,6 +21,15 @@ const {
 
 const { isIgnored, toggleIgnore, getTag, setTag, removeTag } = useIgnore()
 
+// 通知 BaseLayout 的 FAB:表格存在時才提供「捲動到表格最上方」
+const dataTableVisible = useState('dataTableVisible', () => false)
+onMounted(() => {
+  dataTableVisible.value = true
+})
+onUnmounted(() => {
+  dataTableVisible.value = false
+})
+
 // Action Modal:點選某一列的「操作」後,顯示該使用者可執行的動作
 const actionOpen = ref(false)
 const actionRow = ref<FollowUser | null>(null)
@@ -53,7 +62,7 @@ function onRemoveTag() {
 </script>
 
 <template>
-  <div class="flex flex-col gap-3">
+  <div id="data-table" class="flex scroll-mt-4 flex-col gap-3">
     <div class="flex flex-wrap items-center justify-between gap-2">
       <label class="input">
         <input v-model="keyword" type="search" placeholder="搜尋 instagramID" />
