@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { UserPen } from '@lucide/vue'
+
 const props = defineProps<{
   result: FollowUser[]
 }>()
@@ -62,10 +64,10 @@ function onToggleIgnore() {
       <table class="table-zebra table">
         <thead class="[&_th]:font-normal">
           <tr>
-            <th>instagramID</th>
+            <th>InstagramID</th>
             <th>追蹤時間</th>
-            <th>Action</th>
-            <th>Status</th>
+            <th>管理</th>
+            <th>狀態</th>
           </tr>
         </thead>
         <tbody>
@@ -76,7 +78,9 @@ function onToggleIgnore() {
             <td>{{ formatTime(row.timestamp, YMDCheck) }}</td>
             <td>
               <!-- 之後的標籤等功能也放進 Action Modal -->
-              <button class="btn btn-outline font-normal" @click="openAction(row)">操作</button>
+              <button class="btn btn-outline font-normal" @click="openAction(row)">
+                <UserPen />
+              </button>
             </td>
             <!-- 忽略狀態 -->
             <td>
