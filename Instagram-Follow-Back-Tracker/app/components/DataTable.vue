@@ -30,6 +30,12 @@ onUnmounted(() => {
   dataTableVisible.value = false
 })
 
+// 換頁後自動捲回表格最上方
+function changePage(p: number) {
+  goTo(p)
+  document.getElementById('data-table')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
 // Action Modal:點選某一列的「操作」後,顯示該使用者可執行的動作
 const actionOpen = ref(false)
 const actionRow = ref<FollowUser | null>(null)
@@ -132,7 +138,10 @@ function onRemoveTag() {
     <div class="flex flex-wrap items-center justify-between gap-2">
       <span class="opacity-70">共 {{ filteredRows.length }} 筆</span>
       <div class="join">
-        <button class="btn join-item font-normal" :disabled="page === 1" @click="goTo(page - 1)">
+        <button
+          class="btn join-item font-normal"
+          :disabled="page === 1"
+          @click="changePage(page - 1)">
           «
         </button>
         <template v-for="(p, index) in visiblePages" :key="`${p}-${index}`">
@@ -141,14 +150,14 @@ function onRemoveTag() {
             v-else
             class="btn join-item font-normal"
             :class="{ 'btn-active btn-primary': p === page }"
-            @click="goTo(p)">
+            @click="changePage(p)">
             {{ p }}
           </button>
         </template>
         <button
           class="btn join-item font-normal"
           :disabled="page === totalPages"
-          @click="goTo(page + 1)">
+          @click="changePage(page + 1)">
           »
         </button>
       </div>
