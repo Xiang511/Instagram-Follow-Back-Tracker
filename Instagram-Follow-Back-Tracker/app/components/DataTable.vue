@@ -70,10 +70,10 @@ function onRemoveTag() {
 <template>
   <div id="data-table" class="flex scroll-mt-4 flex-col gap-3">
     <div class="flex flex-wrap items-center justify-between gap-2">
-      <label class="input">
+      <label class="input w-full sm:w-auto">
         <input v-model="keyword" type="search" placeholder="搜尋 instagramID" />
       </label>
-      <div class="flex flex-wrap items-center gap-4">
+      <div class="flex w-full flex-wrap items-center gap-x-4 gap-y-2 sm:w-auto">
         <label class="flex cursor-pointer items-center gap-2">
           <input v-model="YMDCheck" type="checkbox" class="checkbox" />
           顯示詳細日期
@@ -92,26 +92,31 @@ function onRemoveTag() {
     </div>
 
     <div class="overflow-x-auto">
-      <table class="table-zebra table">
-        <thead class="[&_th]:font-normal">
+      <table class="table-zebra table-pin-cols table whitespace-nowrap">
+        <thead>
           <tr>
-            <th>InstagramID</th>
-            <th>標籤</th>
-            <th>追蹤時間</th>
-            <th>管理</th>
-            <th>狀態</th>
+            <th class="font-normal">InstagramID / 標籤</th>
+            <td class="w-1/6">追蹤時間</td>
+            <td class="w-1/6">管理</td>
+            <td class="w-1/6">狀態</td>
           </tr>
         </thead>
         <tbody>
           <tr v-for="row in pagedRows" :key="row.value">
-            <td>
-              <a :href="row.href" target="_blank" class="link link-primary">{{ row.value }}</a>
-            </td>
-            <td>
-              <span v-if="getTag(row.value)" class="badge badge-primary badge-outline font-normal">
-                {{ getTag(row.value) }}
-              </span>
-            </td>
+            <!-- ID 與標籤合成同一格一起固定,手機上標籤顯示在 ID 下方 -->
+            <th class="font-normal">
+              <div
+                class="flex max-w-36 flex-col items-start gap-1 md:max-w-none md:flex-row md:items-center md:gap-2">
+                <a :href="row.href" target="_blank" class="link link-primary max-w-full truncate">
+                  {{ row.value }}
+                </a>
+                <span
+                  v-if="getTag(row.value)"
+                  class="badge badge-primary badge-outline max-w-full font-normal">
+                  <span class="truncate">{{ getTag(row.value) }}</span>
+                </span>
+              </div>
+            </th>
             <td>{{ formatTime(row.timestamp, YMDCheck) }}</td>
             <td>
               <!-- 之後的標籤等功能也放進 Action Modal -->
@@ -129,7 +134,7 @@ function onRemoveTag() {
             </td>
           </tr>
           <tr v-if="pagedRows.length === 0">
-            <td colspan="5" class="text-center opacity-60">沒有資料</td>
+            <td colspan="4" class="text-center opacity-60">沒有資料</td>
           </tr>
         </tbody>
       </table>
