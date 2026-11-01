@@ -13,6 +13,22 @@ const {
   clear,
 } = useFileManagement()
 
+const { ignoreList, setIgnoreList, exportIgnoreListJSON } = useIgnore()
+
+// 管理忽略名單:以逗號分隔的文字編輯,對應原本的 prompt
+const manageOpen = ref(false)
+const ignoreText = ref('')
+
+function openManage() {
+  ignoreText.value = ignoreList.value.join(',')
+  manageOpen.value = true
+}
+
+function saveManage() {
+  setIgnoreList(parseIgnoreList(ignoreText.value))
+  manageOpen.value = false
+}
+
 // 兩個 FileUpload 實例,沿用原本 main.js 的 fileInput / fileInput2
 const fileInput = ref<{ reset: () => void } | null>(null)
 const fileInput2 = ref<{ reset: () => void } | null>(null)
@@ -58,9 +74,21 @@ function onClear() {
         @click="exportJSON">
         下載 JSON
       </button>
-      <button class="btn btn-outline font-normal btn-error" :disabled="!hasData" @click="onClear">
+      <button class="btn btn-outline font-normal" @click="exportIgnoreListJSON()">
+        匯出忽略名單
+      </button>
+      <button class="btn btn-outline font-normal" @click="openManage">管理忽略名單</button>
+      <button class="btn btn-outline btn-error font-normal" :disabled="!hasData" @click="onClear">
         全部清空
       </button>
     </div>
+
+    <BaseModal v-model="manageOpen" title="管理忽略名單">
+      <p class="mb-2 opacity-70">請以逗號分隔編輯忽略名單(username1,username2)</p>
+      <textarea v-model="ignoreText" class="textarea w-full" rows="5"></textarea>
+      <template #actions>
+        <button class="btn btn-primary font-normal" @click="saveManage">儲存</button>
+      </template>
+    </BaseModal>
   </div>
 </template>

@@ -1,5 +1,7 @@
 /** 表格的搜尋與分頁邏輯 */
 export function useDataTable(rows: Ref<FollowUser[]>) {
+  const { isIgnored } = useIgnore()
+
   const pageSizeOptions = [10, 20, 50, 100]
 
   const keyword = ref('')
@@ -8,11 +10,16 @@ export function useDataTable(rows: Ref<FollowUser[]>) {
 
   // 追蹤時間顯示詳細日期(YYYY/MM/DD),否則顯示相對時間
   const YMDCheck = ref(false)
+  // 隱藏忽略名單中的人
+  const showIgnore = ref(false)
 
-  // 以 instagramID 搜尋,不分大小寫
+  // 先排除被忽略的人,再以 instagramID 搜尋(不分大小寫)
   const filteredRows = computed(() => {
+    const visible = showIgnore.value
+      ? rows.value.filter((row) => !isIgnored(row.value))
+      : rows.value
     const text = keyword.value.trim().toLowerCase()
-    return text ? rows.value.filter((row) => row.value.toLowerCase().includes(text)) : rows.value
+    return text ? visible.filter((row) => row.value.toLowerCase().includes(text)) : visible
   })
 
   const totalPages = computed(() =>
@@ -39,7 +46,7 @@ export function useDataTable(rows: Ref<FollowUser[]>) {
   })
 
   // 搜尋條件、每頁筆數或資料改變時回到第一頁
-  watch([keyword, pageSize, rows], () => {
+  watch([keyword, pageSize, rows, showIgnore], () => {
     page.value = 1
   })
 
@@ -53,6 +60,7 @@ export function useDataTable(rows: Ref<FollowUser[]>) {
     pageSize,
     page,
     YMDCheck,
+    showIgnore,
     filteredRows,
     totalPages,
     pagedRows,

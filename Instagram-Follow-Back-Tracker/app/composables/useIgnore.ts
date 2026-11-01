@@ -1,0 +1,70 @@
+const STORAGE_KEY = 'ig_ignore_data'
+
+/**
+ * 忽略名單,沿用原本 main.js 的 ignoreList / isIgnored / toggleIgnore
+ * 狀態以 useState 共用,DataTable 與 FileManagement 看到的是同一份
+ * 儲存格式與原本相同:{ ignore: string[], tags: Record<string, string> }
+ */
+export function useIgnore() {
+  const ignoreList = useState<string[]>('ignoreList', () => [])
+  // 標籤功能尚未搬移,但原樣保留,避免存檔時把舊資料蓋掉
+  const tagMap = useState<Record<string, string>>('tagMap', () => ({}))
+  const loaded = useState('ignoreLoaded', () => false)
+
+  // 只在瀏覽器端讀取一次
+  function loadIgnoreData() {
+    if (loaded.value) return
+    loaded.value = true
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY)
+      if (raw) {
+        const obj = JSON.parse(raw)
+        ignoreList.value = obj.ignore || []
+        tagMap.value = obj.tags || {}
+      }
+    } catch (e) {
+      console.error('loadIgnoreData error', e)
+      ignoreList.value = []
+      tagMap.value = {}
+    }
+  }
+
+  function saveIgnoreData() {
+    try {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ ignore: ignoreList.value, tags: tagMap.value }),
+      )
+    } catch (e) {
+      console.error('saveIgnoreData error', e)
+    }
+  }
+
+  onMounted(loadIgnoreData)
+
+  const isIgnored = (username: string) => ignoreList.value.includes(username)
+
+  /** 新增 / 移除忽略 */
+  function toggleIgnore(username: string) {
+    ignoreList.value = isIgnored(username)
+      ? ignoreList.value.filter((u) => u !== username)
+      : [...ignoreList.value, username]
+    saveIgnoreData()
+  }
+
+  /** 直接取代整份忽略名單(管理忽略名單) */
+  function setIgnoreList(list: string[]) {
+    ignoreList.value = list
+    saveIgnoreData()
+  }
+
+  /** 下載忽略名單,檔名沿用 ignore_list.json */
+  function exportIgnoreListJSON(filename = 'ignore_list.json') {
+    const blob = new Blob([toIgnoreListText(ignoreList.value)], {
+      type: 'text/plain;charset=utf-8',
+    })
+    downloadBlob(blob, filename)
+  }
+
+  return { ignoreList, isIgnored, toggleIgnore, setIgnoreList, exportIgnoreListJSON }
+}

@@ -9,12 +9,29 @@ const {
   pageSize,
   page,
   YMDCheck,
+  showIgnore,
   filteredRows,
   totalPages,
   pagedRows,
   visiblePages,
   goTo,
 } = useDataTable(toRef(props, 'result'))
+
+const { isIgnored, toggleIgnore } = useIgnore()
+
+// Action Modal:點選某一列的「操作」後,顯示該使用者可執行的動作
+const actionOpen = ref(false)
+const actionRow = ref<FollowUser | null>(null)
+
+function openAction(row: FollowUser) {
+  actionRow.value = row
+  actionOpen.value = true
+}
+
+function onToggleIgnore() {
+  if (actionRow.value) toggleIgnore(actionRow.value.value)
+  actionOpen.value = false
+}
 </script>
 
 <template>
@@ -27,6 +44,10 @@ const {
         <label class="flex cursor-pointer items-center gap-2">
           <input v-model="YMDCheck" type="checkbox" class="checkbox" />
           顯示詳細日期
+        </label>
+        <label class="flex cursor-pointer items-center gap-2">
+          <input v-model="showIgnore" type="checkbox" class="toggle" />
+          隱藏忽略名單
         </label>
         <label class="select w-auto">
           <span class="label">每頁</span>
@@ -43,8 +64,8 @@ const {
           <tr>
             <th>instagramID</th>
             <th>追蹤時間</th>
-            <!-- 預留給之後的功能(忽略、標籤等) -->
             <th>Action</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
@@ -53,10 +74,21 @@ const {
               <a :href="row.href" target="_blank" class="link link-primary">{{ row.value }}</a>
             </td>
             <td>{{ formatTime(row.timestamp, YMDCheck) }}</td>
-            <td><slot name="action" :row="row"></slot></td>
+            <td>
+              <!-- 之後的標籤等功能也放進 Action Modal -->
+              <button class="btn btn-outline font-normal" @click="openAction(row)">操作</button>
+            </td>
+            <!-- 忽略狀態 -->
+            <td>
+              <span
+                class="badge font-normal"
+                :class="isIgnored(row.value) ? 'badge-error' : 'badge-ghost'">
+                {{ isIgnored(row.value) ? '已忽略' : '正常' }}
+              </span>
+            </td>
           </tr>
           <tr v-if="pagedRows.length === 0">
-            <td colspan="3" class="text-center opacity-60">沒有資料</td>
+            <td colspan="4" class="text-center opacity-60">沒有資料</td>
           </tr>
         </tbody>
       </table>
@@ -86,5 +118,21 @@ const {
         </button>
       </div>
     </div>
+
+    <BaseModal v-model="actionOpen" title="操作">
+      <p v-if="actionRow" class="mb-2">
+        <a :href="actionRow.href" target="_blank" class="link link-primary">
+          {{ actionRow.value }}
+        </a>
+      </p>
+      <template #actions>
+        <button
+          v-if="actionRow"
+          class="btn btn-outline btn-error font-normal"
+          @click="onToggleIgnore">
+          {{ isIgnored(actionRow.value) ? '取消忽略' : '忽略' }}
+        </button>
+      </template>
+    </BaseModal>
   </div>
 </template>
