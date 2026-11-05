@@ -33,6 +33,10 @@ function saveManage() {
 // 兩個 FileUpload 實例,沿用原本 main.js 的 fileInput / fileInput2
 const fileInput = ref<{ reset: () => void } | null>(null)
 const fileInput2 = ref<{ reset: () => void } | null>(null)
+const zipInput = ref<{ reset: () => void } | null>(null)
+
+// 上傳方式:分開上傳兩個 JSON,或直接上傳 Instagram 的 ZIP
+const tab = ref<'json' | 'zip'>('json')
 
 // 檔案格式不正確時,清空對應的 file input
 function onFollower(json: unknown) {
@@ -41,6 +45,13 @@ function onFollower(json: unknown) {
 
 function onFollowing(json: unknown) {
   if (!setFollowing(json)) fileInput2.value?.reset()
+}
+
+// ZIP 解壓縮後一次取得兩份資料;任一份格式不正確就清空 ZIP 欄位
+function onZip(data: { followers: unknown; following: unknown }) {
+  const followerOk = setFollower(data.followers)
+  const followingOk = setFollowing(data.following)
+  if (!followerOk || !followingOk) zipInput.value?.reset()
 }
 
 function onSearch() {
@@ -52,6 +63,7 @@ function onSearch() {
 function onClear() {
   fileInput.value?.reset()
   fileInput2.value?.reset()
+  zipInput.value?.reset()
   clear()
   emit('clear')
 }
@@ -59,8 +71,35 @@ function onClear() {
 
 <template>
   <div class="flex flex-col gap-2">
-    <FileUpload ref="fileInput" label="Follower file" @upload="onFollower" />
-    <FileUpload ref="fileInput2" label="Following file" @upload="onFollowing" />
+    <!-- 兩種上傳方式用 v-show 切換,切換時已選的檔案不會被清掉 -->
+    <div role="tablist" class="tabs tabs-border">
+      <button
+        type="button"
+        role="tab"
+        class="tab font-normal"
+        :class="{ 'tab-active': tab === 'json' }"
+        :aria-selected="tab === 'json'"
+        @click="tab = 'json'">
+        上傳 JSON
+      </button>
+      <button
+        type="button"
+        role="tab"
+        class="tab font-normal"
+        :class="{ 'tab-active': tab === 'zip' }"
+        :aria-selected="tab === 'zip'"
+        @click="tab = 'zip'">
+        上傳 ZIP(自動解壓縮)
+      </button>
+    </div>
+
+    <div v-show="tab === 'json'" class="flex flex-col gap-2">
+      <FileUpload ref="fileInput" label="Follower file" @upload="onFollower" />
+      <FileUpload ref="fileInput2" label="Following file" @upload="onFollowing" />
+    </div>
+    <div v-show="tab === 'zip'">
+      <ZipUpload ref="zipInput" label="Instagram ZIP" @upload="onZip" />
+    </div>
 
     <div v-if="error" role="alert" class="alert alert-error alert-soft">
       <span>{{ error }}</span>

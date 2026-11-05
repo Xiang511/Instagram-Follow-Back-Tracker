@@ -167,7 +167,7 @@ function onClear() {
     </BaseCard>
 
     <BaseCard id="mainform">
-      <BaseSection title="上傳你的 JSON 檔案">
+      <BaseSection title="上傳你的檔案">
         <FileManagement @search="onSearch" @clear="onClear" />
       </BaseSection>
     </BaseCard>
