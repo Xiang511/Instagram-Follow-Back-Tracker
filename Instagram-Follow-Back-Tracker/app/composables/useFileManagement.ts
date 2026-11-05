@@ -58,6 +58,7 @@ export function useFileManagement() {
 
     return {
       result: filteredFollowingValues.value,
+      followingValues: followingValues.value,
       followerValueslength: filteredFollowingValues.value.length,
       followingValueslength: followingValues.value.length,
     }

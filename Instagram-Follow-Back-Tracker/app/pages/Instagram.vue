@@ -46,6 +46,7 @@ const faqs = [
 
 // 比對結果,沿用原本 main.js 的變數名稱
 const result = ref<FollowUser[]>([])
+const followingValues = ref<FollowUser[]>([])
 const followerValueslength = ref(0)
 const followingValueslength = ref(0)
 const searched = ref(false)
@@ -53,6 +54,7 @@ const searched = ref(false)
 // FileManagement 比對完成後 emit 過來,再透過 prop 傳給 DataTable
 function onSearch(payload: SearchPayload) {
   result.value = payload.result
+  followingValues.value = payload.followingValues
   followerValueslength.value = payload.followerValueslength
   followingValueslength.value = payload.followingValueslength
   searched.value = true
@@ -61,6 +63,7 @@ function onSearch(payload: SearchPayload) {
 // 清空後隱藏結果表格
 function onClear() {
   result.value = []
+  followingValues.value = []
   followerValueslength.value = 0
   followingValueslength.value = 0
   searched.value = false
@@ -180,7 +183,7 @@ function onClear() {
               共 {{ followerValueslength }} 位沒有回追你( 你追蹤了 {{ followingValueslength }} 人 )
             </p>
           </div>
-          <DataTable :result="result" />
+          <DataTable :result="result" :following="followingValues" />
         </template>
         <p v-else class="opacity-60">上傳兩個檔案並按下「開始搜尋」後顯示結果</p>
       </BaseSection>

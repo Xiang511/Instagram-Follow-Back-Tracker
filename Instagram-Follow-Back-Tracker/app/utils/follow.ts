@@ -26,6 +26,8 @@ export interface FollowUser {
 // 按下「開始搜尋」後 emit 出去的資料
 export interface SearchPayload {
   result: FollowUser[]
+  // 你追蹤的所有人,重點關注名單用它判斷有沒有回追
+  followingValues: FollowUser[]
   followerValueslength: number
   followingValueslength: number
 }
