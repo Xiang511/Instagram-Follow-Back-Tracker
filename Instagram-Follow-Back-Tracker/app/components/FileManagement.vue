@@ -35,7 +35,7 @@ const fileInput = ref<{ reset: () => void } | null>(null)
 const fileInput2 = ref<{ reset: () => void } | null>(null)
 const zipInput = ref<{ reset: () => void } | null>(null)
 
-// 上傳方式:分開上傳兩個 JSON,或直接上傳 Instagram 的 ZIP;help 為故障排除與注意事項
+// 上傳方式:分開上傳兩個 JSON,或直接上傳 Instagram 的 ZIP;help 為故障排除
 const tab = ref<'json' | 'zip' | 'help'>('json')
 
 // 檔案格式不正確時,清空對應的 file input
@@ -70,13 +70,13 @@ function onClear() {
 </script>
 
 <template>
-  <div class="flex flex-col gap-2">
+  <div class="flex min-w-0 flex-col gap-2">
     <!-- 兩種上傳方式用 v-show 切換,切換時已選的檔案不會被清掉 -->
-    <div role="tablist" class="tabs tabs-border">
+    <div role="tablist" class="tabs tabs-border flex-nowrap overflow-x-auto">
       <button
         type="button"
         role="tab"
-        class="tab font-normal"
+        class="tab shrink-0 font-normal whitespace-nowrap"
         :class="{ 'tab-active': tab === 'json' }"
         :aria-selected="tab === 'json'"
         @click="tab = 'json'">
@@ -85,20 +85,20 @@ function onClear() {
       <button
         type="button"
         role="tab"
-        class="tab font-normal"
+        class="tab shrink-0 font-normal whitespace-nowrap"
         :class="{ 'tab-active': tab === 'zip' }"
         :aria-selected="tab === 'zip'"
         @click="tab = 'zip'">
-        上傳 ZIP(自動解壓縮)
+        上傳 ZIP
       </button>
       <button
         type="button"
         role="tab"
-        class="tab font-normal"
+        class="tab shrink-0 font-normal whitespace-nowrap"
         :class="{ 'tab-active': tab === 'help' }"
         :aria-selected="tab === 'help'"
         @click="tab = 'help'">
-        故障排除與注意事項
+        故障排除
       </button>
     </div>
 

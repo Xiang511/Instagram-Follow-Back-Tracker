@@ -11,7 +11,7 @@ defineExpose({ reset })
 </script>
 
 <template>
-  <fieldset class="fieldset">
+  <fieldset class="fieldset min-w-0">
     <legend class="fieldset-legend text-lg font-normal">{{ label }}</legend>
     <input
       ref="fileInput"
@@ -20,7 +20,9 @@ defineExpose({ reset })
       class="file-input w-full"
       :disabled="loading"
       @change="onChange" />
-    <p class="label">直接選擇 Instagram 下載的 ZIP,不需要先解壓縮,檔案只會在你的瀏覽器內處理</p>
+    <p class="label whitespace-normal">
+      直接選擇 Instagram 下載的 ZIP,會自動解壓縮,不需要先解壓縮。檔案只會在你的瀏覽器內處理
+    </p>
     <div v-if="loading" class="flex items-center gap-2 opacity-70">
       <span class="loading loading-spinner"></span>
       解壓縮中…
