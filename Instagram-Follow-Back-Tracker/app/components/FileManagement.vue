@@ -10,6 +10,7 @@ const {
   setFollowing,
   main,
   exportJSON,
+  exportCSV,
   clear,
 } = useFileManagement()
 
@@ -73,6 +74,12 @@ function onClear() {
         :disabled="filteredFollowingValues.length === 0"
         @click="exportJSON">
         下載 JSON
+      </button>
+      <button
+        class="btn btn-outline font-normal"
+        :disabled="filteredFollowingValues.length === 0"
+        @click="exportCSV">
+        下載 CSV
       </button>
       <button class="btn btn-outline font-normal" @click="exportIgnoreListJSON()">
         匯出忽略名單

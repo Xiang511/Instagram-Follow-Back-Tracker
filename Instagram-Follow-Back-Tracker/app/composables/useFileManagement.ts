@@ -71,6 +71,14 @@ export function useFileManagement() {
     )
   }
 
+  /** 下載 CSV,內容與 JSON 相同(不含忽略名單中的人) */
+  function exportCSV() {
+    exportToCSV(
+      filteredFollowingValues.value.filter((d) => !isIgnored(d.value)),
+      tagMap.value,
+    )
+  }
+
   // 有上傳過任何檔案或有比對結果時,才需要清空
   const hasData = computed(
     () =>
@@ -101,6 +109,7 @@ export function useFileManagement() {
     setFollowing,
     main,
     exportJSON,
+    exportCSV,
     clear,
   }
 }
