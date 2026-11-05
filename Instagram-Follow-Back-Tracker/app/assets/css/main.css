@@ -1,5 +1,39 @@
 @import 'tailwindcss';
-@plugin 'daisyui';
+@plugin 'daisyui' {
+  themes:
+    light --default,
+    night --prefersdark,
+    winter,
+    lofi;
+}
+
+/*
+ * 連結與行內 code 的顏色:
+ * light / night 維持原本頁面的固定色;winter / lofi 沒有指定,自動改吃主題的 primary / secondary
+ */
+[data-theme='light'] {
+  --link-color: #0d6efd;
+  --code-color: #781d4a;
+}
+
+[data-theme='night'] {
+  --link-color: #4493f8;
+  --code-color: var(--color-accent);
+  /* night 原本的 base-300 比底色還暗,卡片與標題底線幾乎看不見,改成比底色亮一階 */
+  --color-base-300: oklch(0.32 0.04 265);
+}
+
+/* 深色底上只靠顏色不夠明顯,內文段落裡的連結加上底線 */
+[data-theme='night'] p a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* winter / lofi:頁面底色用 base-200,和 base-100 的卡片分出層次;light / night 維持原樣 */
+[data-theme='winter'],
+[data-theme='lofi'] {
+  --root-bg: var(--color-base-200);
+}
 
 /* Tailwind preflight 會重置 code 與連結樣式,這裡補回原本頁面的外觀 */
 @layer base {
@@ -8,11 +42,11 @@
     padding: 0.2em 0.4em;
     font-size: 85%;
     border-radius: 6px;
-    color: #781d4a;
+    color: var(--code-color, var(--color-secondary));
   }
 
   a {
-    color: #0d6efd;
+    color: var(--link-color, var(--color-primary));
   }
 
   a:hover {

@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import Giscus from '@giscus/vue'
+
+const { giscusTheme } = useTheme()
 </script>
 
 <template>
@@ -17,7 +19,7 @@ import Giscus from '@giscus/vue'
         reactions-enabled="1"
         emit-metadata="0"
         input-position="top"
-        theme="light"
+        :theme="giscusTheme"
         lang="zh-TW"
         loading="lazy" />
     </div>

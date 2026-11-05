@@ -18,6 +18,14 @@ export default defineNuxtConfig({
         },
       ],
       link: [{ rel: 'icon', type: 'image/svg+xml', href: '/img/grid-svgrepo-com.svg' }],
+      script: [
+        {
+          // 繪製前先套用主題(記住的選擇,否則跟隨系統),避免深色模式閃一下白畫面
+          innerHTML:
+            "try{var t=localStorage.getItem('theme');if(t==='dark')t='night';t=t||(matchMedia('(prefers-color-scheme: dark)').matches?'night':'light');document.documentElement.dataset.theme=t}catch(e){}",
+          tagPosition: 'head',
+        },
+      ],
     },
   },
   vite: {

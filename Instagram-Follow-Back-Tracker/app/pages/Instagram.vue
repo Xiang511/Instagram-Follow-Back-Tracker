@@ -71,6 +71,10 @@ function onClear() {
   <div>
     <BaseCard>
       <BaseSection title="Instagram-Follow-Back-Tracker">
+        <!-- 標題列右側放主題切換與 GitHub 連結 -->
+        <template #actions>
+          <AppNav />
+        </template>
         <div class="mb-4 flex flex-wrap gap-1">
           <img v-for="src in badges" :key="src" :src="src" alt="badge" />
         </div>
