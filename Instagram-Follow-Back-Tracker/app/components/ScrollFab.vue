@@ -19,7 +19,11 @@ function scrollToDataTable() {
 <template>
   <!-- 快速捲動:展開後可選擇回到頁面最上方,或表格最上方 -->
   <div class="fab">
-    <div tabindex="0" role="button" class="btn btn-circle btn-primary lg:btn-xl" aria-label="快速捲動">
+    <div
+      tabindex="0"
+      role="button"
+      class="btn btn-circle btn-primary lg:btn-xl"
+      aria-label="快速捲動">
       <ChevronsUp />
     </div>
     <div>

@@ -90,27 +90,6 @@ function onClear() {
         </p>
       </BaseSection>
 
-      <BaseSection title="功能">
-        <ul class="ml-4 leading-[1.8em]">
-          <li>
-            <input type="checkbox" checked disabled />
-            查看在 Instagram 上誰沒有回追你
-          </li>
-          <li>
-            <input type="checkbox" checked disabled />
-            自訂義
-            <code>標籤</code>
-            以便於管理追蹤者
-          </li>
-          <li>
-            <input type="checkbox" checked disabled />
-            自訂義
-            <code>忽略名單</code>
-            以便於管理追蹤者
-          </li>
-        </ul>
-      </BaseSection>
-
       <BaseSection title="如何使用">
         <div class="flex flex-col gap-3">
           <p>
@@ -139,28 +118,52 @@ function onClear() {
         </div>
       </BaseSection>
 
-      <BaseSection title="資料隱私政策">
-        <p>我們不會保留任何使用者相關資訊，僅提供搜尋功能</p>
-      </BaseSection>
+      <!-- 「如何使用」留在外面;其餘補充資訊收進 Collapse,用帶箭頭的分隔線展開 -->
+      <BaseCollapse>
+        <BaseSection title="功能">
+          <ul class="ml-4 leading-[1.8em]">
+            <li>
+              <input type="checkbox" checked disabled />
+              查看在 Instagram 上誰沒有回追你
+            </li>
+            <li>
+              <input type="checkbox" checked disabled />
+              自訂義
+              <code>標籤</code>
+              以便於管理追蹤者
+            </li>
+            <li>
+              <input type="checkbox" checked disabled />
+              自訂義
+              <code>忽略名單</code>
+              以便於管理追蹤者
+            </li>
+          </ul>
+        </BaseSection>
 
-      <BaseSection title="錯誤回報 & 使用回饋">
-        <p>
-          歡迎前往 GitHub 提交
-          <a target="_blank" :href="`https://github.com/${repo}/issues`">Issues</a>
-        </p>
-      </BaseSection>
+        <BaseSection title="資料隱私政策">
+          <p>我們不會保留任何使用者相關資訊，僅提供搜尋功能</p>
+        </BaseSection>
 
-      <BaseSection title="GitHub">
-        <p>
-          歡迎前往
-          <a target="_blank" href="https://github.com/Xiang511">GitHub</a>
-          查看我其他專案
-        </p>
-      </BaseSection>
+        <BaseSection title="錯誤回報 & 使用回饋">
+          <p>
+            歡迎前往 GitHub 提交
+            <a target="_blank" :href="`https://github.com/${repo}/issues`">Issues</a>
+          </p>
+        </BaseSection>
 
-      <BaseSection title="FAQ">
-        <BaseAccordion :items="faqs" />
-      </BaseSection>
+        <BaseSection title="GitHub">
+          <p>
+            歡迎前往
+            <a target="_blank" href="https://github.com/Xiang511">GitHub</a>
+            查看我其他專案
+          </p>
+        </BaseSection>
+
+        <BaseSection title="FAQ">
+          <BaseAccordion :items="faqs" />
+        </BaseSection>
+      </BaseCollapse>
     </BaseCard>
 
     <BaseCard id="mainform">
