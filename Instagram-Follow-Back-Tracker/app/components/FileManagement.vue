@@ -35,8 +35,8 @@ const fileInput = ref<{ reset: () => void } | null>(null)
 const fileInput2 = ref<{ reset: () => void } | null>(null)
 const zipInput = ref<{ reset: () => void } | null>(null)
 
-// 上傳方式:分開上傳兩個 JSON,或直接上傳 Instagram 的 ZIP
-const tab = ref<'json' | 'zip'>('json')
+// 上傳方式:分開上傳兩個 JSON,或直接上傳 Instagram 的 ZIP;help 為故障排除與注意事項
+const tab = ref<'json' | 'zip' | 'help'>('json')
 
 // 檔案格式不正確時,清空對應的 file input
 function onFollower(json: unknown) {
@@ -91,6 +91,15 @@ function onClear() {
         @click="tab = 'zip'">
         上傳 ZIP(自動解壓縮)
       </button>
+      <button
+        type="button"
+        role="tab"
+        class="tab font-normal"
+        :class="{ 'tab-active': tab === 'help' }"
+        :aria-selected="tab === 'help'"
+        @click="tab = 'help'">
+        故障排除與注意事項
+      </button>
     </div>
 
     <div v-show="tab === 'json'" class="flex flex-col gap-2">
@@ -99,6 +108,10 @@ function onClear() {
     </div>
     <div v-show="tab === 'zip'">
       <ZipUpload ref="zipInput" label="Instagram ZIP" @upload="onZip" />
+    </div>
+
+    <div v-show="tab === 'help'">
+      <UploadHelp />
     </div>
 
     <div v-if="error" role="alert" class="alert alert-error alert-soft">
