@@ -14,36 +14,6 @@ useSeoMeta({
   ogImage: '/img/banner.png',
 })
 
-const repo = 'Xiang511/Instagram-Follow-Back-Tracker'
-const badges = [
-  `https://img.shields.io/github/last-commit/${repo}?display_timestamp=committer&style=flat-square`,
-  `https://img.shields.io/github/created-at/${repo}?style=flat-square`,
-  `https://img.shields.io/github/license/${repo}?style=flat-square`,
-  'https://img.shields.io/badge/build-Github--Page-green?style=flat-square&logo=Github%20Page&color=%23FE7D37',
-  `https://img.shields.io/github/stars/${repo}?style=flat-square`,
-]
-
-// 常見問題,每一組為 title + detail
-const faqs = [
-  {
-    title: '請問我被追蹤人數太多，生成兩個檔案，該怎麼比對呢',
-    detail: '請先前往這裡合併你的檔案之後再上傳即可',
-  },
-  {
-    title: '請問點完日期跟格式 建立檔案過一小時都沒下載好沒收到mail是正常的嗎？',
-    detail: '正常，有時候meta處理得比較慢',
-  },
-  {
-    title: '執行後的結果有錯',
-    detail:
-      '請使用最新的檔案，交叉使用舊檔案會導致結果出錯\n資料範圍請選擇所有時間，選擇其他時間會導致錯誤',
-  },
-  {
-    title: '已刪除帳號會出現在列表中',
-    detail: '這部分可以使用 忽略名單功能 解決',
-  },
-]
-
 // 比對結果,沿用原本 main.js 的變數名稱
 const result = ref<FollowUser[]>([])
 const followingValues = ref<FollowUser[]>([])
@@ -120,53 +90,6 @@ function onClear() {
           </p>
         </div>
       </BaseSection>
-
-      <!-- 「如何使用」留在外面;其餘補充資訊收進 Collapse,用帶箭頭的分隔線展開 -->
-      <BaseCollapse>
-        <BaseSection title="功能">
-          <ul class="ml-4 leading-[1.8em]">
-            <li>
-              <input type="checkbox" checked disabled />
-              查看在 Instagram 上誰沒有回追你
-            </li>
-            <li>
-              <input type="checkbox" checked disabled />
-              自訂義
-              <code>標籤</code>
-              以便於管理追蹤者
-            </li>
-            <li>
-              <input type="checkbox" checked disabled />
-              自訂義
-              <code>忽略名單</code>
-              以便於管理追蹤者
-            </li>
-          </ul>
-        </BaseSection>
-
-        <BaseSection title="資料隱私政策">
-          <p>我們不會保留任何使用者相關資訊，僅提供搜尋功能</p>
-        </BaseSection>
-
-        <BaseSection title="錯誤回報 & 使用回饋">
-          <p>
-            歡迎前往 GitHub 提交
-            <a target="_blank" :href="`https://github.com/${repo}/issues`">Issues</a>
-          </p>
-        </BaseSection>
-
-        <BaseSection title="GitHub">
-          <p>
-            歡迎前往
-            <a target="_blank" href="https://github.com/Xiang511">GitHub</a>
-            查看我其他專案
-          </p>
-        </BaseSection>
-
-        <BaseSection title="FAQ">
-          <BaseAccordion :items="faqs" />
-        </BaseSection>
-      </BaseCollapse>
     </BaseCard>
 
     <BaseCard id="mainform">

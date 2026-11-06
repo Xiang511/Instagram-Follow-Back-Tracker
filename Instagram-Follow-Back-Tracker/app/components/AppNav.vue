@@ -4,13 +4,20 @@ import { Menu, Palette } from '@lucide/vue'
 const repoUrl = 'https://github.com/Xiang511/Instagram-Follow-Back-Tracker'
 
 // 假資料:有 children 的項目會變成可收合的子選單
-const menuItems: { label: string; children?: string[] }[] = [
-  { label: '功能', children: ['查看沒有回追的人', '自訂標籤', '忽略名單'] },
-  { label: '如何使用', children: ['下載資料', '上傳檔案', '比對結果'] },
-  { label: 'FAQ' },
-  { label: '資料隱私政策' },
+// 有 to 的項目會連到站內頁面,其餘仍是假連結
+const menuItems: { label: string; to?: string; children?: string[] }[] = [
+  { label: '首頁', to: '/instagram' },
+  { label: '關於本站', to: '/about' },
+  { label: '網站功能', children: ['Instagram', 'Threads'] },
   { label: '更多', children: ['回報問題', '使用回饋'] },
+  { label: '資料隱私政策' },
 ]
+
+// 選單項目被按下或是目前頁面時,底色與文字改吃主題色(daisyUI 預設是 neutral,淺色主題會變黑)
+const activeColor =
+  '[--menu-active-bg:var(--color-primary)] [--menu-active-fg:var(--color-primary-content)]'
+// 全域 a 的連結色會蓋掉選單文字,所以平常才套 base-content,按下或目前頁面時交還給 menu-active 的文字色
+const linkClass = '[&:not(:active,.menu-active,[aria-current])]:text-base-content'
 
 // 主題狀態與切換邏輯在 useTheme,Giscus 也共用同一份
 const { currentTheme, setTheme } = useTheme()
@@ -37,7 +44,8 @@ function pickTheme(theme: string) {
       </div>
       <ul
         tabindex="0"
-        class="menu dropdown-content rounded-box bg-base-100 border-base-300 z-10 mt-2 w-40 border shadow-sm">
+        class="menu dropdown-content rounded-box bg-base-100 border-base-300 z-10 mt-2 w-40 border shadow-sm"
+        :class="activeColor">
         <li v-for="t in themes" :key="t.value">
           <button
             type="button"
@@ -74,17 +82,25 @@ function pickTheme(theme: string) {
       </div>
       <ul
         tabindex="0"
-        class="menu dropdown-content rounded-box bg-base-100 border-base-300 z-10 mt-2 w-56 border shadow-sm">
+        class="menu dropdown-content rounded-box bg-base-100 border-base-300 z-10 mt-2 w-56 border shadow-sm"
+        :class="activeColor">
         <li v-for="item in menuItems" :key="item.label">
           <details v-if="item.children" open>
             <summary class="font-normal">{{ item.label }}</summary>
             <ul>
               <li v-for="child in item.children" :key="child">
-                <a class="text-base-content font-normal no-underline" href="#">{{ child }}</a>
+                <a class="font-normal no-underline" :class="linkClass" href="#">{{ child }}</a>
               </li>
             </ul>
           </details>
-          <a v-else class="text-base-content font-normal no-underline" href="#">
+          <NuxtLink
+            v-else-if="item.to"
+            :to="item.to"
+            class="font-normal no-underline"
+            :class="linkClass">
+            {{ item.label }}
+          </NuxtLink>
+          <a v-else class="font-normal no-underline" :class="linkClass" href="#">
             {{ item.label }}
           </a>
         </li>
