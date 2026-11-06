@@ -189,6 +189,10 @@ function onClear() {
       </BaseSection>
     </BaseCard>
 
+    <BaseCard>
+      <SiteInfo />
+    </BaseCard>
+
     <BaseGiscus />
   </div>
 </template>
