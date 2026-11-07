@@ -5,11 +5,12 @@ const repoUrl = 'https://github.com/Xiang511/Instagram-Follow-Back-Tracker'
 
 // 假資料:有 children 的項目會變成可收合的子選單
 // 有 to 的項目會連到站內頁面,其餘仍是假連結
-const menuItems: { label: string; to?: string; children?: string[] }[] = [
-  { label: '首頁', to: '/instagram' },
+type MenuLink = { label: string; to?: string }
+const menuItems: (MenuLink & { children?: MenuLink[] })[] = [
+  { label: '首頁', to: '/' },
   { label: '關於本站', to: '/about' },
-  { label: '網站功能', children: ['Instagram', 'Threads'] },
-  { label: '更多', children: ['回報問題', '使用回饋'] },
+  { label: '網站功能', children: [{ label: 'Instagram', to: '/instagram' }, { label: 'Threads' }] },
+  { label: '更多', children: [{ label: '回報問題' }, { label: '使用回饋' }] },
   { label: '資料隱私政策' },
 ]
 
@@ -88,8 +89,17 @@ function pickTheme(theme: string) {
           <details v-if="item.children" open>
             <summary class="font-normal">{{ item.label }}</summary>
             <ul>
-              <li v-for="child in item.children" :key="child">
-                <a class="font-normal no-underline" :class="linkClass" href="#">{{ child }}</a>
+              <li v-for="child in item.children" :key="child.label">
+                <NuxtLink
+                  v-if="child.to"
+                  :to="child.to"
+                  class="font-normal no-underline"
+                  :class="linkClass">
+                  {{ child.label }}
+                </NuxtLink>
+                <a v-else class="font-normal no-underline" :class="linkClass" href="#">
+                  {{ child.label }}
+                </a>
               </li>
             </ul>
           </details>

@@ -51,16 +51,7 @@ function onClear() {
         <div class="mb-4 flex flex-wrap gap-1">
           <img v-for="src in badges" :key="src" :src="src" alt="badge" />
         </div>
-        <p class="mb-4">
-          此方法利用 Instagram
-          的「下載您的資料」功能來取得追蹤者及追蹤者清單檔案。透過比較兩個檔案，您可以發現那些沒有回追你的人
-        </p>
-        <p>
-          只需要
-          <code>JSON</code>
-          文件，不需要任何授權或認證
-          <a target="_blank" href="https://youtu.be/0XyRyZL3BO4?si=CVc7xN1tdGbtrgeK">觀看示範</a>
-        </p>
+       
       </BaseSection>
 
       <BaseSection title="如何使用">
