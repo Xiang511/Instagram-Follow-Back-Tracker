@@ -122,16 +122,14 @@ const pseudocode = [
 
     <BaseCard>
       <BaseSection title="功能介紹">
-        <!-- 標題列右邊的「更多內容」連到功能詳細頁;頁面還沒做，先是假連結(不跳轉)，做好後把 href 換成 to -->
+        <!-- 標題列右邊的「更多內容」連到版本紀錄頁 -->
         <template #actions>
-          <a
-            href="#"
-            class="text-base-content/70 hover:text-base-content inline-flex items-center gap-0.5 text-base no-underline"
-            title="詳細資料頁面尚未完成"
-            @click.prevent>
+          <NuxtLink
+            to="/changelog"
+            class="text-base-content/70 hover:text-base-content inline-flex items-center gap-0.5 text-base no-underline">
             更多內容
             <ChevronRight class="size-4" />
-          </a>
+          </NuxtLink>
         </template>
         <dl class="grid gap-x-10 md:grid-cols-2">
           <div v-for="item in features" :key="item.name" class="border-base-300 border-b py-3">

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Activity, Footprints, MessageCircleWarning, NotepadText, Star } from '@lucide/vue'
+import { Activity, CircleQuestionMark, Footprints, NotepadText, Tag } from '@lucide/vue'
 
 // 頁尾:沿用 README 式的細線風格，不做卡片也不加底色，只用一條細線和頁面內容分開
 // 內容全部是目前實際存在的頁面與連結;版權列寫 Xiang511 與 GPL-3.0
@@ -26,15 +26,17 @@ const groups: { title: string; links: FooterLink[] }[] = [
     links: [
       { label: '首頁', to: '/' },
       { label: '關於本站', to: '/about' },
-      { label: 'Instagram 比對', to: '/instagram' },
+      { label: 'IG 比對', to: '/instagram' },
+      { label: 'Threads 比對', to: '/threads' },
+      { label: '資料隱私政策', to: '/privacy' },
     ],
   },
   {
     title: '專案',
     links: [
-      { label: 'GitHub 原始碼', href: repoUrl },
+      { label: '原始碼', href: repoUrl },
+      { label: '版本紀錄', to: '/changelog' },
       { label: '回報問題', to: '/report' },
-      { label: '資料隱私政策', to: '/privacy' },
     ],
   },
 ]
@@ -50,14 +52,14 @@ const linkClass =
 <template>
   <footer class="border-base-300 mx-auto mt-10 max-w-[1200px] border-t px-1 pt-8 pb-6">
     <div class="grid gap-8 md:grid-cols-[1fr_auto] md:gap-16">
-      <div class="max-w-[28rem]">
+      <div class="max-w-[40rem]">
         <NuxtLink to="/" class="text-base-content text-base no-underline">
           Instagram-Follow-Back-Tracker
         </NuxtLink>
         <p class="text-base-content/70 mt-2 text-sm leading-[1.7em]">
           找出 Instagram 上誰沒有回追你。檔案只在你的瀏覽器內處理，不上傳、不用登入。
         </p>
-        <!-- 圓形外框的圖示連結:只放實際存在的連結(GitHub、問題回報頁、Star);
+        <!-- 圓形外框的圖示連結:只放實際存在的連結(GitHub、問題回報頁、版本紀錄頁);
              其他社群帳號等有了再加 -->
         <ul class="mt-4 flex items-center gap-3">
           <li>
@@ -76,19 +78,13 @@ const linkClass =
           </li>
           <li>
             <NuxtLink to="/report" :class="iconClass" aria-label="回報問題" title="回報問題">
-              <MessageCircleWarning class="size-5" />
+              <CircleQuestionMark class="size-5" />
             </NuxtLink>
           </li>
           <li>
-            <a
-              :href="repoUrl"
-              target="_blank"
-              rel="noopener noreferrer"
-              :class="iconClass"
-              aria-label="在 GitHub 給這個專案星星"
-              title="給個 Star">
-              <Star class="size-5" />
-            </a>
+            <NuxtLink to="/changelog" :class="iconClass" aria-label="版本紀錄" title="版本紀錄">
+              <Tag class="size-5" />
+            </NuxtLink>
           </li>
         </ul>
       </div>
@@ -119,8 +115,10 @@ const linkClass =
         <!-- 授權是 GPL-3.0，所以不寫 All rights reserved(與 GPL 授予使用者的權利相衝突) -->
         <p>© 2024-{{ new Date().getFullYear() }} Xiang511。原始碼以 GPL-3.0 授權。</p>
       </div>
-      <!-- 網站資訊:訪客統計 -->
-      <ul class="flex flex-wrap items-center gap-x-5 gap-y-1" aria-label="網站資訊">
+      <!-- 網站資訊:訪客統計。小於 768px(含 640px)一個項目一列，768px 以上排成一行，與上方版權列同一個斷點 -->
+      <ul
+        class="flex flex-col gap-y-1 md:flex-row md:flex-wrap md:items-center md:gap-x-5"
+        aria-label="網站資訊">
         <li v-for="item in stats" :key="item.label" class="flex items-center gap-1.5">
           <component :is="item.icon" class="size-4 shrink-0" aria-hidden="true" />
           <span>{{ item.label }} {{ formatStat(item.value) }}</span>

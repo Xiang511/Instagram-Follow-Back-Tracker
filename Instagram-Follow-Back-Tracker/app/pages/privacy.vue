@@ -28,7 +28,7 @@ const services = [
   { name: 'GitHub Pages', detail: '本站的網頁託管。' },
   {
     name: 'SiteStates',
-    detail: '訪客統計。載入一支計數腳本與一張 1×1 的圖片，用來顯示累計、今日與線上人數。',
+    detail: '訪客統計。用來顯示累計、今日與線上人數。',
   },
   {
     name: 'GitHub 與 shields.io',
@@ -39,9 +39,9 @@ const services = [
     detail: '留言區。要登入 GitHub 才能留言，留言內容公開顯示在專案的 GitHub Discussions。',
   },
   {
-    name: 'Google 表單(準備中)',
+    name: 'Google 表單',
     detail:
-      '問題回報表單啟用後，你填寫的內容會交給 Google 表單處理，請不要在裡面填寫密碼等敏感資訊。',
+      '問題回報表單。',
   },
 ]
 </script>
@@ -108,14 +108,6 @@ const services = [
       </BaseSection>
     </BaseCard>
 
-    <BaseCard>
-      <BaseSection title="政策更新與聯絡">
-        <p>
-          本政策有變動時會更新上方的日期。有任何疑問，請到
-          <NuxtLink to="/report">問題回報</NuxtLink>
-          頁留言或提出。
-        </p>
-      </BaseSection>
-    </BaseCard>
+    
   </div>
 </template>

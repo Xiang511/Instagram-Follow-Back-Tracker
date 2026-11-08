@@ -16,7 +16,13 @@ const menuItems: (MenuLink & { children?: MenuLink[] })[] = [
       { label: 'Threads', to: '/threads' },
     ],
   },
-  { label: '更多', children: [{ label: '回報問題', to: '/report' }] },
+  {
+    label: '更多',
+    children: [
+      { label: '版本紀錄', to: '/changelog' },
+      { label: '回報問題', to: '/report' },
+    ],
+  },
   { label: '資料隱私政策', to: '/privacy' },
 ]
 
