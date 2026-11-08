@@ -16,7 +16,7 @@ const {
 
 const { ignoreList, setIgnoreList, exportIgnoreListJSON } = useIgnore()
 
-// 管理忽略名單:以逗號分隔的文字編輯,對應原本的 prompt
+// 管理忽略名單:以逗號分隔的文字編輯，對應原本的 prompt
 const manageOpen = ref(false)
 const ignoreText = ref('')
 
@@ -30,15 +30,15 @@ function saveManage() {
   manageOpen.value = false
 }
 
-// 兩個 FileUpload 實例,沿用原本 main.js 的 fileInput / fileInput2
+// 兩個 FileUpload 實例，沿用原本 main.js 的 fileInput / fileInput2
 const fileInput = ref<{ reset: () => void } | null>(null)
 const fileInput2 = ref<{ reset: () => void } | null>(null)
 const zipInput = ref<{ reset: () => void } | null>(null)
 
-// 上傳方式:分開上傳兩個 JSON,或直接上傳 Instagram 的 ZIP;help 為故障排除
+// 上傳方式:分開上傳兩個 JSON，或直接上傳 Instagram 的 ZIP;help 為故障排除
 const tab = ref<'json' | 'zip' | 'help'>('json')
 
-// 檔案格式不正確時,清空對應的 file input
+// 檔案格式不正確時，清空對應的 file input
 function onFollower(json: unknown) {
   if (!setFollower(json)) fileInput.value?.reset()
 }
@@ -71,7 +71,7 @@ function onClear() {
 
 <template>
   <div class="flex min-w-0 flex-col gap-2">
-    <!-- 兩種上傳方式用 v-show 切換,切換時已選的檔案不會被清掉 -->
+    <!-- 兩種上傳方式用 v-show 切換，切換時已選的檔案不會被清掉 -->
     <div role="tablist" class="tabs tabs-border flex-nowrap overflow-x-auto">
       <button
         type="button"

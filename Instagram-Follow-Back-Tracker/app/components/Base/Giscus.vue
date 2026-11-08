@@ -5,7 +5,7 @@ const { giscusTheme } = useTheme()
 </script>
 
 <template>
-  <!-- giscus 依賴瀏覽器 DOM,只在 client 端渲染 -->
+  <!-- giscus 依賴瀏覽器 DOM，只在 client 端渲染 -->
   <ClientOnly>
     <div class="mx-auto mt-4 max-w-[1200px]">
       <Giscus

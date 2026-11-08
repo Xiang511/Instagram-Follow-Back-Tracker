@@ -1,8 +1,8 @@
 const STORAGE_KEY = 'ig_ignore_data'
 
 /**
- * 忽略名單,沿用原本 main.js 的 ignoreList / isIgnored / toggleIgnore
- * 狀態以 useState 共用,DataTable 與 FileManagement 看到的是同一份
+ * 忽略名單，沿用原本 main.js 的 ignoreList / isIgnored / toggleIgnore
+ * 狀態以 useState 共用，DataTable 與 FileManagement 看到的是同一份
  * 儲存格式與原本相同:{ ignore: string[], tags: Record<string, string> }
  */
 export function useIgnore() {
@@ -63,7 +63,7 @@ export function useIgnore() {
   /** 新增 / 編輯標籤;留空代表移除(與原本 setTag 一致) */
   function setTag(username: string, tag: string) {
     const text = tag.trim()
-    // 先排除該使用者,有內容再加回去,避免直接 delete 動態 key
+    // 先排除該使用者，有內容再加回去，避免直接 delete 動態 key
     const rest = Object.fromEntries(
       Object.entries(tagMap.value).filter(([key]) => key !== username),
     )
@@ -76,7 +76,7 @@ export function useIgnore() {
     setTag(username, '')
   }
 
-  /** 下載忽略名單,檔名沿用 ignore_list.json */
+  /** 下載忽略名單，檔名沿用 ignore_list.json */
   function exportIgnoreListJSON(filename = 'ignore_list.json') {
     const blob = new Blob([toIgnoreListText(ignoreList.value)], {
       type: 'text/plain;charset=utf-8',

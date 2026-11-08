@@ -1,4 +1,4 @@
-// GitHub API 回傳中,畫面會用到的欄位
+// GitHub API 回傳中，畫面會用到的欄位
 interface GithubRepoResponse {
   html_url: string
   description: string | null
@@ -14,7 +14,7 @@ interface GithubRepoResponse {
 
 /**
  * 載入倉庫資訊:只在瀏覽器端向 GitHub 公開 API 取得一次
- * 未登入的呼叫每小時有次數限制,失敗時 failed 為 true,畫面改顯示連結即可
+ * 未登入的呼叫每小時有次數限制，失敗時 failed 為 true，畫面改顯示連結即可
  */
 export function useGithubRepo(fullName: string) {
   const info = ref<GithubRepoResponse | null>(null)

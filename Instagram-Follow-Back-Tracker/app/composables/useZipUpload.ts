@@ -1,5 +1,5 @@
 /**
- * Instagram 匯出的 ZIP 上傳:讀取檔案、自動解壓縮並取出 followers / following,成功後呼叫 onLoad
+ * Instagram 匯出的 ZIP 上傳:讀取檔案、自動解壓縮並取出 followers / following，成功後呼叫 onLoad
  * 回傳的 fileInput 要綁在 <input type="file" ref="fileInput">
  */
 export function useZipUpload(onLoad: (data: ReturnType<typeof extractFollowData>) => void) {

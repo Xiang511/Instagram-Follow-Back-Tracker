@@ -21,7 +21,7 @@ defineExpose({ reset })
       :disabled="loading"
       @change="onChange" />
     <p class="label whitespace-normal">
-      直接選擇 Instagram 下載的 ZIP,會自動解壓縮,不需要先解壓縮。檔案只會在你的瀏覽器內處理
+      直接選擇 Instagram 下載的 ZIP，會自動解壓縮，不需要先解壓縮。檔案只會在你的瀏覽器內處理
     </p>
     <div v-if="loading" class="flex items-center gap-2 opacity-70">
       <span class="loading loading-spinner"></span>

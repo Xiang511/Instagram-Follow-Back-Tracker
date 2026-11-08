@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Activity, Footprints, NotepadText } from '@lucide/vue'
 
-// 訪客統計的載入與資料在 useSiteStats,頁尾也共用同一份;計數圖片放在頁尾,每頁只載入一次
+// 訪客統計的載入與資料在 useSiteStats，頁尾也共用同一份;計數圖片放在頁尾，每頁只載入一次
 const { total, today, online, failed, load } = useSiteStats()
 onMounted(load)
 

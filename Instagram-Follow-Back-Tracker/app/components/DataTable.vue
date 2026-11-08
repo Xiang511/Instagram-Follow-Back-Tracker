@@ -3,7 +3,7 @@ import { Star, UserPen } from '@lucide/vue'
 
 const props = defineProps<{
   result: FollowUser[]
-  // 你追蹤的所有人,重點關注分頁用它判斷有沒有回追
+  // 你追蹤的所有人，重點關注分頁用它判斷有沒有回追
   following: FollowUser[]
 }>()
 
@@ -42,7 +42,7 @@ function changePage(p: number) {
   document.getElementById('data-table')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
-// Action Modal:點選某一列的「操作」後,顯示該使用者可執行的動作
+// Action Modal:點選某一列的「操作」後，顯示該使用者可執行的動作
 const actionOpen = ref(false)
 const actionRow = ref<FollowUser | null>(null)
 const tagText = ref('')
@@ -106,7 +106,7 @@ function onRemoveTag() {
 
     <WatchlistTable v-show="tab === 'watch'" :result="result" :following="following" />
 
-    <!-- 用 v-show 切換,回到「全部」時搜尋條件與頁碼都還在 -->
+    <!-- 用 v-show 切換，回到「全部」時搜尋條件與頁碼都還在 -->
     <div v-show="tab === 'all'" class="flex flex-col gap-3">
       <div class="flex flex-wrap items-center justify-between gap-2">
         <label class="input w-full sm:w-auto">
@@ -142,7 +142,7 @@ function onRemoveTag() {
           </thead>
           <tbody>
             <tr v-for="row in pagedRows" :key="row.value">
-              <!-- ID 與標籤合成同一格一起固定,手機上標籤顯示在 ID 下方 -->
+              <!-- ID 與標籤合成同一格一起固定，手機上標籤顯示在 ID 下方 -->
               <th class="font-normal">
                 <div
                   class="flex max-w-36 flex-col items-start gap-1 md:max-w-none md:flex-row md:items-center md:gap-2">

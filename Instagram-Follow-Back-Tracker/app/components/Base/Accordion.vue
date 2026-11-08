@@ -7,12 +7,12 @@ interface AccordionItem {
 
 defineProps<{ items: AccordionItem[] }>()
 
-// radio 的 name 相同才會互斥(一次只展開一個),用 useId 避免多個 accordion 互相影響
+// radio 的 name 相同才會互斥(一次只展開一個)，用 useId 避免多個 accordion 互相影響
 const name = useId()
 </script>
 
 <template>
-  <!-- join 讓項目連在一起,join-vertical 為垂直排列 -->
+  <!-- join 讓項目連在一起，join-vertical 為垂直排列 -->
   <div class="join join-vertical bg-base-100 w-full">
     <div
       v-for="item in items"

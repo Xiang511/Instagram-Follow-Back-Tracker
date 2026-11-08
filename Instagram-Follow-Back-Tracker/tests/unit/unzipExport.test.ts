@@ -6,7 +6,7 @@ import { extractFollowData } from '../../app/utils/unzipExport'
 const json = (data: unknown) => strToU8(JSON.stringify(data))
 
 describe('extractFollowData', () => {
-  it('不論資料夾層級,取出 followers 與 following', () => {
+  it('不論資料夾層級，取出 followers 與 following', () => {
     const zip = zipSync({
       'connections/followers_and_following/followers_1.json': json([{ n: 1 }]),
       'connections/followers_and_following/following.json': json({ relationships_following: [] }),
@@ -19,7 +19,7 @@ describe('extractFollowData', () => {
     expect(result.following).toEqual({ relationships_following: [] })
   })
 
-  it('followers 被拆成多個檔案時,依編號合併', () => {
+  it('followers 被拆成多個檔案時，依編號合併', () => {
     const zip = zipSync({
       'followers_2.json': json([{ n: 2 }]),
       'followers_10.json': json([{ n: 10 }]),

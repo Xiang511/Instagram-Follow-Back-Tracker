@@ -1,4 +1,4 @@
-/** 匯出忽略名單的文字內容,沿用原本格式:以逗號分隔,沒有資料時輸出固定文字 */
+/** 匯出忽略名單的文字內容，沿用原本格式:以逗號分隔，沒有資料時輸出固定文字 */
 export function toIgnoreListText(ignoreList: string[]) {
   return ignoreList.length ? ignoreList.join(',') : 'No ignored users.'
 }

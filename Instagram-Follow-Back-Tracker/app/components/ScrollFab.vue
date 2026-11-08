@@ -17,7 +17,7 @@ function scrollToDataTable() {
 </script>
 
 <template>
-  <!-- 快速捲動:展開後可選擇回到頁面最上方,或表格最上方 -->
+  <!-- 快速捲動:展開後可選擇回到頁面最上方，或表格最上方 -->
   <div class="fab">
     <div
       tabindex="0"

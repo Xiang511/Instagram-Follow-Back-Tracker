@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// 重點關注:列出名單中的人,以及最近一次比對下他們有沒有回追;此分頁只能移除,不提供管理
+// 重點關注:列出名單中的人，以及最近一次比對下他們有沒有回追;此分頁只能移除，不提供管理
 const props = defineProps<{
   result: FollowUser[]
   following: FollowUser[]
@@ -37,7 +37,7 @@ const statusClass: Record<WatchStatus, string> = {
 <template>
   <div class="flex flex-col gap-3">
     <p v-if="watchlist.length === 0" class="opacity-60">
-      還沒有重點關注的人。在「全部」分頁點選某人的管理按鈕,就能加入這裡。
+      還沒有重點關注的人。在「全部」分頁點選某人的管理按鈕，就能加入這裡。
     </p>
 
     <template v-else>
@@ -46,7 +46,7 @@ const statusClass: Record<WatchStatus, string> = {
           <input v-model="keyword" type="search" placeholder="搜尋 instagramID" />
         </label>
         <span class="opacity-70">
-          共 {{ watchlist.length }} 人,其中 {{ notBackCount }} 人沒有回追
+          共 {{ watchlist.length }} 人，其中 {{ notBackCount }} 人沒有回追
         </span>
       </div>
 

@@ -1,8 +1,8 @@
 const STORAGE_KEY = 'ig_watchlist'
 
 /**
- * 重點關注名單:只記 username,存在 localStorage,下次開啟時自動帶回
- * 狀態以 useState 共用,DataTable 與 WatchlistTable 看到的是同一份
+ * 重點關注名單:只記 username，存在 localStorage，下次開啟時自動帶回
+ * 狀態以 useState 共用，DataTable 與 WatchlistTable 看到的是同一份
  */
 export function useWatchlist() {
   const watchlist = useState<string[]>('watchlist', () => [])

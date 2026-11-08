@@ -5,7 +5,7 @@ const dtf = new Intl.DateTimeFormat('zh-TW', {
   day: '2-digit',
 })
 
-// 由大到小,秒數門檻對應 Intl 的單位
+// 由大到小，秒數門檻對應 Intl 的單位
 const units: [Intl.RelativeTimeFormatUnit, number][] = [
   ['year', 60 * 60 * 24 * 365],
   ['month', 60 * 60 * 24 * 30],
@@ -17,8 +17,8 @@ const units: [Intl.RelativeTimeFormatUnit, number][] = [
 /**
  * 格式化追蹤時間
  * @param timestamp Unix 秒數
- * @param YMDCheck true 顯示 YYYY/MM/DD,false 顯示相對時間(例:3 個月前)
- * @param now 現在的 Unix 秒數,測試時可注入
+ * @param YMDCheck true 顯示 YYYY/MM/DD，false 顯示相對時間(例:3 個月前)
+ * @param now 現在的 Unix 秒數，測試時可注入
  */
 export function formatTime(
   timestamp: number,

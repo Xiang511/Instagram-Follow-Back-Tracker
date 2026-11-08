@@ -26,7 +26,7 @@ export interface FollowUser {
 // 按下「開始搜尋」後 emit 出去的資料
 export interface SearchPayload {
   result: FollowUser[]
-  // 你追蹤的所有人,重點關注名單用它判斷有沒有回追
+  // 你追蹤的所有人，重點關注名單用它判斷有沒有回追
   followingValues: FollowUser[]
   followerValueslength: number
   followingValueslength: number
@@ -38,7 +38,7 @@ const isEntryList = (list: unknown): list is FollowEntry[] =>
 // 缺少 href 時以 username 補上個人頁連結
 const profileHref = (username: string) => `https://www.instagram.com/_u/${username}`
 
-/** 解析 followers.json,回傳攤平後的 followerValues */
+/** 解析 followers.json，回傳攤平後的 followerValues */
 export function Follower(followersData: unknown): FollowUser[] {
   if (!isEntryList(followersData)) {
     throw new Error('followers 檔案格式不正確')
@@ -53,7 +53,7 @@ export function Follower(followersData: unknown): FollowUser[] {
   )
 }
 
-/** 解析 following.json,回傳攤平後的 followingValues */
+/** 解析 following.json，回傳攤平後的 followingValues */
 export function Following(arg: unknown): FollowUser[] {
   const followingData = (arg as FollowingData | null)?.relationships_following
   if (!isEntryList(followingData)) {
@@ -62,7 +62,7 @@ export function Following(arg: unknown): FollowUser[] {
 
   return followingData.flatMap((follower) =>
     follower.string_list_data.map((data) => {
-      // 新版匯出的 username 在 value(title 是空字串),舊版在 title(value 是空的)
+      // 新版匯出的 username 在 value(title 是空字串)，舊版在 title(value 是空的)
       const username = data.value || follower.title || ''
       return {
         value: username,

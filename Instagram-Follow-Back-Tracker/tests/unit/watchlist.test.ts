@@ -23,7 +23,7 @@ describe('getWatchlistRows', () => {
     })
   })
 
-  it('沒回追的排最前面,其次已回追,最後是你沒有追蹤的', () => {
+  it('沒回追的排最前面，其次已回追，最後是你沒有追蹤的', () => {
     const rows = getWatchlistRows(['dave', 'alice', 'bob'], result, following)
 
     expect(rows.map((r) => r.value)).toEqual(['bob', 'alice', 'dave'])
@@ -35,7 +35,7 @@ describe('getWatchlistRows', () => {
     expect(rows.map((r) => r.value)).toEqual(['carol', 'alice'])
   })
 
-  it('你沒有追蹤的人沒有追蹤時間,連結以 username 補上', () => {
+  it('你沒有追蹤的人沒有追蹤時間，連結以 username 補上', () => {
     const [row] = getWatchlistRows(['dave'], result, following)
 
     expect(row).toMatchObject({

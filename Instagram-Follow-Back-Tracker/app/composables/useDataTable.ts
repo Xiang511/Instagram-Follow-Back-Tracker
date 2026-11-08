@@ -8,12 +8,12 @@ export function useDataTable(rows: Ref<FollowUser[]>) {
   const pageSize = ref(pageSizeOptions[0]!)
   const page = ref(1)
 
-  // 追蹤時間顯示詳細日期(YYYY/MM/DD),否則顯示相對時間
+  // 追蹤時間顯示詳細日期(YYYY/MM/DD)，否則顯示相對時間
   const YMDCheck = ref(false)
   // 隱藏忽略名單中的人
   const showIgnore = ref(false)
 
-  // 先排除被忽略的人,再以 instagramID 搜尋(不分大小寫)
+  // 先排除被忽略的人，再以 instagramID 搜尋(不分大小寫)
   const filteredRows = computed(() => {
     const visible = showIgnore.value
       ? rows.value.filter((row) => !isIgnored(row.value))
@@ -31,7 +31,7 @@ export function useDataTable(rows: Ref<FollowUser[]>) {
     return filteredRows.value.slice(start, start + pageSize.value)
   })
 
-  // 頁碼按鈕:首頁、末頁與目前頁前後各一頁,其餘以 '...' 省略
+  // 頁碼按鈕:首頁、末頁與目前頁前後各一頁，其餘以 '...' 省略
   const visiblePages = computed(() => {
     const total = totalPages.value
     const pages = new Set([1, total, page.value - 1, page.value, page.value + 1])

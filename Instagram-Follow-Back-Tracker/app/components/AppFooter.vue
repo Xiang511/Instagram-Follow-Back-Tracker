@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { Activity, Footprints, MessageCircleWarning, NotepadText, Star } from '@lucide/vue'
 
-// 頁尾:沿用 README 式的細線風格,不做卡片也不加底色,只用一條細線和頁面內容分開
+// 頁尾:沿用 README 式的細線風格，不做卡片也不加底色，只用一條細線和頁面內容分開
 // 內容全部是目前實際存在的頁面與連結;版權列寫 Xiang511 與 GPL-3.0
 const repoUrl = `https://github.com/${repo}`
 
-// 訪客統計與首頁的「網站資訊」共用同一份資料(useSiteStats),只載入一次
+// 訪客統計與首頁的「網站資訊」共用同一份資料(useSiteStats)，只載入一次
 const { total, today, online, failed, load } = useSiteStats()
 onMounted(load)
-// 隱藏的計數圖片:載入它才會把這次造訪算進統計,放在頁尾讓每一頁都會計入
+// 隱藏的計數圖片:載入它才會把這次造訪算進統計，放在頁尾讓每一頁都會計入
 const COUNTER_IMG = 'https://SiteStates.com/show/image/33614.jpg'
 
 const stats = computed(() => [
@@ -39,7 +39,7 @@ const groups: { title: string; links: FooterLink[] }[] = [
   },
 ]
 
-// 圓形圖示按鈕:細線外框,hover 才浮出淡底色與較深的圖示
+// 圓形圖示按鈕:細線外框，hover 才浮出淡底色與較深的圖示
 const iconClass =
   'border-base-300 text-base-content/70 hover:text-base-content hover:bg-base-200 flex size-10 items-center justify-center rounded-full border no-underline transition-colors'
 
@@ -55,7 +55,7 @@ const linkClass =
           Instagram-Follow-Back-Tracker
         </NuxtLink>
         <p class="text-base-content/70 mt-2 text-sm leading-[1.7em]">
-          找出 Instagram 上誰沒有回追你。檔案只在你的瀏覽器內處理,不上傳、不用登入。
+          找出 Instagram 上誰沒有回追你。檔案只在你的瀏覽器內處理，不上傳、不用登入。
         </p>
         <!-- 圓形外框的圖示連結:只放實際存在的連結(GitHub、問題回報頁、Star);
              其他社群帳號等有了再加 -->
@@ -116,9 +116,8 @@ const linkClass =
     <div
       class="border-base-300 text-base-content/60 mt-8 flex flex-col gap-4 border-t pt-4 text-sm leading-[1.7em] md:flex-row md:items-start md:justify-between">
       <div class="space-y-1">
-        <!-- 授權是 GPL-3.0,所以不寫 All rights reserved(與 GPL 授予使用者的權利相衝突) -->
+        <!-- 授權是 GPL-3.0，所以不寫 All rights reserved(與 GPL 授予使用者的權利相衝突) -->
         <p>© 2024-{{ new Date().getFullYear() }} Xiang511。原始碼以 GPL-3.0 授權。</p>
-        
       </div>
       <!-- 網站資訊:訪客統計 -->
       <ul class="flex flex-wrap items-center gap-x-5 gap-y-1" aria-label="網站資訊">

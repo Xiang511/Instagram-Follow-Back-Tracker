@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineProps<{ title?: string }>()
 
-// v-model 控制開關,點背景、按 Esc 或關閉按鈕都會同步回 false
+// v-model 控制開關，點背景、按 Esc 或關閉按鈕都會同步回 false
 const open = defineModel<boolean>({ default: false })
 
 const dialog = ref<HTMLDialogElement | null>(null)

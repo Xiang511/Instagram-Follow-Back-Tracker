@@ -7,8 +7,8 @@ const baseName = (path: string) => path.split('/').pop() ?? path
 
 /**
  * 從 Instagram 匯出的 ZIP 取出 followers 與 following 的 JSON
- * - 只解壓這兩類檔案(不管放在哪個資料夾),其餘如圖片、影片完全不讀
- * - 粉絲太多時 Instagram 會拆成 followers_1.json、followers_2.json…,這裡依序合併成一份陣列
+ * - 只解壓這兩類檔案(不管放在哪個資料夾)，其餘如圖片、影片完全不讀
+ * - 粉絲太多時 Instagram 會拆成 followers_1.json、followers_2.json…，這裡依序合併成一份陣列
  */
 export function extractFollowData(zip: Uint8Array) {
   let files: Record<string, Uint8Array>
@@ -20,7 +20,7 @@ export function extractFollowData(zip: Uint8Array) {
       },
     })
   } catch {
-    throw new Error('這不是有效的 ZIP 檔案,請選擇 Instagram 下載的壓縮檔')
+    throw new Error('這不是有效的 ZIP 檔案，請選擇 Instagram 下載的壓縮檔')
   }
 
   const followerFiles = Object.entries(files)
@@ -29,7 +29,7 @@ export function extractFollowData(zip: Uint8Array) {
   const followingFile = Object.entries(files).find(([path]) => FOLLOWING_FILE.test(baseName(path)))
 
   if (followerFiles.length === 0 || !followingFile) {
-    throw new Error('壓縮檔內找不到 followers_1.json 或 following.json,請確認下載格式為 JSON')
+    throw new Error('壓縮檔內找不到 followers_1.json 或 following.json，請確認下載格式為 JSON')
   }
 
   const followers = followerFiles.flatMap(([path, data]) => {
@@ -42,7 +42,7 @@ export function extractFollowData(zip: Uint8Array) {
   return { followers, following, followerFileCount: followerFiles.length }
 }
 
-// followers.json 視為 0,followers_N.json 依 N 排序
+// followers.json 視為 0，followers_N.json 依 N 排序
 function fileIndex(path: string) {
   return Number(FOLLOWERS_FILE.exec(baseName(path))?.[1] ?? 0)
 }

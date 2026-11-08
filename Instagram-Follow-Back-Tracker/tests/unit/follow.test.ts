@@ -9,7 +9,7 @@ const followersData = [
 
 const followingData = {
   relationships_following: [
-    // value 為空時,username 取自 title
+    // value 為空時，username 取自 title
     {
       title: 'alice',
       string_list_data: [{ href: 'https://www.instagram.com/_u/alice', timestamp: 3 }],
@@ -32,14 +32,14 @@ describe('Follower', () => {
 })
 
 describe('Following', () => {
-  it('使用 title 當 username,缺少 href 時補上個人頁連結', () => {
+  it('使用 title 當 username，缺少 href 時補上個人頁連結', () => {
     expect(Following(followingData)).toEqual([
       { value: 'alice', href: 'https://www.instagram.com/_u/alice', timestamp: 3 },
       { value: 'carol', href: 'https://www.instagram.com/_u/carol', timestamp: 4 },
     ])
   })
 
-  it('新版匯出:title 為空字串時,username 取自 value', () => {
+  it('新版匯出:title 為空字串時，username 取自 value', () => {
     const data = {
       relationships_following: [
         {
@@ -71,7 +71,7 @@ describe('getNotFollowingBack', () => {
     expect(getNotFollowingBack(followers, followers)).toEqual([])
   })
 
-  it('followers 為空時,following 全部都是沒回追', () => {
+  it('followers 為空時，following 全部都是沒回追', () => {
     expect(getNotFollowingBack([], Following(followingData))).toHaveLength(2)
   })
 })

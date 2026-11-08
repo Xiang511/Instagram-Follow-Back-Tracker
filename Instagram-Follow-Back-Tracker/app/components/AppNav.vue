@@ -20,13 +20,13 @@ const menuItems: (MenuLink & { children?: MenuLink[] })[] = [
   { label: '資料隱私政策', to: '/privacy' },
 ]
 
-// 選單項目被按下或是目前頁面時,底色與文字改吃主題色(daisyUI 預設是 neutral,淺色主題會變黑)
+// 選單項目被按下或是目前頁面時，底色與文字改吃主題色(daisyUI 預設是 neutral，淺色主題會變黑)
 const activeColor =
   '[--menu-active-bg:var(--color-primary)] [--menu-active-fg:var(--color-primary-content)]'
-// 全域 a 的連結色會蓋掉選單文字,所以平常才套 base-content,按下或目前頁面時交還給 menu-active 的文字色
+// 全域 a 的連結色會蓋掉選單文字，所以平常才套 base-content，按下或目前頁面時交還給 menu-active 的文字色
 const linkClass = '[&:not(:active,.menu-active,[aria-current])]:text-base-content'
 
-// 主題狀態與切換邏輯在 useTheme,Giscus 也共用同一份
+// 主題狀態與切換邏輯在 useTheme，Giscus 也共用同一份
 const { currentTheme, setTheme } = useTheme()
 
 function pickTheme(theme: string) {
@@ -37,7 +37,7 @@ function pickTheme(theme: string) {
 </script>
 
 <template>
-  <!-- 右上角導覽:無底色無邊框的圖示按鈕,淡色文字,hover 才浮出底色,和頁面的細線風格融合 -->
+  <!-- 右上角導覽:無底色無邊框的圖示按鈕，淡色文字，hover 才浮出底色，和頁面的細線風格融合 -->
   <nav class="flex items-center gap-1" aria-label="網站工具">
     <!-- 主題選單 -->
     <div class="dropdown dropdown-end">
@@ -77,7 +77,7 @@ function pickTheme(theme: string) {
       </svg>
     </a>
 
-    <!-- 漢堡選單:daisyUI 的 collapsible with submenu,-->
+    <!-- 漢堡選單:daisyUI 的 collapsible with submenu，-->
     <div class="dropdown dropdown-end">
       <div
         tabindex="0"

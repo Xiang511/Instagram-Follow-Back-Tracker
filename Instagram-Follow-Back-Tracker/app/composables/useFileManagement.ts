@@ -12,12 +12,12 @@ export function useFileManagement() {
   const followerValues = ref<FollowUser[]>([])
   const followingValues = ref<FollowUser[]>([])
 
-  // 最近一次比對的結果,供下載 JSON 使用
+  // 最近一次比對的結果，供下載 JSON 使用
   const filteredFollowingValues = ref<FollowUser[]>([])
 
   const error = ref('')
 
-  // 回傳 false 代表檔案格式不正確,呼叫端可據此清空 file input
+  // 回傳 false 代表檔案格式不正確，呼叫端可據此清空 file input
   function setFollower(json: unknown) {
     try {
       followerValues.value = Follower(json)
@@ -46,7 +46,7 @@ export function useFileManagement() {
     }
   }
 
-  /** 開始搜尋:資料未到齊回傳 null,否則回傳比對結果 */
+  /** 開始搜尋:資料未到齊回傳 null，否則回傳比對結果 */
   function main(): SearchPayload | null {
     if (followersData.value === null || followingData.value === null) {
       error.value = '請先上傳您的檔案'
@@ -64,7 +64,7 @@ export function useFileManagement() {
     }
   }
 
-  /** 下載最近一次的比對結果(與原本一致,不含忽略名單中的人) */
+  /** 下載最近一次的比對結果(與原本一致，不含忽略名單中的人) */
   function exportJSON() {
     exportToJSON(
       filteredFollowingValues.value.filter((d) => !isIgnored(d.value)),
@@ -72,7 +72,7 @@ export function useFileManagement() {
     )
   }
 
-  /** 下載 CSV,內容與 JSON 相同(不含忽略名單中的人) */
+  /** 下載 CSV，內容與 JSON 相同(不含忽略名單中的人) */
   function exportCSV() {
     exportToCSV(
       filteredFollowingValues.value.filter((d) => !isIgnored(d.value)),
@@ -80,7 +80,7 @@ export function useFileManagement() {
     )
   }
 
-  // 有上傳過任何檔案或有比對結果時,才需要清空
+  // 有上傳過任何檔案或有比對結果時，才需要清空
   const hasData = computed(
     () =>
       followersData.value !== null ||

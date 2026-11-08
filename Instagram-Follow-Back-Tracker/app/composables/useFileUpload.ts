@@ -1,5 +1,5 @@
 /**
- * 單一 JSON 檔案上傳:讀取檔案文字、解析 JSON,成功後呼叫 onLoad
+ * 單一 JSON 檔案上傳:讀取檔案文字、解析 JSON，成功後呼叫 onLoad
  * 回傳的 fileInput 要綁在 <input type="file" ref="fileInput">
  */
 export function useFileUpload(onLoad: (json: unknown) => void) {

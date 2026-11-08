@@ -34,7 +34,7 @@ describe('tokenize', () => {
     expect(types['followers.json']).toBe('string')
   })
 
-  it('FOR EACH 與 IN 都是關鍵字,變數不被誤判', () => {
+  it('FOR EACH 與 IN 都是關鍵字，變數不被誤判', () => {
     const tokens = tokenize('FOR EACH 人 IN following:')
     expect(tokens.filter((t) => t.type === 'keyword').map((t) => t.text)).toEqual([
       'FOR EACH',

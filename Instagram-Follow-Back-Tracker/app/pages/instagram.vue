@@ -1,8 +1,8 @@
 <script setup lang="ts">
-// 對應原本 router 的 /instagram 路由,layout 名稱為檔名 BaseLayout 的 kebab-case
+// 對應原本 router 的 /instagram 路由，layout 名稱為檔名 BaseLayout 的 kebab-case
 definePageMeta({ layout: 'base-layout' })
 
-// 取代原本 route meta 的 title,並設定頁面 SEO 與社群分享(Open Graph)資訊
+// 取代原本 route meta 的 title，並設定頁面 SEO 與社群分享(Open Graph)資訊
 const description =
   '此方法利用 Instagram 的「下載您的資料」功能來取得 你的粉絲 和 你追蹤的人 的檔案。透過比較兩個檔案，您可以發現那些沒有回追你的人。'
 
@@ -14,14 +14,14 @@ useSeoMeta({
   ogImage: '/img/banner.png',
 })
 
-// 比對結果,沿用原本 main.js 的變數名稱
+// 比對結果，沿用原本 main.js 的變數名稱
 const result = ref<FollowUser[]>([])
 const followingValues = ref<FollowUser[]>([])
 const followerValueslength = ref(0)
 const followingValueslength = ref(0)
 const searched = ref(false)
 
-// FileManagement 比對完成後 emit 過來,再透過 prop 傳給 DataTable
+// FileManagement 比對完成後 emit 過來，再透過 prop 傳給 DataTable
 function onSearch(payload: SearchPayload) {
   result.value = payload.result
   followingValues.value = payload.followingValues
@@ -51,7 +51,6 @@ function onClear() {
         <div class="mb-4 flex flex-wrap gap-1">
           <img v-for="src in badges" :key="src" :src="src" alt="badge" />
         </div>
-       
       </BaseSection>
 
       <BaseSection title="如何使用">
@@ -106,7 +105,5 @@ function onClear() {
     <BaseCard>
       <SiteInfo />
     </BaseCard>
-
-    
   </div>
 </template>
