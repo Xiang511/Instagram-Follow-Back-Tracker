@@ -3,13 +3,19 @@ import { Menu, Palette } from '@lucide/vue'
 
 const repoUrl = 'https://github.com/Xiang511/Instagram-Follow-Back-Tracker'
 
-// 假資料:有 children 的項目會變成可收合的子選單
-// 有 to 的項目會連到站內頁面,其餘仍是假連結
+// 有 children 的項目會變成可收合的子選單
+// 有 to 的項目會連到站內頁面;沒有 to 的項目是尚未完成的假連結(目前沒有)
 type MenuLink = { label: string; to?: string }
 const menuItems: (MenuLink & { children?: MenuLink[] })[] = [
   { label: '首頁', to: '/' },
   { label: '關於本站', to: '/about' },
-  { label: '網站功能', children: [{ label: 'Instagram', to: '/instagram' }, { label: 'Threads' }] },
+  {
+    label: '網站功能',
+    children: [
+      { label: 'Instagram', to: '/instagram' },
+      { label: 'Threads', to: '/threads' },
+    ],
+  },
   { label: '更多', children: [{ label: '回報問題', to: '/report' }] },
   { label: '資料隱私政策', to: '/privacy' },
 ]
@@ -71,7 +77,7 @@ function pickTheme(theme: string) {
       </svg>
     </a>
 
-    <!-- 漢堡選單:daisyUI 的 collapsible with submenu,先放假資料 -->
+    <!-- 漢堡選單:daisyUI 的 collapsible with submenu,-->
     <div class="dropdown dropdown-end">
       <div
         tabindex="0"
