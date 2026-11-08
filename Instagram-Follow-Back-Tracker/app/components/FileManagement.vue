@@ -112,6 +112,11 @@ function onClear() {
 
     <div v-show="tab === 'help'">
       <UploadHelp />
+      <!-- 沒解決的人直接去問題回報頁(/report) -->
+      <p class="text-base-content/70">
+        問題還是沒有解決?
+        <NuxtLink to="/report">填寫表單</NuxtLink>
+      </p>
     </div>
 
     <div v-if="error" role="alert" class="alert alert-error alert-soft">
