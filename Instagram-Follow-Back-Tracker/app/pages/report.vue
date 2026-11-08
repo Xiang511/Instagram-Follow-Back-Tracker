@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { LifeBuoy } from '@lucide/vue'
+import { CircleQuestionMark } from '@lucide/vue'
 
 definePageMeta({ layout: 'base-layout' })
 
@@ -10,7 +10,7 @@ useSeoMeta({
 
 // Google 表單網址(暫定):貼上表單的「傳送 > 嵌入 HTML」裡 iframe 的 src 即可顯示，
 // 留空時會顯示「準備中」的說明
-const googleFormUrl = ''
+const googleFormUrl = 'https://forms.gle/Yg1yqhEDWYomrMoS7'
 const issuesUrl = `https://github.com/${repo}/issues`
 </script>
 
@@ -35,9 +35,7 @@ const issuesUrl = `https://github.com/${repo}/issues`
             </span>
           </h1>
           <p class="text-base-content/80 mt-7 max-w-[34rem] text-lg leading-[1.8em]">
-            也可以在留言區討論，或填寫回報表單，也歡迎到
-            <a :href="issuesUrl" target="_blank" rel="noopener noreferrer">GitHub Issues</a>
-            提出。
+            也可以在留言區討論，或填寫回報表單
           </p>
         </div>
       </div>
