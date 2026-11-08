@@ -107,6 +107,6 @@ function onClear() {
       <SiteInfo />
     </BaseCard>
 
-    <BaseGiscus />
+    
   </div>
 </template>
