@@ -1,35 +1,9 @@
 <script setup lang="ts">
 import { Activity, Footprints, NotepadText } from '@lucide/vue'
 
-// 訪客統計:沿用原本的 SiteStates 腳本
-// 腳本載入後會在 window 上留下 stTotalount(原站拼字如此)、stTodayCount、stOnlineCount 三個數字,
-// 它原本用 document.write 輸出的內容在頁面載入後無效,所以直接讀這三個變數
-const STATS_URL = 'https://SiteStates.com/show/js_text/b8cc25660e113e850df745866725c57d'
-// 原本放在頁面最上方、隱藏的計數圖片,載入它才會把這次造訪算進統計
-const COUNTER_IMG = 'https://SiteStates.com/show/image/33614.jpg'
-
-const total = ref<number | null>(null)
-const today = ref<number | null>(null)
-const online = ref<number | null>(null)
-const failed = ref(false)
-
-const toNumber = (value: unknown) => (typeof value === 'number' ? value : null)
-
-onMounted(() => {
-  const script = document.createElement('script')
-  script.src = STATS_URL
-  script.onload = () => {
-    const stats = window as unknown as Record<string, unknown>
-    total.value = toNumber(stats.stTotalount)
-    today.value = toNumber(stats.stTodayCount)
-    online.value = toNumber(stats.stOnlineCount)
-    failed.value = total.value === null && today.value === null && online.value === null
-  }
-  script.onerror = () => {
-    failed.value = true
-  }
-  document.body.appendChild(script)
-})
+// 訪客統計的載入與資料在 useSiteStats,頁尾也共用同一份;計數圖片放在頁尾,每頁只載入一次
+const { total, today, online, failed, load } = useSiteStats()
+onMounted(load)
 
 const items = computed(() => [
   { icon: NotepadText, label: '累計訪客', value: total.value },
@@ -51,7 +25,5 @@ const items = computed(() => [
         </span>
       </li>
     </ul>
-    <!-- 隱藏的計數圖片,不佔版面 -->
-    <img :src="COUNTER_IMG" alt="" width="1" height="1" class="hidden" />
   </BaseSection>
 </template>

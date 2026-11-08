@@ -1,9 +1,23 @@
 <script setup lang="ts">
-import { MessageCircleWarning, Star } from '@lucide/vue'
+import { Activity, Footprints, MessageCircleWarning, NotepadText, Star } from '@lucide/vue'
 
 // 頁尾:沿用 README 式的細線風格,不做卡片也不加底色,只用一條細線和頁面內容分開
 // 內容全部是目前實際存在的頁面與連結;版權列寫 Xiang511 與 GPL-3.0
 const repoUrl = `https://github.com/${repo}`
+
+// 訪客統計與首頁的「網站資訊」共用同一份資料(useSiteStats),只載入一次
+const { total, today, online, failed, load } = useSiteStats()
+onMounted(load)
+// 隱藏的計數圖片:載入它才會把這次造訪算進統計,放在頁尾讓每一頁都會計入
+const COUNTER_IMG = 'https://SiteStates.com/show/image/33614.jpg'
+
+const stats = computed(() => [
+  { icon: NotepadText, label: '累計訪客', value: total.value },
+  { icon: Footprints, label: '今日訪客', value: today.value },
+  { icon: Activity, label: '線上人數', value: online.value },
+])
+const formatStat = (value: number | null) =>
+  value === null ? (failed.value ? '—' : '…') : value.toLocaleString()
 
 type FooterLink = { label: string; to?: string; href?: string }
 const groups: { title: string; links: FooterLink[] }[] = [
@@ -100,10 +114,20 @@ const linkClass =
     </div>
 
     <div
-      class="border-base-300 text-base-content/60 mt-8 space-y-1 border-t pt-4 text-sm leading-[1.7em]">
-      <!-- 授權是 GPL-3.0,所以不寫 All rights reserved(與 GPL 授予使用者的權利相衝突) -->
-      <p>© 2024-{{ new Date().getFullYear() }} Xiang511。原始碼以 GPL-3.0 授權。</p>
-      <p>本站是獨立的第三方工具,與 Instagram、Meta 沒有關聯</p>
+      class="border-base-300 text-base-content/60 mt-8 flex flex-col gap-4 border-t pt-4 text-sm leading-[1.7em] md:flex-row md:items-start md:justify-between">
+      <div class="space-y-1">
+        <!-- 授權是 GPL-3.0,所以不寫 All rights reserved(與 GPL 授予使用者的權利相衝突) -->
+        <p>© 2024-{{ new Date().getFullYear() }} Xiang511。原始碼以 GPL-3.0 授權。</p>
+        
+      </div>
+      <!-- 網站資訊:訪客統計 -->
+      <ul class="flex flex-wrap items-center gap-x-5 gap-y-1" aria-label="網站資訊">
+        <li v-for="item in stats" :key="item.label" class="flex items-center gap-1.5">
+          <component :is="item.icon" class="size-4 shrink-0" aria-hidden="true" />
+          <span>{{ item.label }} {{ formatStat(item.value) }}</span>
+        </li>
+      </ul>
     </div>
+    <img :src="COUNTER_IMG" alt="" width="1" height="1" class="hidden" />
   </footer>
 </template>
