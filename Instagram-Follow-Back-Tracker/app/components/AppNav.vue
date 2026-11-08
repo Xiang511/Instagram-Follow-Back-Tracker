@@ -11,7 +11,7 @@ const menuItems: (MenuLink & { children?: MenuLink[] })[] = [
   { label: '關於本站', to: '/about' },
   { label: '網站功能', children: [{ label: 'Instagram', to: '/instagram' }, { label: 'Threads' }] },
   { label: '更多', children: [{ label: '回報問題', to: '/report' }] },
-  { label: '資料隱私政策' },
+  { label: '資料隱私政策', to: '/privacy' },
 ]
 
 // 選單項目被按下或是目前頁面時,底色與文字改吃主題色(daisyUI 預設是 neutral,淺色主題會變黑)

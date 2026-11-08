@@ -152,6 +152,14 @@ const pseudocode = [
 
     <BaseCard id="privacy" class="scroll-mt-4">
       <BaseSection title="資料隱私政策">
+        <template #actions>
+          <NuxtLink
+            to="/privacy"
+            class="text-base-content/70 hover:text-base-content inline-flex items-center gap-0.5 text-base no-underline">
+            完整政策
+            <ChevronRight class="size-4" />
+          </NuxtLink>
+        </template>
         <ul class="list">
           <li v-for="item in promises" :key="item.title" class="list-row px-0 py-3">
             <div>

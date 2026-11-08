@@ -20,7 +20,7 @@ const groups: { title: string; links: FooterLink[] }[] = [
     links: [
       { label: 'GitHub 原始碼', href: repoUrl },
       { label: '回報問題', to: '/report' },
-      { label: '資料隱私政策', to: '/#privacy' },
+      { label: '資料隱私政策', to: '/privacy' },
     ],
   },
 ]
