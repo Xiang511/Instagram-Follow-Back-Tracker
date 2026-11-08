@@ -101,9 +101,5 @@ function onClear() {
         <p v-else class="opacity-60">上傳兩個檔案並按下「開始搜尋」後顯示結果</p>
       </BaseSection>
     </BaseCard>
-
-    <BaseCard>
-      <SiteInfo />
-    </BaseCard>
   </div>
 </template>
