@@ -19,7 +19,7 @@ const groups: { title: string; links: FooterLink[] }[] = [
     title: '專案',
     links: [
       { label: 'GitHub 原始碼', href: repoUrl },
-      { label: '回報問題', href: `${repoUrl}/issues` },
+      { label: '回報問題', to: '/report' },
       { label: '資料隱私政策', to: '/#privacy' },
     ],
   },
@@ -43,7 +43,7 @@ const linkClass =
         <p class="text-base-content/70 mt-2 text-sm leading-[1.7em]">
           找出 Instagram 上誰沒有回追你。檔案只在你的瀏覽器內處理,不上傳、不用登入。
         </p>
-        <!-- 圓形外框的圖示連結:只放實際存在的專案連結(GitHub、回報問題、Star);
+        <!-- 圓形外框的圖示連結:只放實際存在的連結(GitHub、問題回報頁、Star);
              其他社群帳號等有了再加 -->
         <ul class="mt-4 flex items-center gap-3">
           <li>
@@ -61,15 +61,9 @@ const linkClass =
             </a>
           </li>
           <li>
-            <a
-              :href="`${repoUrl}/issues`"
-              target="_blank"
-              rel="noopener noreferrer"
-              :class="iconClass"
-              aria-label="回報問題"
-              title="回報問題">
+            <NuxtLink to="/report" :class="iconClass" aria-label="回報問題" title="回報問題">
               <MessageCircleWarning class="size-5" />
-            </a>
+            </NuxtLink>
           </li>
           <li>
             <a

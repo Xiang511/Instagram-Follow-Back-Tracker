@@ -10,7 +10,7 @@ const menuItems: (MenuLink & { children?: MenuLink[] })[] = [
   { label: '首頁', to: '/' },
   { label: '關於本站', to: '/about' },
   { label: '網站功能', children: [{ label: 'Instagram', to: '/instagram' }, { label: 'Threads' }] },
-  { label: '更多', children: [{ label: '回報問題' }, { label: '使用回饋' }] },
+  { label: '更多', children: [{ label: '回報問題', to: '/report' }] },
   { label: '資料隱私政策' },
 ]
 
