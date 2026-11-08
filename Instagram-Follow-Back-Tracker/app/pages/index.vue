@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ChevronRight, Sparkles } from '@lucide/vue'
 
-definePageMeta({ layout: 'base-layout' })
+// alias:讓 /index.html 也能比對到這一頁(再由 middleware/index-html.global.ts 轉到 /),避免顯示 404
+definePageMeta({ layout: 'base-layout', alias: ['/index.html'] })
 
 useSeoMeta({
   title: 'Meta粉絲追蹤-網頁版',
