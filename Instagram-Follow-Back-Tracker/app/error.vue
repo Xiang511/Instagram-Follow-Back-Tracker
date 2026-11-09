@@ -3,6 +3,7 @@ import { SearchX, TriangleAlert } from '@lucide/vue'
 import type { NuxtError } from '#app'
 
 const props = defineProps<{ error: NuxtError }>()
+const siteUrl = useSiteUrl()
 
 // 404 顯示專用文字，其他錯誤顯示通用文字
 const is404 = computed(() => props.error.statusCode === 404)
@@ -24,7 +25,7 @@ const go = (path: string) => clearError({ redirect: path })
       <header class="px-1 pt-2 pb-10 md:pt-4 md:pb-12">
         <div class="flex items-center justify-between gap-3">
           <a
-            href="/"
+            :href="siteUrl.asset('')"
             class="text-base-content min-w-0 truncate no-underline"
             @click.prevent="go('/')">
             Instagram-Follow-Back-Tracker

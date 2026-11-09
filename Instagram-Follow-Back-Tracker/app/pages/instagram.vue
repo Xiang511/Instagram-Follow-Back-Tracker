@@ -6,12 +6,14 @@ definePageMeta({ layout: 'base-layout' })
 const description =
   '此方法利用 Instagram 的「下載您的資料」功能來取得 你的粉絲 和 你追蹤的人 的檔案。透過比較兩個檔案，您可以發現那些沒有回追你的人。'
 
+const siteUrl = useSiteUrl()
+
 useSeoMeta({
   title: 'Instagram | Meta粉絲追蹤-網頁版',
   description,
   ogTitle: 'IG粉絲追蹤-網頁版',
   ogDescription: "Find who's not following you back on Instagram",
-  ogImage: '/img/banner.png',
+  ogImage: siteUrl.absolute('img/banner.png'),
 })
 
 // 比對結果，沿用原本 main.js 的變數名稱

@@ -4,12 +4,14 @@ import { ChevronRight, Sparkles } from '@lucide/vue'
 // alias:讓 /index.html 也能比對到這一頁(再由 middleware/index-html.global.ts 轉到 /)，避免顯示 404
 definePageMeta({ layout: 'base-layout', alias: ['/index.html'] })
 
+const siteUrl = useSiteUrl()
+
 useSeoMeta({
   title: 'Meta粉絲追蹤-網頁版',
   description: '找出 Instagram 上誰沒有回追你。檔案只在瀏覽器內處理，不用登入、不用授權。',
   ogTitle: 'IG粉絲追蹤-網頁版',
   ogDescription: "Find who's not following you back on Instagram",
-  ogImage: '/img/banner.png',
+  ogImage: siteUrl.absolute('img/banner.png'),
 })
 
 // 隱私承諾:每一項都是目前程式實際的行為

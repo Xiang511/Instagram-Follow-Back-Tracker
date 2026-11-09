@@ -1,2 +1,4 @@
 User-Agent: *
 Disallow:
+
+Sitemap: https://xiang511.com/Instagram-Follow-Back-Tracker/sitemap.xml
