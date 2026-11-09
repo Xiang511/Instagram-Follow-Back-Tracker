@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Ellipsis, FileDown, FileJson, FileSpreadsheet, Trash2, UserRoundX } from '@lucide/vue'
+
 // 搜尋成功後把比對結果交給 view;清空時通知 view 一併清掉結果
 const emit = defineEmits<{ search: [payload: SearchPayload]; clear: [] }>()
 
@@ -57,6 +59,15 @@ function onZip(data: { followers: unknown; following: unknown }) {
 function onSearch() {
   const payload = main()
   if (payload) emit('search', payload)
+}
+
+// 還沒有比對結果時，下載選項不能用
+const noResult = computed(() => filteredFollowingValues.value.length === 0)
+
+// 執行選單項目後收起下拉(dropdown 靠 focus 開啟，把焦點移走就會關閉)
+function run(action: () => void) {
+  if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
+  action()
 }
 
 // 清空兩個 file input、資料與結果
@@ -123,28 +134,55 @@ function onClear() {
       <span>{{ error }}</span>
     </div>
 
-    <div class="flex flex-wrap gap-2">
+    <div class="flex flex-wrap items-center gap-2">
       <button class="btn btn-outline btn-primary font-normal" @click="onSearch">開始搜尋</button>
-      <!-- 搜尋過才有結果可以下載 -->
-      <button
-        class="btn btn-outline font-normal"
-        :disabled="filteredFollowingValues.length === 0"
-        @click="exportJSON">
-        下載 JSON
-      </button>
-      <button
-        class="btn btn-outline font-normal"
-        :disabled="filteredFollowingValues.length === 0"
-        @click="exportCSV">
-        下載 CSV
-      </button>
-      <button class="btn btn-outline font-normal" @click="exportIgnoreListJSON()">
-        匯出忽略名單
-      </button>
-      <button class="btn btn-outline font-normal" @click="openManage">管理忽略名單</button>
+      <!-- 清空會刪掉已載入的資料與結果，是破壞性操作，所以留在選單外面，名稱與紅色一眼可見 -->
       <button class="btn btn-outline btn-error font-normal" :disabled="!hasData" @click="onClear">
+        <Trash2 class="size-4" />
         全部清空
       </button>
+
+      <!-- 其餘操作收進「更多」選單:下載、忽略名單、清空;daisyUI dropdown 靠 focus 開啟 -->
+      <div class="dropdown">
+        <div
+          tabindex="0"
+          role="button"
+          class="btn btn-outline btn-square font-normal"
+          aria-label="更多操作"
+          title="更多操作">
+          <Ellipsis />
+        </div>
+        <ul
+          tabindex="0"
+          class="menu dropdown-content rounded-box bg-base-100 border-base-300 z-10 mt-2 w-56 border shadow-sm">
+          <!-- 搜尋過才有結果可以下載 -->
+          <li :class="{ 'menu-disabled': noResult }">
+            <button type="button" class="font-normal" :disabled="noResult" @click="run(exportJSON)">
+              <FileJson class="size-4" />
+              下載 JSON
+            </button>
+          </li>
+          <li :class="{ 'menu-disabled': noResult }">
+            <button type="button" class="font-normal" :disabled="noResult" @click="run(exportCSV)">
+              <FileSpreadsheet class="size-4" />
+              下載 CSV
+            </button>
+          </li>
+          <li role="separator" class="border-base-300 my-1 border-t"></li>
+          <li>
+            <button type="button" class="font-normal" @click="run(exportIgnoreListJSON)">
+              <FileDown class="size-4" />
+              匯出忽略名單
+            </button>
+          </li>
+          <li>
+            <button type="button" class="font-normal" @click="run(openManage)">
+              <UserRoundX class="size-4" />
+              管理忽略名單
+            </button>
+          </li>
+        </ul>
+      </div>
     </div>
 
     <BaseModal v-model="manageOpen" title="管理忽略名單">
