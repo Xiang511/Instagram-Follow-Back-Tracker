@@ -251,7 +251,8 @@ function onClear() {
       <span>{{ error }}</span>
     </div>
 
-    <div class="flex flex-wrap items-center gap-2">
+    <!-- 故障排除只是說明頁，不需要操作按鈕 -->
+    <div v-show="tab !== 'help'" class="flex flex-wrap items-center gap-2">
       <button class="btn btn-outline btn-primary font-normal" @click="onSearch">開始搜尋</button>
       <!-- 清空會刪掉已載入的資料與結果，是破壞性操作，所以留在選單外面，名稱與紅色一眼可見 -->
       <button class="btn btn-outline btn-error font-normal" :disabled="!hasData" @click="onClear">
