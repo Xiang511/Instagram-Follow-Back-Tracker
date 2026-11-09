@@ -33,6 +33,33 @@ describe('extractFollowData', () => {
     expect(result.followerFileCount).toBe(3)
   })
 
+  it('Windows 壓縮的 ZIP(路徑用反斜線)也能取出並合併', () => {
+    const zip = zipSync({
+      'default\\followers_2.json': json([{ n: 2 }]),
+      'default\\followers_1.json': json([{ n: 1 }]),
+      'default\\following.json': json({ relationships_following: [] }),
+    })
+
+    const result = extractFollowData(zip)
+
+    expect(result.followers).toEqual([{ n: 1 }, { n: 2 }])
+    expect(result.followerFileCount).toBe(2)
+  })
+
+  it('略過 macOS 壓縮附帶的 __MACOSX 資源檔', () => {
+    const zip = zipSync({
+      'default/followers_1.json': json([{ n: 1 }]),
+      'default/following.json': json({}),
+      '__MACOSX/default/followers_1.json': json([{ n: 999 }]),
+      'default/__MACOSX/._followers_2.json': strToU8('binary'),
+    })
+
+    const result = extractFollowData(zip)
+
+    expect(result.followers).toEqual([{ n: 1 }])
+    expect(result.followerFileCount).toBe(1)
+  })
+
   it('缺少 following.json 時丟出錯誤', () => {
     const zip = zipSync({ 'followers_1.json': json([]) })
 

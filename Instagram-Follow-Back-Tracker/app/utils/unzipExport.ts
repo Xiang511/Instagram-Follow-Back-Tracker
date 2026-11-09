@@ -3,22 +3,28 @@ import { strFromU8, unzipSync } from 'fflate'
 const FOLLOWERS_FILE = /^followers(?:_(\d+))?\.json$/
 const FOLLOWING_FILE = /^following\.json$/
 
-const baseName = (path: string) => path.split('/').pop() ?? path
+// Windows 內建壓縮做出來的 ZIP 路徑用反斜線(default\followers_1.json)，所以兩種分隔符號都要切
+const baseName = (path: string) => path.split(/[\\/]/).pop() ?? path
+
+// macOS 壓縮時附帶的 __MACOSX 資料夾只有資源檔(._followers_1.json)，不是真正的內容，直接略過
+const isMacResource = (path: string) => path.split(/[\\/]/).includes('__MACOSX')
+
+const isTarget = (path: string) => {
+  if (isMacResource(path)) return false
+  const name = baseName(path)
+  return FOLLOWERS_FILE.test(name) || FOLLOWING_FILE.test(name)
+}
 
 /**
  * 從 Instagram 匯出的 ZIP 取出 followers 與 following 的 JSON
- * - 只解壓這兩類檔案(不管放在哪個資料夾)，其餘如圖片、影片完全不讀
- * - 粉絲太多時 Instagram 會拆成 followers_1.json、followers_2.json…，這裡依序合併成一份陣列
+ * - 只解壓這兩類檔案(不管放在哪個資料夾，也不管路徑用 / 或 \)，其餘如圖片、影片完全不讀
+ * - 粉絲太多時 Instagram 會拆成 followers_1.json、followers_2.json…，這裡依序合併成一份陣列，
+ *   之後才拿合併後的完整粉絲名單去和 following 比對
  */
 export function extractFollowData(zip: Uint8Array) {
   let files: Record<string, Uint8Array>
   try {
-    files = unzipSync(zip, {
-      filter: (file) => {
-        const name = baseName(file.name)
-        return FOLLOWERS_FILE.test(name) || FOLLOWING_FILE.test(name)
-      },
-    })
+    files = unzipSync(zip, { filter: (file) => isTarget(file.name) })
   } catch {
     throw new Error('這不是有效的 ZIP 檔案，請選擇 Instagram 下載的壓縮檔')
   }
