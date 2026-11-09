@@ -6,7 +6,7 @@ useSeoMeta({
   description: '說明本站如何處理你的檔案、儲存在瀏覽器的資料，以及用到的第三方服務。',
 })
 
-const updatedAt = '2026-11-08'
+const updatedAt = '2026-11-09'
 
 // 摘要:與首頁「資料隱私政策」的三項承諾一致
 const summary = [
@@ -73,7 +73,7 @@ const services = [
       <BaseSection title="你的檔案">
         <p>
           你從 Instagram 下載的 followers、following 檔案(JSON 或 ZIP)，從選擇檔案到比對、解壓縮、
-          匯出 CSV，全部在你的瀏覽器內完成。本站沒有後端，也沒有任何功能會把這些檔案傳出你的裝置。
+          匯出 CSV，全部在你的瀏覽器內完成。
         </p>
       </BaseSection>
     </BaseCard>
