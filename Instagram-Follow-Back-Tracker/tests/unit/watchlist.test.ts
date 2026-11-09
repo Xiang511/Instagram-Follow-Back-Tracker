@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { getWatchlistRows } from '../../app/utils/watchlist'
+import {
+  getWatchlistRows,
+  mergeWatchlist,
+  parseWatchlistFile,
+  toWatchlistJSON,
+} from '../../app/utils/watchlist'
 
 const user = (value: string, timestamp = 1) => ({
   value,
@@ -46,5 +51,50 @@ describe('getWatchlistRows', () => {
 
   it('空名單回傳空陣列', () => {
     expect(getWatchlistRows([], result, following)).toEqual([])
+  })
+})
+
+describe('parseWatchlistFile', () => {
+  it('讀得回 toWatchlistJSON 的輸出', () => {
+    expect(parseWatchlistFile(toWatchlistJSON(['a', 'b']))).toEqual({
+      watchlist: ['a', 'b'],
+      skipped: 0,
+    })
+  })
+
+  it('也接受 { watchlist: [...] } 與逗號、換行分隔的文字', () => {
+    expect(parseWatchlistFile('{"watchlist":["a","b"]}')?.watchlist).toEqual(['a', 'b'])
+    expect(parseWatchlistFile('a, b\r\nc')?.watchlist).toEqual(['a', 'b', 'c'])
+  })
+
+  it('去除重複與 BOM，不合法的 username 略過並計數', () => {
+    const bom = String.fromCharCode(0xfeff)
+    expect(parseWatchlistFile(`${bom}["a","a","bad name","@b"]`)).toEqual({
+      watchlist: ['a'],
+      skipped: 2,
+    })
+  })
+
+  it('格式不對時回傳 null', () => {
+    expect(parseWatchlistFile('[1,2]')).toBeNull()
+    expect(parseWatchlistFile('{"foo":1}')).toBeNull()
+    expect(parseWatchlistFile('[broken')).toBeNull()
+  })
+
+  it('空檔案回傳空名單', () => {
+    expect(parseWatchlistFile('')).toEqual({ watchlist: [], skipped: 0 })
+  })
+})
+
+describe('mergeWatchlist', () => {
+  it('保留原順序，只加入新的人', () => {
+    expect(mergeWatchlist(['a', 'b'], ['b', 'c'])).toEqual({
+      watchlist: ['a', 'b', 'c'],
+      added: 1,
+    })
+  })
+
+  it('內容都已存在時新增數量為 0', () => {
+    expect(mergeWatchlist(['a'], ['a']).added).toBe(0)
   })
 })

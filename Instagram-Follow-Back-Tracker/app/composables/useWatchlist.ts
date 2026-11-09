@@ -45,5 +45,21 @@ export function useWatchlist() {
     saveWatchlist()
   }
 
-  return { watchlist, isWatched, addWatch, removeWatch }
+  /** 下載重點關注名單(JSON 陣列，格式同瀏覽器儲存的資料) */
+  function exportWatchlistJSON(filename = 'watchlist.json') {
+    downloadBlob(
+      new Blob([toWatchlistJSON(watchlist.value)], { type: 'application/json' }),
+      filename,
+    )
+  }
+
+  /** 把匯入的名單併進現有名單(不覆蓋)，回傳新增的數量與目前總數 */
+  function importWatchlist(incoming: string[]) {
+    const { watchlist: merged, added } = mergeWatchlist(watchlist.value, incoming)
+    watchlist.value = merged
+    saveWatchlist()
+    return { added, total: merged.length }
+  }
+
+  return { watchlist, isWatched, addWatch, removeWatch, exportWatchlistJSON, importWatchlist }
 }

@@ -29,6 +29,7 @@ const {
 
 const { ignoreList, tagMap, setIgnoreList, setTags, exportIgnoreListJSON, importIgnoreData } =
   useIgnore()
+const { exportWatchlistJSON, importWatchlist } = useWatchlist()
 
 // 管理忽略名單:以逗號分隔的文字編輯，對應原本的 prompt
 const manageOpen = ref(false)
@@ -107,6 +108,43 @@ async function onImportIgnore() {
     showNotice('error', '讀取檔案失敗，請重新嘗試')
   } finally {
     // 清空欄位，之後才能再選同一個檔案
+    input.value = ''
+  }
+}
+
+// 匯入重點關注:選擇本站匯出的 watchlist.json(也接受逗號 / 換行分隔的文字)，併入現有名單
+const watchInput = ref<HTMLInputElement | null>(null)
+
+async function onImportWatchlist() {
+  const input = watchInput.value
+  const file = input?.files?.[0]
+  if (!input || !file) return
+
+  try {
+    const parsed = parseWatchlistFile(await file.text())
+    if (parsed === null) {
+      showNotice('error', '無法讀取這個檔案，請選擇本站匯出的重點關注名單')
+    } else if (parsed.watchlist.length === 0) {
+      showNotice(
+        'error',
+        parsed.skipped > 0
+          ? `檔案裡的 ${parsed.skipped} 個項目都不是有效的 username`
+          : '這個檔案裡沒有重點關注名單',
+      )
+    } else {
+      const { added, total } = importWatchlist(parsed.watchlist)
+      const skipped = parsed.skipped > 0 ? `，略過 ${parsed.skipped} 個無效的 username` : ''
+      showNotice(
+        'success',
+        added === 0
+          ? `檔案裡的人都已經在重點關注名單裡，沒有新增${skipped}`
+          : `已匯入 ${added} 位，目前重點關注共 ${total} 位${skipped}`,
+      )
+    }
+  } catch (e) {
+    console.error('匯入重點關注失敗:', e)
+    showNotice('error', '讀取檔案失敗，請重新嘗試')
+  } finally {
     input.value = ''
   }
 }
@@ -260,6 +298,20 @@ function onClear() {
               匯入忽略名單與標籤
             </button>
           </li>
+          <li role="separator" class="border-base-300 my-1 border-t"></li>
+          <li>
+            <button type="button" class="font-normal" @click="run(exportWatchlistJSON)">
+              <FileDown class="size-4" />
+              匯出重點關注
+            </button>
+          </li>
+          <li>
+            <button type="button" class="font-normal" @click="run(() => watchInput?.click())">
+              <FileUp class="size-4" />
+              匯入重點關注
+            </button>
+          </li>
+          <li role="separator" class="border-base-300 my-1 border-t"></li>
           <li>
             <button type="button" class="font-normal" @click="run(openManage)">
               <UserRoundX class="size-4" />
@@ -285,6 +337,15 @@ function onClear() {
       aria-hidden="true"
       tabindex="-1"
       @change="onImportIgnore" />
+    <!-- 匯入重點關注用的隱藏檔案欄位 -->
+    <input
+      ref="watchInput"
+      type="file"
+      accept=".json,.txt,application/json,text/plain"
+      class="hidden"
+      aria-hidden="true"
+      tabindex="-1"
+      @change="onImportWatchlist" />
 
     <!-- 匯入結果提示(daisyUI toast):底色文字吃 base，成功 / 失敗只用框線與圖示的主題色區分 -->
     <Teleport to="body">
