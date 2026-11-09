@@ -8,7 +8,9 @@ defineProps<{ title: string }>()
   <section class="[&:not(:first-child)]:mt-6">
     <div
       class="border-base-300 mt-[0.4em] mb-4 flex items-center justify-between gap-3 border-b pb-2.5">
-      <h2 class="min-w-0 text-[1.6em] font-medium break-words">
+      <!-- 窄螢幕字級縮小:長標題(例如 Instagram-Follow-Back-Tracker)旁邊還有工具按鈕，
+           25.6px 會被擠成三行;sm(640px)以上才用原本的 1.6em -->
+      <h2 class="min-w-0 text-[1.25em] font-medium break-words sm:text-[1.6em]">
         <slot name="title">{{ title }}</slot>
       </h2>
       <div v-if="$slots.actions" class="shrink-0">
