@@ -23,10 +23,19 @@ defineExpose({ reset })
     <p class="label whitespace-normal">
       直接選擇 Instagram 下載的 ZIP，會自動解壓縮，不需要先解壓縮。檔案只會在你的瀏覽器內處理
     </p>
-    <div v-if="loading" class="flex items-center gap-2 opacity-70">
-      <span class="loading loading-spinner"></span>
-      解壓縮中…
-    </div>
+    <!-- 解壓縮期間的讀取提示(daisyUI toast + alert):固定在畫面上方中間，不推擠版面;
+         放到 body 避免被上層容器裁切。底色與文字吃 base-100 / base-content(各主題對比都夠)，
+         框線與轉圈圈吃 primary，切換主題時整個提示會自動跟著變 -->
+    <Teleport to="body">
+      <div v-if="loading" class="toast toast-top toast-center z-50">
+        <div
+          role="status"
+          class="alert bg-base-100 text-base-content border-primary border shadow-md">
+          <span class="loading loading-spinner loading-sm text-primary"></span>
+          <span>解壓縮中，請稍候…</span>
+        </div>
+      </div>
+    </Teleport>
     <div v-if="error" role="alert" class="alert alert-error alert-soft mt-2">
       <span>{{ error }}</span>
     </div>

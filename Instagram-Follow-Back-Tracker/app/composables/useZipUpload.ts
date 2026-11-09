@@ -26,8 +26,14 @@ export function useZipUpload(onLoad: (data: ReturnType<typeof extractFollowData>
     }
 
     loading.value = true
+    // 小檔案幾毫秒就解完，提示會一閃而過;至少顯示 500ms，使用者才看得到有在處理
+    const minimumShown = new Promise((resolve) => setTimeout(resolve, 500))
     try {
-      const data = extractFollowData(new Uint8Array(await file.arrayBuffer()))
+      const buffer = new Uint8Array(await file.arrayBuffer())
+      // 讓畫面先把提示畫出來，再做會卡住主執行緒的同步解壓縮
+      await new Promise((resolve) => setTimeout(resolve, 0))
+      const data = extractFollowData(buffer)
+      await minimumShown
       fileName.value = file.name
       onLoad(data)
     } catch (e) {
