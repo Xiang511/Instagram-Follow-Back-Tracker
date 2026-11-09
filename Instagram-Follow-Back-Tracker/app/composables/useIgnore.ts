@@ -58,6 +58,12 @@ export function useIgnore() {
     saveIgnoreData()
   }
 
+  /** 直接取代整份標籤(管理標籤) */
+  function setTags(tags: Record<string, string>) {
+    tagMap.value = tags
+    saveIgnoreData()
+  }
+
   const getTag = (username: string) => tagMap.value[username] ?? ''
 
   /** 新增 / 編輯標籤;留空代表移除(與原本 setTag 一致) */
@@ -76,12 +82,22 @@ export function useIgnore() {
     setTag(username, '')
   }
 
-  /** 下載忽略名單，檔名沿用 ignore_list.json */
+  /** 下載忽略名單與標籤(JSON，格式同瀏覽器儲存的資料)，檔名沿用 ignore_list.json */
   function exportIgnoreListJSON(filename = 'ignore_list.json') {
-    const blob = new Blob([toIgnoreListText(ignoreList.value)], {
-      type: 'text/plain;charset=utf-8',
-    })
-    downloadBlob(blob, filename)
+    const text = toIgnoreDataJSON({ ignore: ignoreList.value, tags: tagMap.value })
+    downloadBlob(new Blob([text], { type: 'application/json' }), filename)
+  }
+
+  /** 把匯入的忽略名單與標籤併進現有資料(不覆蓋)，回傳新增的數量 */
+  function importIgnoreData(incoming: IgnoreData) {
+    const { data, addedIgnore, addedTags } = mergeIgnoreData(
+      { ignore: ignoreList.value, tags: tagMap.value },
+      incoming,
+    )
+    ignoreList.value = data.ignore
+    tagMap.value = data.tags
+    saveIgnoreData()
+    return { addedIgnore, addedTags, total: data.ignore.length }
   }
 
   return {
@@ -90,9 +106,11 @@ export function useIgnore() {
     isIgnored,
     toggleIgnore,
     setIgnoreList,
+    setTags,
     getTag,
     setTag,
     removeTag,
     exportIgnoreListJSON,
+    importIgnoreData,
   }
 }

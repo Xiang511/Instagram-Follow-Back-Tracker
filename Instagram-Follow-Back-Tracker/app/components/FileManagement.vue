@@ -1,5 +1,16 @@
 <script setup lang="ts">
-import { Ellipsis, FileDown, FileJson, FileSpreadsheet, Trash2, UserRoundX } from '@lucide/vue'
+import {
+  CircleAlert,
+  CircleCheck,
+  Ellipsis,
+  FileDown,
+  FileJson,
+  FileSpreadsheet,
+  FileUp,
+  Tags,
+  Trash2,
+  UserRoundX,
+} from '@lucide/vue'
 
 // 搜尋成功後把比對結果交給 view;清空時通知 view 一併清掉結果
 const emit = defineEmits<{ search: [payload: SearchPayload]; clear: [] }>()
@@ -16,11 +27,14 @@ const {
   clear,
 } = useFileManagement()
 
-const { ignoreList, setIgnoreList, exportIgnoreListJSON } = useIgnore()
+const { ignoreList, tagMap, setIgnoreList, setTags, exportIgnoreListJSON, importIgnoreData } =
+  useIgnore()
 
 // 管理忽略名單:以逗號分隔的文字編輯，對應原本的 prompt
 const manageOpen = ref(false)
 const ignoreText = ref('')
+// 即時檢查格式;有錯誤時不能儲存
+const ignoreErrors = computed(() => ignoreTextErrors(ignoreText.value))
 
 function openManage() {
   ignoreText.value = ignoreList.value.join(',')
@@ -28,8 +42,73 @@ function openManage() {
 }
 
 function saveManage() {
+  if (ignoreErrors.value.length > 0) return
   setIgnoreList(parseIgnoreList(ignoreText.value))
   manageOpen.value = false
+}
+
+// 管理標籤:每行「username,標籤」的文字編輯;刪掉某一行就是移除那個人的標籤
+const tagsOpen = ref(false)
+const tagsText = ref('')
+// 即時檢查格式;有錯誤時不能儲存
+const parsedTags = computed(() => parseTagsText(tagsText.value))
+
+function openTags() {
+  tagsText.value = tagsToText(tagMap.value)
+  tagsOpen.value = true
+}
+
+function saveTags() {
+  if (parsedTags.value.errors.length > 0) return
+  setTags(parsedTags.value.tags)
+  tagsOpen.value = false
+}
+
+// 匯入忽略名單與標籤:選擇本站匯出的 ignore_list.json(舊版匯出的逗號分隔文字也可以)，
+// 併入現有資料(不會覆蓋，要整份取代忽略名單請用「管理忽略名單」)
+const importInput = ref<HTMLInputElement | null>(null)
+// 匯入結果提示,3 秒後自動消失
+const notice = ref<{ type: 'success' | 'error'; text: string } | null>(null)
+let noticeTimer: ReturnType<typeof setTimeout> | undefined
+
+function showNotice(type: 'success' | 'error', text: string) {
+  notice.value = { type, text }
+  clearTimeout(noticeTimer)
+  noticeTimer = setTimeout(() => (notice.value = null), 3000)
+}
+onBeforeUnmount(() => clearTimeout(noticeTimer))
+
+async function onImportIgnore() {
+  const input = importInput.value
+  const file = input?.files?.[0]
+  if (!input || !file) return
+
+  try {
+    const incoming = parseIgnoreFile(await file.text())
+    if (incoming === null) {
+      showNotice('error', '無法讀取這個檔案，請選擇本站匯出的忽略名單')
+    } else if (incoming.ignore.length === 0 && Object.keys(incoming.tags).length === 0) {
+      showNotice('error', '這個檔案裡沒有忽略名單或標籤')
+    } else {
+      const { addedIgnore, addedTags, total } = importIgnoreData(incoming)
+      const parts = [
+        addedIgnore > 0 && `${addedIgnore} 位忽略`,
+        addedTags > 0 && `${addedTags} 個標籤`,
+      ].filter(Boolean)
+      showNotice(
+        'success',
+        parts.length === 0
+          ? '檔案裡的內容都已經存在，沒有新增'
+          : `已匯入 ${parts.join('、')}，目前忽略名單共 ${total} 位`,
+      )
+    }
+  } catch (e) {
+    console.error('匯入忽略名單失敗:', e)
+    showNotice('error', '讀取檔案失敗，請重新嘗試')
+  } finally {
+    // 清空欄位，之後才能再選同一個檔案
+    input.value = ''
+  }
 }
 
 // 兩個 FileUpload 實例，沿用原本 main.js 的 fileInput / fileInput2
@@ -172,7 +251,13 @@ function onClear() {
           <li>
             <button type="button" class="font-normal" @click="run(exportIgnoreListJSON)">
               <FileDown class="size-4" />
-              匯出忽略名單
+              匯出忽略名單與標籤
+            </button>
+          </li>
+          <li>
+            <button type="button" class="font-normal" @click="run(() => importInput?.click())">
+              <FileUp class="size-4" />
+              匯入忽略名單與標籤
             </button>
           </li>
           <li>
@@ -181,15 +266,79 @@ function onClear() {
               管理忽略名單
             </button>
           </li>
+          <li>
+            <button type="button" class="font-normal" @click="run(openTags)">
+              <Tags class="size-4" />
+              管理標籤
+            </button>
+          </li>
         </ul>
       </div>
     </div>
 
+    <!-- 匯入忽略名單用的隱藏檔案欄位，由選單項目觸發 -->
+    <input
+      ref="importInput"
+      type="file"
+      accept=".json,.txt,application/json,text/plain"
+      class="hidden"
+      aria-hidden="true"
+      tabindex="-1"
+      @change="onImportIgnore" />
+
+    <!-- 匯入結果提示(daisyUI toast):底色文字吃 base，成功 / 失敗只用框線與圖示的主題色區分 -->
+    <Teleport to="body">
+      <div v-if="notice" class="toast toast-top toast-center z-50">
+        <div
+          role="status"
+          class="alert bg-base-100 text-base-content border shadow-md"
+          :class="notice.type === 'success' ? 'border-success' : 'border-error'">
+          <CircleCheck v-if="notice.type === 'success'" class="text-success size-5" />
+          <CircleAlert v-else class="text-error size-5" />
+          <span>{{ notice.text }}</span>
+        </div>
+      </div>
+    </Teleport>
+
     <BaseModal v-model="manageOpen" title="管理忽略名單">
+      <IrreversibleWarning />
       <p class="mb-2 opacity-70">請以逗號分隔編輯忽略名單(username1,username2)</p>
-      <textarea v-model="ignoreText" class="textarea w-full" rows="5"></textarea>
+      <textarea
+        v-model="ignoreText"
+        class="textarea w-full"
+        :class="{ 'textarea-error': ignoreErrors.length > 0 }"
+        :aria-invalid="ignoreErrors.length > 0"
+        rows="5"></textarea>
+      <FormatError :errors="ignoreErrors" />
       <template #actions>
-        <button class="btn btn-primary font-normal" @click="saveManage">儲存</button>
+        <button
+          class="btn btn-primary font-normal"
+          :disabled="ignoreErrors.length > 0"
+          @click="saveManage">
+          儲存
+        </button>
+      </template>
+    </BaseModal>
+
+    <BaseModal v-model="tagsOpen" title="管理標籤">
+      <IrreversibleWarning />
+      <p class="mb-2 opacity-70">每行一筆，格式為 username,標籤。刪掉某一行就會移除那個人的標籤</p>
+      <textarea
+        v-model="tagsText"
+        class="textarea w-full"
+        :class="{ 'textarea-error': parsedTags.errors.length > 0 }"
+        :aria-invalid="parsedTags.errors.length > 0"
+        rows="8"
+        placeholder="username,標籤"
+        spellcheck="false"></textarea>
+      <FormatError :errors="parsedTags.errors" />
+      <template #actions>
+        <button
+          class="btn btn-primary font-normal"
+          :disabled="parsedTags.errors.length > 0"
+          @click="saveTags">
+          儲存
+        </button>
       </template>
     </BaseModal>
   </div>
