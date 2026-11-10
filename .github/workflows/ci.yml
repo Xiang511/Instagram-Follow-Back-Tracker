@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  # 每次 push dev 都檢查
+  push:
+    branches: [refactor/nuxt, main]
+  # 對 main 發 PR 時檢查
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# 同一個分支有新的 push 時，取消還在跑的舊檢查
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # 專案在 repo 的子資料夾
+  APP_DIR: Instagram-Follow-Back-Tracker
+
+jobs:
+  check:
+    name: Lint, 測試與建置
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: ${{ env.APP_DIR }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: ${{ env.APP_DIR }}/package-lock.json
+
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run lint
+      - run: npm test
+
+      # 子路徑由環境變數決定(正式站在 xiang511.com 的子路徑下)
+      - name: 靜態產生
+        run: npm run generate
+        env:
+          NUXT_APP_BASE_URL: /Instagram-Follow-Back-Tracker/
