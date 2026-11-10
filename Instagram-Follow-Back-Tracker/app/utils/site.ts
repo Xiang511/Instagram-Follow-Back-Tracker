@@ -8,4 +8,5 @@ export const badges = [
   `https://img.shields.io/github/license/${repo}?style=flat-square`,
   'https://img.shields.io/badge/build-Github--Page-green?style=flat-square&logo=Github%20Page&color=%23FE7D37',
   `https://img.shields.io/github/stars/${repo}?style=flat-square`,
+  `https://img.shields.io/github/actions/workflow/status/${repo}/ci.yml?style=flat-square&logo=github&label=CI&branch=refactor/nuxt`,
 ]
