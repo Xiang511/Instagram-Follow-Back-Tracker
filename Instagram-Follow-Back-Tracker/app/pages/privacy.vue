@@ -40,8 +40,7 @@ const services = [
   },
   {
     name: 'Google 表單',
-    detail:
-      '問題回報表單。',
+    detail: '問題回報表單。',
   },
 ]
 </script>
@@ -107,7 +106,5 @@ const services = [
         </ul>
       </BaseSection>
     </BaseCard>
-
-    
   </div>
 </template>

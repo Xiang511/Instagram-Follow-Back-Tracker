@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 definePageMeta({ layout: 'base-layout' })
 
 useSeoMeta({

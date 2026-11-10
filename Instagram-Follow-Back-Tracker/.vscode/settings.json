@@ -1,13 +1,13 @@
 {
-    // 預設使用 Prettier 排版
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
-    // 針對 Vue 檔案的特殊設定
-    "[vue]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    // 存檔時，讓 ESLint 自動修復邏輯錯誤
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": "explicit"
-    },
+  // 預設使用 Prettier 排版
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  // 針對 Vue 檔案的特殊設定
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  // 存檔時，讓 ESLint 自動修復邏輯錯誤
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  }
 }
