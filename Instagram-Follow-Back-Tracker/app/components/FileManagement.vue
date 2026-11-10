@@ -261,7 +261,7 @@ function onClear() {
       </button>
 
       <!-- 其餘操作收進「更多」選單:下載、忽略名單、清空;daisyUI dropdown 靠 focus 開啟 -->
-      <div class="dropdown">
+      <div class="dropdown group">
         <div
           tabindex="0"
           role="button"
@@ -270,9 +270,13 @@ function onClear() {
           title="更多操作">
           <Ellipsis />
         </div>
+        <!-- 手機:選單開啟時蓋住畫面，點空白處（焦點離開）即關閉 -->
+        <div
+          class="fixed inset-0 z-20 hidden bg-black/40 group-focus-within:max-sm:block"
+          aria-hidden="true"></div>
         <ul
           tabindex="0"
-          class="menu dropdown-content rounded-box bg-base-100 border-base-300 z-10 mt-2 w-56 border shadow-sm">
+          class="menu dropdown-content rounded-box bg-base-100 border-base-300 z-30 mt-2 w-56 border shadow-sm max-sm:fixed! max-sm:top-1/2! max-sm:left-1/2! max-sm:mt-0 max-sm:w-72 max-sm:max-w-[calc(100vw-2rem)] max-sm:-translate-x-1/2 max-sm:-translate-y-1/2">
           <!-- 搜尋過才有結果可以下載 -->
           <li :class="{ 'menu-disabled': noResult }">
             <button type="button" class="font-normal" :disabled="noResult" @click="run(exportJSON)">
