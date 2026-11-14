@@ -35,6 +35,15 @@ const issuesUrl = `https://github.com/${repo}/issues`
           <p class="text-base-content/80 mt-7 max-w-[34rem] text-lg leading-[1.8em]">
             也可以在留言區討論，或填寫回報表單
           </p>
+          <!-- 抬頭的按鈕:頁內捲動到下方的留言區或回報表單 -->
+          <div class="mt-10 flex flex-wrap items-center gap-3">
+            <a href="#comments" class="btn btn-primary btn-lg font-normal no-underline">
+              前往留言區
+            </a>
+            <a href="#form" class="btn btn-ghost btn-lg font-normal no-underline">
+              填寫回報表單
+            </a>
+          </div>
         </div>
       </div>
     </header>
