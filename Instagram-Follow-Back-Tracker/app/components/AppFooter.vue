@@ -4,6 +4,9 @@ import { Activity, CircleQuestionMark, Footprints, NotepadText, Tag } from '@luc
 // 頁尾:沿用 README 式的細線風格，不做卡片也不加底色，只用一條細線和頁面內容分開
 // 內容全部是目前實際存在的頁面與連結;版權列寫 Xiang511 與 GPL-3.0
 const repoUrl = `https://github.com/${repo}`
+const webSiteUrl = `https://xiang511.com`
+// 授權連結直接指向 GitHub 上的 LICENSE 檔
+const licenseUrl = `${repoUrl}/blob/main/LICENSE`
 
 // 訪客統計與首頁的「網站資訊」共用同一份資料(useSiteStats)，只載入一次
 const { total, today, online, failed, load } = useSiteStats()
@@ -28,7 +31,7 @@ const groups: { title: string; links: FooterLink[] }[] = [
       { label: '關於本站', to: '/about' },
       { label: 'IG 比對', to: '/instagram' },
       { label: 'Threads 比對', to: '/threads' },
-      { label: '資料隱私政策', to: '/privacy' },
+      
     ],
   },
   {
@@ -37,6 +40,7 @@ const groups: { title: string; links: FooterLink[] }[] = [
       { label: '原始碼', href: repoUrl },
       { label: '版本紀錄', to: '/changelog' },
       { label: '回報問題', to: '/report' },
+      { label: '資料隱私政策', to: '/privacy' },
     ],
   },
 ]
@@ -77,13 +81,13 @@ const linkClass =
             </a>
           </li>
           <li>
-            <NuxtLink to="/report" :class="iconClass" aria-label="回報問題" title="回報問題">
-              <CircleQuestionMark class="size-5" />
+            <NuxtLink to="/changelog" :class="iconClass" aria-label="版本紀錄" title="版本紀錄">
+              <Tag class="size-5" />
             </NuxtLink>
           </li>
           <li>
-            <NuxtLink to="/changelog" :class="iconClass" aria-label="版本紀錄" title="版本紀錄">
-              <Tag class="size-5" />
+            <NuxtLink to="/report" :class="iconClass" aria-label="回報問題" title="回報問題">
+              <CircleQuestionMark class="size-5" />
             </NuxtLink>
           </li>
         </ul>
@@ -113,7 +117,23 @@ const linkClass =
       class="border-base-300 text-base-content/60 mt-8 flex flex-col gap-4 border-t pt-4 text-sm leading-[1.7em] md:flex-row md:items-start md:justify-between">
       <div class="space-y-1">
         <!-- 授權是 GPL-3.0，所以不寫 All rights reserved(與 GPL 授予使用者的權利相衝突) -->
-        <p>© 2024-{{ new Date().getFullYear() }} Xiang511。原始碼以 GPL-3.0 授權。</p>
+        <p>
+          © 2024-{{ new Date().getFullYear() }} <a
+            :href="webSiteUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hover:text-base-content underline">
+            Xiang511
+          </a>。原始碼以
+          <a
+            :href="licenseUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hover:text-base-content underline">
+            GPL-3.0
+          </a>
+          授權。
+        </p>
       </div>
       <!-- 網站資訊:訪客統計。小於 768px(含 640px)一個項目一列，768px 以上排成一行，與上方版權列同一個斷點 -->
       <ul
