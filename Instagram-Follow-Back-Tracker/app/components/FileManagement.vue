@@ -9,6 +9,7 @@ import {
   FileUp,
   Tags,
   Trash2,
+  TriangleAlert,
   UserRoundX,
 } from '@lucide/vue'
 
@@ -69,10 +70,10 @@ function saveTags() {
 // 併入現有資料(不會覆蓋，要整份取代忽略名單請用「管理忽略名單」)
 const importInput = ref<HTMLInputElement | null>(null)
 // 匯入結果提示,3 秒後自動消失
-const notice = ref<{ type: 'success' | 'error'; text: string } | null>(null)
+const notice = ref<{ type: 'success' | 'error' | 'warning'; text: string } | null>(null)
 let noticeTimer: ReturnType<typeof setTimeout> | undefined
 
-function showNotice(type: 'success' | 'error', text: string) {
+function showNotice(type: 'success' | 'error' | 'warning', text: string) {
   notice.value = { type, text }
   clearTimeout(noticeTimer)
   noticeTimer = setTimeout(() => (notice.value = null), 3000)
@@ -182,6 +183,21 @@ function onSearch() {
 const noResult = computed(() => filteredFollowingValues.value.length === 0)
 
 // 執行選單項目後收起下拉(dropdown 靠 focus 開啟，把焦點移走就會關閉)
+// 防重複下載:同一個檔案下載後鎖定一小段時間，期間再點會被擋下並以 alert 提醒
+const DOWNLOAD_LOCK_MS = 3000
+const downloadLocks = new Set<string>()
+
+function download(key: string, label: string, action: () => void) {
+  if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
+  if (downloadLocks.has(key)) {
+    showNotice('warning', `${label}下載中..，請稍候幾秒再試`)
+    return
+  }
+  downloadLocks.add(key)
+  setTimeout(() => downloadLocks.delete(key), DOWNLOAD_LOCK_MS)
+  action()
+}
+
 function run(action: () => void) {
   if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
   action()
@@ -279,20 +295,31 @@ function onClear() {
           class="menu dropdown-content rounded-box bg-base-100 border-base-300 z-30 mt-2 w-56 border shadow-sm max-sm:fixed! max-sm:top-1/2! max-sm:left-1/2! max-sm:mt-0 max-sm:w-72 max-sm:max-w-[calc(100vw-2rem)] max-sm:-translate-x-1/2 max-sm:-translate-y-1/2">
           <!-- 搜尋過才有結果可以下載 -->
           <li :class="{ 'menu-disabled': noResult }">
-            <button type="button" class="font-normal" :disabled="noResult" @click="run(exportJSON)">
+            <button
+              type="button"
+              class="font-normal"
+              :disabled="noResult"
+              @click="download('json', 'JSON 檔案', exportJSON)">
               <FileJson class="size-4" />
               下載 JSON
             </button>
           </li>
           <li :class="{ 'menu-disabled': noResult }">
-            <button type="button" class="font-normal" :disabled="noResult" @click="run(exportCSV)">
+            <button
+              type="button"
+              class="font-normal"
+              :disabled="noResult"
+              @click="download('csv', 'CSV 檔案', exportCSV)">
               <FileSpreadsheet class="size-4" />
               下載 CSV
             </button>
           </li>
           <li role="separator" class="border-base-300 my-1 border-t"></li>
           <li>
-            <button type="button" class="font-normal" @click="run(exportIgnoreListJSON)">
+            <button
+              type="button"
+              class="font-normal"
+              @click="download('ignore', '忽略名單與標籤', exportIgnoreListJSON)">
               <FileDown class="size-4" />
               匯出忽略名單與標籤
             </button>
@@ -305,7 +332,10 @@ function onClear() {
           </li>
           <li role="separator" class="border-base-300 my-1 border-t"></li>
           <li>
-            <button type="button" class="font-normal" @click="run(exportWatchlistJSON)">
+            <button
+              type="button"
+              class="font-normal"
+              @click="download('watchlist', '重點關注名單', exportWatchlistJSON)">
               <FileDown class="size-4" />
               匯出重點關注
             </button>
@@ -358,8 +388,13 @@ function onClear() {
         <div
           role="status"
           class="alert bg-base-100 text-base-content border shadow-md"
-          :class="notice.type === 'success' ? 'border-success' : 'border-error'">
+          :class="{
+            'border-success': notice.type === 'success',
+            'border-error': notice.type === 'error',
+            'border-warning': notice.type === 'warning',
+          }">
           <CircleCheck v-if="notice.type === 'success'" class="text-success size-5" />
+          <TriangleAlert v-else-if="notice.type === 'warning'" class="text-warning size-5" />
           <CircleAlert v-else class="text-error size-5" />
           <span>{{ notice.text }}</span>
         </div>
