@@ -1,0 +1,58 @@
+name: CD
+
+on:
+  # 合併到 main 後自動部署
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# 一次只部署一個版本，新的部署排隊等前一個完成(不取消進行中的部署)
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  # 專案在 repo 的子資料夾
+  APP_DIR: Instagram-Follow-Back-Tracker
+
+jobs:
+  build:
+    name: 建置
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: ${{ env.APP_DIR }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: ${{ env.APP_DIR }}/package-lock.json
+
+      - run: npm ci
+
+      # 子路徑由環境變數決定(正式站在 xiang511.com 的子路徑下)
+      - name: 靜態產生
+        run: npm run generate
+        env:
+          NUXT_APP_BASE_URL: /Instagram-Follow-Back-Tracker/
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ env.APP_DIR }}/.output/public
+
+  deploy:
+    name: 部署到 GitHub Pages
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
