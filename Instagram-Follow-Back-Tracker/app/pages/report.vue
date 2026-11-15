@@ -2,7 +2,7 @@
 definePageMeta({ layout: 'base-layout' })
 
 useSeoMeta({
-  title: '問題回報 | Meta粉絲追蹤-網頁版',
+  title: '問題回報 | ig粉絲追蹤-網頁版',
   description: '使用上有問題?先看常見問題，找不到答案可以留言或填寫回報表單。',
 })
 

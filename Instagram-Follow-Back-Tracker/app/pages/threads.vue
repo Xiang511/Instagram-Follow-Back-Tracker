@@ -5,7 +5,7 @@ import { Construction } from '@lucide/vue'
 definePageMeta({ layout: 'base-layout' })
 
 useSeoMeta({
-  title: 'Threads(開發中) | Meta粉絲追蹤-網頁版',
+  title: 'Threads(開發中) | ig粉絲追蹤-網頁版',
   description: 'Threads 功能開發中，敬請期待。目前可以先使用 Instagram 比對。',
 })
 

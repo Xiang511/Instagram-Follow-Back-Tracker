@@ -10,7 +10,7 @@ const is404 = computed(() => props.error.statusCode === 404)
 
 useSeoMeta({
   title: () =>
-    is404.value ? '找不到頁面 | Meta粉絲追蹤-網頁版' : '發生錯誤 | Meta粉絲追蹤-網頁版',
+    is404.value ? '找不到頁面 | ig粉絲追蹤-網頁版' : '發生錯誤 | ig粉絲追蹤-網頁版',
   robots: 'noindex',
 })
 

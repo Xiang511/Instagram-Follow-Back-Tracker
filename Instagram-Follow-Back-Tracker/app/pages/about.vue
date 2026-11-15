@@ -2,7 +2,7 @@
 definePageMeta({ layout: 'base-layout' })
 
 useSeoMeta({
-  title: '關於本站 | Meta粉絲追蹤-網頁版',
+  title: '關於本站 | ig粉絲追蹤-網頁版',
   description: '了解這個網站的用途、專案資訊與網站統計。',
 })
 </script>

@@ -2,7 +2,7 @@
 definePageMeta({ layout: 'base-layout' })
 
 useSeoMeta({
-  title: '版本紀錄 | Meta粉絲追蹤-網頁版',
+  title: '版本紀錄 | ig粉絲追蹤-網頁版',
   description: '這個網站的 Release 版本與主要更新。',
 })
 

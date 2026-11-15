@@ -2,7 +2,7 @@
 definePageMeta({ layout: 'base-layout' })
 
 useSeoMeta({
-  title: '資料隱私政策 | Meta粉絲追蹤-網頁版',
+  title: '資料隱私政策 | ig粉絲追蹤-網頁版',
   description: '說明本站如何處理你的檔案、儲存在瀏覽器的資料，以及用到的第三方服務。',
 })
 

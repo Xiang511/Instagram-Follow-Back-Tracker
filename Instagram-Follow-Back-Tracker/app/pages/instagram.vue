@@ -9,7 +9,7 @@ const description =
 const siteUrl = useSiteUrl()
 
 useSeoMeta({
-  title: 'Instagram | Meta粉絲追蹤-網頁版',
+  title: 'Instagram | ig粉絲追蹤-網頁版',
   description,
   ogTitle: 'IG粉絲追蹤-網頁版',
   ogDescription: "Find who's not following you back on Instagram",
