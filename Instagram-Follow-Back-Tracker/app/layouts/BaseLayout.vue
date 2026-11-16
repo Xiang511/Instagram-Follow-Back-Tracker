@@ -3,5 +3,6 @@
     <slot />
     <AppFooter />
     <ScrollFab />
+    <UpdateModal />
   </div>
 </template>
