@@ -5,5 +5,11 @@ export default defineConfig({
   test: {
     environment: 'happy-dom',
     include: ['tests/**/*.test.ts'],
+    coverage: {
+      provider: 'v8',
+      // 目前只有 Utils/ 單元測試
+      include: ['app/utils/**/*.ts'],
+      reporter: ['text', 'html'],
+    },
   },
 })
