@@ -28,127 +28,27 @@ const {
   clear,
 } = useFileManagement()
 
-const { ignoreList, tagMap, setIgnoreList, setTags, exportIgnoreListJSON, importIgnoreData } =
-  useIgnore()
-const { exportWatchlistJSON, importWatchlist } = useWatchlist()
+// 通知與下載防重複
+const { notice, showNotice } = useNotice()
+const { download } = useDownloadGuard(showNotice)
 
-// 管理忽略名單:以逗號分隔的文字編輯，對應原本的 prompt
-const manageOpen = ref(false)
-const ignoreText = ref('')
-// 即時檢查格式;有錯誤時不能儲存
-const ignoreErrors = computed(() => ignoreTextErrors(ignoreText.value))
-
-function openManage() {
-  ignoreText.value = ignoreList.value.join(',')
-  manageOpen.value = true
-}
-
-function saveManage() {
-  if (ignoreErrors.value.length > 0) return
-  setIgnoreList(parseIgnoreList(ignoreText.value))
-  manageOpen.value = false
-}
-
-// 管理標籤:每行「username,標籤」的文字編輯;刪掉某一行就是移除那個人的標籤
-const tagsOpen = ref(false)
-const tagsText = ref('')
-// 即時檢查格式;有錯誤時不能儲存
-const parsedTags = computed(() => parseTagsText(tagsText.value))
-
-function openTags() {
-  tagsText.value = tagsToText(tagMap.value)
-  tagsOpen.value = true
-}
-
-function saveTags() {
-  if (parsedTags.value.errors.length > 0) return
-  setTags(parsedTags.value.tags)
-  tagsOpen.value = false
-}
-
-// 匯入忽略名單與標籤:選擇本站匯出的 ignore_list.json(舊版匯出的逗號分隔文字也可以)，
-// 併入現有資料(不會覆蓋，要整份取代忽略名單請用「管理忽略名單」)
-const importInput = ref<HTMLInputElement | null>(null)
-// 匯入結果提示,3 秒後自動消失
-const notice = ref<{ type: 'success' | 'error' | 'warning'; text: string } | null>(null)
-let noticeTimer: ReturnType<typeof setTimeout> | undefined
-
-function showNotice(type: 'success' | 'error' | 'warning', text: string) {
-  notice.value = { type, text }
-  clearTimeout(noticeTimer)
-  noticeTimer = setTimeout(() => (notice.value = null), 3000)
-}
-onBeforeUnmount(() => clearTimeout(noticeTimer))
-
-async function onImportIgnore() {
-  const input = importInput.value
-  const file = input?.files?.[0]
-  if (!input || !file) return
-
-  try {
-    const incoming = parseIgnoreFile(await file.text())
-    if (incoming === null) {
-      showNotice('error', '無法讀取這個檔案，請選擇本站匯出的忽略名單')
-    } else if (incoming.ignore.length === 0 && Object.keys(incoming.tags).length === 0) {
-      showNotice('error', '這個檔案裡沒有忽略名單或標籤')
-    } else {
-      const { addedIgnore, addedTags, total } = importIgnoreData(incoming)
-      const parts = [
-        addedIgnore > 0 && `${addedIgnore} 位忽略`,
-        addedTags > 0 && `${addedTags} 個標籤`,
-      ].filter(Boolean)
-      showNotice(
-        'success',
-        parts.length === 0
-          ? '檔案裡的內容都已經存在，沒有新增'
-          : `已匯入 ${parts.join('、')}，目前忽略名單共 ${total} 位`,
-      )
-    }
-  } catch (e) {
-    console.error('匯入忽略名單失敗:', e)
-    showNotice('error', '讀取檔案失敗，請重新嘗試')
-  } finally {
-    // 清空欄位，之後才能再選同一個檔案
-    input.value = ''
-  }
-}
-
-// 匯入重點關注:選擇本站匯出的 watchlist.json(也接受逗號 / 換行分隔的文字)，併入現有名單
-const watchInput = ref<HTMLInputElement | null>(null)
-
-async function onImportWatchlist() {
-  const input = watchInput.value
-  const file = input?.files?.[0]
-  if (!input || !file) return
-
-  try {
-    const parsed = parseWatchlistFile(await file.text())
-    if (parsed === null) {
-      showNotice('error', '無法讀取這個檔案，請選擇本站匯出的重點關注名單')
-    } else if (parsed.watchlist.length === 0) {
-      showNotice(
-        'error',
-        parsed.skipped > 0
-          ? `檔案裡的 ${parsed.skipped} 個項目都不是有效的 username`
-          : '這個檔案裡沒有重點關注名單',
-      )
-    } else {
-      const { added, total } = importWatchlist(parsed.watchlist)
-      const skipped = parsed.skipped > 0 ? `，略過 ${parsed.skipped} 個無效的 username` : ''
-      showNotice(
-        'success',
-        added === 0
-          ? `檔案裡的人都已經在重點關注名單裡，沒有新增${skipped}`
-          : `已匯入 ${added} 位，目前重點關注共 ${total} 位${skipped}`,
-      )
-    }
-  } catch (e) {
-    console.error('匯入重點關注失敗:', e)
-    showNotice('error', '讀取檔案失敗，請重新嘗試')
-  } finally {
-    input.value = ''
-  }
-}
+// 忽略名單、標籤與重點關注的操作(資料本身由 useIgnore / useWatchlist 管)
+const {
+  manageOpen,
+  ignoreText,
+  ignoreErrors,
+  openManage,
+  saveManage,
+  tagsOpen,
+  tagsText,
+  parsedTags,
+  openTags,
+  saveTags,
+  importInput,
+  onImportIgnore,
+  exportIgnoreListJSON,
+} = useIgnoreManager(showNotice)
+const { watchInput, onImportWatchlist, exportWatchlistJSON } = useWatchlistTransfer(showNotice)
 
 // 兩個 FileUpload 實例，沿用原本 main.js 的 fileInput / fileInput2
 const fileInput = ref<{ reset: () => void } | null>(null)
@@ -183,21 +83,6 @@ function onSearch() {
 const noResult = computed(() => filteredFollowingValues.value.length === 0)
 
 // 執行選單項目後收起下拉(dropdown 靠 focus 開啟，把焦點移走就會關閉)
-// 防重複下載:同一個檔案下載後鎖定一小段時間，期間再點會被擋下並以 alert 提醒
-const DOWNLOAD_LOCK_MS = 3000
-const downloadLocks = new Set<string>()
-
-function download(key: string, label: string, action: () => void) {
-  if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
-  if (downloadLocks.has(key)) {
-    showNotice('warning', `${label}下載中..，請稍候幾秒再試`)
-    return
-  }
-  downloadLocks.add(key)
-  setTimeout(() => downloadLocks.delete(key), DOWNLOAD_LOCK_MS)
-  action()
-}
-
 function run(action: () => void) {
   if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
   action()
